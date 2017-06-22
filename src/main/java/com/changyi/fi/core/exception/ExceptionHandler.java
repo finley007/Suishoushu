@@ -1,7 +1,7 @@
 package com.changyi.fi.core.exception;
 
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.response.ErrorResponse;
-import com.changyi.fi.core.response.ResponseWrapper;
 import com.changyi.fi.exception.SystemErrorException;
 
 /**
@@ -10,12 +10,14 @@ import com.changyi.fi.exception.SystemErrorException;
 public class ExceptionHandler {
 
     public static String handle(Throwable t) {
+        ErrorResponse response;
         if (t instanceof BusinessException) {
-            return new ResponseWrapper(new ErrorResponse((BusinessException)t)).build(ErrorResponse.class);
+            response = new ErrorResponse((BusinessException)t);
         } else if (t instanceof SystemException) {
-            return new ResponseWrapper(new ErrorResponse(new SystemErrorException("System error, please contact the customer service"))).build(ErrorResponse.class);
+            response = new ErrorResponse(new SystemErrorException("System error, please contact the customer service"));
         } else {
-            return new ResponseWrapper(new ErrorResponse(new SystemErrorException("System error, please contact the customer service"))).build(ErrorResponse.class);
+            response = new ErrorResponse(new SystemErrorException("System error, please contact the customer service"));
         }
+        return response.build();
     }
 }

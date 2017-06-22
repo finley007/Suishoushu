@@ -1,7 +1,7 @@
 package com.changyi.fi.auth;
 
 import com.changyi.fi.core.annotation.Validate;
-import com.changyi.fi.core.Token;
+import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.exception.AuthenticationErrorException;
 import com.changyi.fi.exception.AuthenticationFailedException;

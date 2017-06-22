@@ -1,7 +1,7 @@
 package com.changyi.fi.core.aop;
 
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.Token;
+import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.exception.UnauthorizedException;

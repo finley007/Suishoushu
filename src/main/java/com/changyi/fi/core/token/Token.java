@@ -1,4 +1,4 @@
-package com.changyi.fi.core;
+package com.changyi.fi.core.token;
 
 import com.changyi.fi.core.tool.Properties;
 import org.apache.shiro.subject.Subject;

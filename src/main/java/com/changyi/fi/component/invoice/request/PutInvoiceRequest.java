@@ -3,7 +3,17 @@ package com.changyi.fi.component.invoice.request;
 /**
  * Created by finley on 6/21/17.
  */
-public class AddInvoiceRequest {
+public class PutInvoiceRequest {
+
+    public String getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(String isNew) {
+        this.isNew = isNew;
+    }
+
+    private String isNew;
 
     private String type;
 
@@ -84,5 +94,15 @@ public class AddInvoiceRequest {
     private String bank;
 
     private String bankAcct;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
 
 }

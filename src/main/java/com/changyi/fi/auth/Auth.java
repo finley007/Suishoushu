@@ -3,7 +3,6 @@ package com.changyi.fi.auth;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.response.ResponseWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,7 +31,8 @@ public class Auth {
         LogUtil.info(this.getClass(), "Do authentication for user: {} ", request);
         try {
             AuthResponse response = this.authService.authenticate(new Payload(request).as(AuthRequest.class));
-            return Response.status(Response.Status.OK).entity(new ResponseWrapper(response).build(AuthResponse.class)).build();
+            String responseContent = new Payload(response).from(AuthResponse.class);
+            return Response.status(Response.Status.OK).entity(responseContent).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Authentication failed: ", t);
             String res = ExceptionHandler.handle(t);

@@ -1,7 +1,7 @@
 package com.changyi.fi.component.invoice.service;
 
-import com.changyi.fi.component.invoice.request.AddInvoiceRequest;
-import com.changyi.fi.component.invoice.request.InvoicesRequest;
+import com.changyi.fi.component.invoice.request.PutInvoiceRequest;
+import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,20 @@ public class InvoiceServiceImpl implements InvoiceService {
 //        this.module2Dao = module2Dao;
 //    }
 
-    public InvoicesResponse listInvoice(InvoicesRequest request) {
+    public InvoicesResponse listInvoice(String openId) {
         return new InvoicesResponse();
     }
 
-    public void addInvoice(AddInvoiceRequest request) {
+    public void updateInvoice(PutInvoiceRequest request) {
     }
 
+    public void deleteInvoice(String openId, String invoiceId) {
+
+    }
+
+    public GetInvoiceResponse getInvoice(String id) {
+        return new GetInvoiceResponse();
+    }
 
 
 }
