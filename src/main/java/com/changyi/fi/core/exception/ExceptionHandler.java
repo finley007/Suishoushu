@@ -1,6 +1,5 @@
 package com.changyi.fi.core.exception;
 
-import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.response.ErrorResponse;
 import com.changyi.fi.exception.SystemErrorException;
 

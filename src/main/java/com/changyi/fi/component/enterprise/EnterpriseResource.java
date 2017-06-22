@@ -28,10 +28,9 @@ public class EnterpriseResource {
         LogUtil.info(this.getClass(), "Call matchEnterprise service for key: " + key);
         try {
             MatchEnterpriseResponse response = enterpriseService.matchEnterprise(key);
-            String responseContent = new Payload(response).from(MatchEnterpriseResponse.class);
             LogUtil.info(this.getClass(), "Complete matchEnterprise service call");
-            LogUtil.info(this.getClass(), "Response: {} ", responseContent);
-            return Response.status(Response.Status.OK).entity(responseContent).build();
+            LogUtil.info(this.getClass(), "Response: {} ", response.build());
+            return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Call matchEnterprise service failed: ", t);
             String res = ExceptionHandler.handle(t);
