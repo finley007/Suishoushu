@@ -1,7 +1,6 @@
 package com.changyi.fi.core.token;
 
 import com.changyi.fi.core.tool.Properties;
-import org.apache.shiro.subject.Subject;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -24,16 +23,22 @@ public class Token {
 
     private static final int SECOND = 1000;
     private static final String TOKEN_EXPIRATION_SECONDS = "token.expiration.seconds";
+    public static final String KEY = "token";
 
     private String key;
     private Date lastTouched;
-    private Subject subject;
 
-    public Token(String username, Subject subject) {
-        String keyBase = username + System.currentTimeMillis();
+    public String getOpenId() {
+        return openId;
+    }
+
+    private String openId;
+
+    public Token(String openId) {
+        this.openId = openId;
+        String keyBase = openId + System.currentTimeMillis();
         setKey(new BigInteger(130, random).toString(32) + String.valueOf(keyBase.hashCode()));
         setLastTouched(new Date());
-        setSubject(subject);
         tokens.put(key, this);
         tokenRemoverPool.schedule(new TokenRemover(key), getDelay() + SECOND, TimeUnit.MILLISECONDS);
         traceTokens();
@@ -89,14 +94,6 @@ public class Token {
 
     private void setKey(String body) {
         this.key = body;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    private void setSubject(Subject subject) {
-        this.subject = subject;
     }
 
     private class TokenRemover implements Runnable {

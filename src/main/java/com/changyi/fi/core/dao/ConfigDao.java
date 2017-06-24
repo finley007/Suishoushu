@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface ConfigDao {
 
-    @Select("SELECT * from exception_code")
+    @Select("SELECT * from SYS_EXCEPTION")
     @Result(javaType = Map.class)
     @Options(useCache = true)
     public List<Map> getExceptionCode();

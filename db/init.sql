@@ -50,7 +50,6 @@ create table ENTERPRISE
 create table ENTERPRISE_MODIFY_HISTORY
 (
    ID                   int not null,
-   ENT_CREDIT_CODE      varchar(20),
    CREDIT_CODE          varchar(20) not null,
    MODIFY_TIME          timestamp not null,
    MODIFY_BY            varchar(64) not null,
@@ -66,13 +65,12 @@ create table ENTERPRISE_MODIFY_HISTORY
 create table INVOICE
 (
    ID                   int not null,
-   ENT_CREDIT_CODE      varchar(20),
    OPEN_ID              varchar(64) not null,
    TYPE                 smallint not null,
    USER_NAME            varchar(32),
    CREDIT_CODE          varchar(32),
    CREATE_TIME          timestamp not null,
-   MODIFY_TIME          timestamp,
+   MODIFY_TIME          timestamp default CURRENT_TIMESTAMP,
    IS_DEFAULT           smallint not null,
    primary key (ID)
 );
@@ -96,9 +94,9 @@ create table MERCHANT
    STATUS               smallint not null,
    CREATE_TIME          timestamp not null,
    CREATE_BY            varchar(32) not null,
-   MODIFY_TIME          timestamp,
+   MODIFY_TIME          timestamp default CURRENT_TIMESTAMP,
    MODIFY_BY            varchar(32),
-   EXPIRE_TIME          timestamp,
+   EXPIRE_TIME          timestamp default '2036-12-31 23:59:59',
    primary key (ID)
 );
 
@@ -144,10 +142,10 @@ create table USER
    primary key (OPEN_ID)
 );
 
-alter table ENTERPRISE_MODIFY_HISTORY add constraint FK_ENTERPRISE_HISTORY foreign key (ENT_CREDIT_CODE)
+alter table ENTERPRISE_MODIFY_HISTORY add constraint FK_ENTERPRISE_HISTORY foreign key (CREDIT_CODE)
       references ENTERPRISE (CREDIT_CODE) on delete restrict on update restrict;
 
-alter table INVOICE add constraint FK_Relationship_5 foreign key (ENT_CREDIT_CODE)
+alter table INVOICE add constraint FK_INVOICE_ENTERPRISE foreign key (CREDIT_CODE)
       references ENTERPRISE (CREDIT_CODE) on delete restrict on update restrict;
 
 alter table INVOICE add constraint FK_USER_INVOICE foreign key (OPEN_ID)

@@ -1,23 +1,35 @@
 package com.changyi.fi.component.invoice.request;
 
+import com.changyi.fi.core.request.Request;
+import net.sf.oval.constraint.MatchPattern;
+import net.sf.oval.constraint.NotEmpty;
+import net.sf.oval.constraint.NotNull;
+
 /**
  * Created by finley on 6/21/17.
  */
-public class PutInvoiceRequest {
+public class PutInvoiceRequest implements Request {
 
-    public String getIsNew() {
-        return isNew;
-    }
+    private String id;
 
-    public void setIsNew(String isNew) {
-        this.isNew = isNew;
-    }
-
-    private String isNew;
-
+    @NotNull
+    @NotEmpty
+    @MatchPattern(pattern = "^0|1$")
     private String type;
 
     private String userName;
+
+    private String corpName;
+
+    private String address;
+
+    private String creditCode;
+
+    private String phone;
+
+    private String bank;
+
+    private String bankAcct;
 
     public String getType() {
         return type;
@@ -83,18 +95,6 @@ public class PutInvoiceRequest {
         this.bankAcct = bankAcct;
     }
 
-    private String corpName;
-
-    private String address;
-
-    private String creditCode;
-
-    private String phone;
-
-    private String bank;
-
-    private String bankAcct;
-
     public String getId() {
         return id;
     }
@@ -103,6 +103,5 @@ public class PutInvoiceRequest {
         this.id = id;
     }
 
-    private String id;
 
 }

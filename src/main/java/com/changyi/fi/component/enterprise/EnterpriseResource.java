@@ -4,6 +4,7 @@ import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.component.enterprise.service.EnterpriseService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
+import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class EnterpriseResource {
     @GET
     @Path("/{key}")
     @Produces("application/json")
+    @Secured
     public Response matchEnterprise(@HeaderParam("token") String token, @QueryParam("key") String key) {
         LogUtil.info(this.getClass(), "Call matchEnterprise service for key: " + key);
         try {

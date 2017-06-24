@@ -22,19 +22,19 @@ import javax.ws.rs.core.Response;
 @Aspect
 public class AuthAspect {
 
-    @Around(value="execution(* com.template.component..*.*(..)) && @annotation(secured)", argNames="secured")
+    @Around(value="execution(* com.changyi.fi.component..*.*(..)) && @annotation(secured)", argNames="secured")
     public Response authToken(ProceedingJoinPoint aPoint, Secured secured) {
         LogUtil.debug(this.getClass(), "Auth aspect handle for component: {} and service: {}",
                 new Object[]{aPoint.getTarget().getClass(), aPoint.getSignature()});
-        HttpServletRequest request = (HttpServletRequest)aPoint.getArgs()[0];
-        String tokenKey = request.getHeader(HttpHeaders.AUTHORIZATION);
-        HttpServletResponse response = (HttpServletResponse)aPoint.getArgs()[1];
-        Token token = Token.touch(tokenKey);
-        if (token != null) {
-            try {
-                return (Response)aPoint.proceed();
-            } catch (Throwable throwable) {
-                LogUtil.error(this.getClass(), "Execute service error: ", throwable);
+        String tokenKey = (String)aPoint.getArgs()[0];
+        if (tokenKey != null) {
+            Token token = Token.touch(tokenKey);
+            if (token != null) {
+                try {
+                    return (Response) aPoint.proceed();
+                } catch (Throwable throwable) {
+                    LogUtil.error(this.getClass(), "Execute service error: ", throwable);
+                }
             }
         }
         String res = ExceptionHandler.handle(new UnauthorizedException("Unauthorized error"));

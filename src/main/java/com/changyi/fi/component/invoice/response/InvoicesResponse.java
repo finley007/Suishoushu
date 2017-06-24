@@ -1,24 +1,27 @@
 package com.changyi.fi.component.invoice.response;
 
 import com.changyi.fi.core.response.NormalResponse;
+import com.changyi.fi.model.VInvoicePO;
+
+import java.util.List;
 
 /**
  * Created by finley on 1/2/17.
  */
 public class InvoicesResponse extends NormalResponse {
 
-    public InvoicesResponse InvoicesResponse() {
-        return this;
+    public InvoicesResponse(List<VInvoicePO> invoiceList) {
+        this.invoiceList = invoiceList;
     }
 
-    public String getResult() {
-        return result;
+    public List<VInvoicePO> getInvoiceList() {
+        return invoiceList;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setInvoiceList(List<VInvoicePO> invoiceList) {
+        this.invoiceList = invoiceList;
     }
 
-    private String result = "ok";
+    private List<VInvoicePO> invoiceList;
 
 }

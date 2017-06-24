@@ -9,13 +9,13 @@ import com.changyi.fi.component.invoice.response.InvoicesResponse;
  */
 public interface InvoiceService {
 
-    public InvoicesResponse listInvoice(String openId);
+    public InvoicesResponse listInvoice(String openId) throws Exception;
 
-    public void updateInvoice(PutInvoiceRequest request);
+    public void updateInvoice(String openId, PutInvoiceRequest request) throws Exception;
 
-    public void deleteInvoice(String openId, String invoiceId);
+    public void deleteInvoice(String openId, String invoiceId) throws Exception;
 
-    public GetInvoiceResponse getInvoice(String id);
+    public GetInvoiceResponse getInvoice(String id) throws Exception;
 
 }
 

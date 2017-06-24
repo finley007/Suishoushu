@@ -46,27 +46,47 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table schema="${dev_schema}" tableName="INVOICE" domainObjectName="InvoicePO" >
+        <!--
+        <table schema="${dev_schema}" tableName="INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 
-        <table schema="${dev_schema}" tableName="ENTERPRISE" domainObjectName="EnterprisePO" >
+        <table schema="${dev_schema}" tableName="ENTERPRISE" domainObjectName="EnterprisePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 
-        <table schema="${dev_schema}" tableName="ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" >
+        <table schema="${dev_schema}" tableName="ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 
-        <table schema="${dev_schema}" tableName="MERCHANT" domainObjectName="MerchantPO" >
+        <table schema="${dev_schema}" tableName="MERCHANT" domainObjectName="MerchantPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 
-        <table schema="${dev_schema}" tableName="MERCHANT_INVOICE" domainObjectName="MerchantInvoicePO" >
+        <table schema="${dev_schema}" tableName="MERCHANT_INVOICE" domainObjectName="MerchantInvoicePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 
-        <table schema="${dev_schema}" tableName="MERCHANT_TYPE" domainObjectName="MerchantTypePO" >
+        <table schema="${dev_schema}" tableName="MERCHANT_TYPE" domainObjectName="MerchantTypePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
+        -->
+
+        <table schema="${dev_schema}" tableName="V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
 

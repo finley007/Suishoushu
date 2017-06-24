@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface AuthService {
 
-    public AuthResponse authenticate(AuthRequest request) throws Exception;
+    public AuthResponse authenticate(String code) throws Exception;
 
 }
