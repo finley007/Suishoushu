@@ -56,7 +56,7 @@ public class InvoiceResource {
         LogUtil.debug(this.getClass(), "Request: {} ", request);
         try {
             PutInvoiceRequest req = new Payload(request).as(PutInvoiceRequest.class);
-            invoiceService.updateInvoice(Token.touch(token).getOpenId(), req);
+            invoiceService.updateInvoice(req, Token.touch(token).getOpenId());
             LogUtil.info(this.getClass(), "Complete addInvoice service call");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
@@ -72,7 +72,7 @@ public class InvoiceResource {
     public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @QueryParam("id") String id) {
         LogUtil.info(this.getClass(), "Call deleteInvoice service for id: " + id);
         try {
-            invoiceService.deleteInvoice(token, id);
+            invoiceService.deleteInvoice(Token.touch(token).getOpenId(), id);
             LogUtil.info(this.getClass(), "Complete deleteInvoice service call");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
@@ -89,13 +89,7 @@ public class InvoiceResource {
     public Response getInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         LogUtil.info(this.getClass(), "Enter invoice endpoint for id: " + id);
         try {
-            GetInvoiceResponse response = invoiceService.getInvoice(id);
-            //验证openId
-            String cOpenId = Token.touch(token).getOpenId();
-            if (!cOpenId.equals(response.getInvoice().getOpen_id())) {
-                LogUtil.info(this.getClass(), "Current user: " + cOpenId + " and invoice owner: " + response.getInvoice().getOpen_id());
-                throw new AuthenticationFailedException("Current user has no permission to current invoice");
-            }
+            GetInvoiceResponse response = invoiceService.getInvoice(Token.touch(token).getOpenId(), id);
             LogUtil.info(this.getClass(), "Complete invoice endpoint handle");
             LogUtil.debug(this.getClass(), "Response: {} ", response.build());
             return Response.status(Response.Status.OK).entity(response.build()).build();

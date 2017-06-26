@@ -1,10 +1,10 @@
 package com.changyi.fi.core.aop;
 
+import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.exception.BusinessException;
 import com.changyi.fi.core.request.Request;
 import com.changyi.fi.exception.InvalidRequestException;
-import com.changyi.fi.core.annotation.Validate;
-import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.exception.NullRequestException;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
@@ -13,7 +13,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import sun.rmi.runtime.Log;
 
 import java.util.List;
 

@@ -46,25 +46,22 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <!--
         <table schema="${dev_schema}" tableName="INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false">
-            <property name="useActualColumnNames" value="true"/>
+               enableUpdateByExample="true">
         </table>
 
         <table schema="${dev_schema}" tableName="ENTERPRISE" domainObjectName="EnterprisePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false">
-            <property name="useActualColumnNames" value="true"/>
+               enableUpdateByExample="true">
         </table>
 
         <table schema="${dev_schema}" tableName="ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false">
-            <property name="useActualColumnNames" value="true"/>
+               enableUpdateByExample="true">
         </table>
 
+        <!--
         <table schema="${dev_schema}" tableName="MERCHANT" domainObjectName="MerchantPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
@@ -84,14 +81,14 @@
         </table>
         -->
 
-        <table schema="${dev_schema}" tableName="V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="CUSTOMER" domainObjectName="CustomerPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false">
-            <property name="useActualColumnNames" value="true"/>
+               enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="USER" domainObjectName="UserPO" >
-            <property name="useActualColumnNames" value="true"/>
+        <table schema="${dev_schema}" tableName="V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="true">
         </table>
 
     </context>

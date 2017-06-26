@@ -1,6 +1,7 @@
 package com.changyi.fi.core.token;
 
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.vo.CustomerInfo;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -28,15 +29,17 @@ public class Token {
     private String key;
     private Date lastTouched;
 
-    public String getOpenId() {
-        return openId;
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
     }
 
-    private String openId;
+    public String getOpenId() {return this.customerInfo == null ? "" : this.customerInfo.getOpenId(); }
 
-    public Token(String openId) {
-        this.openId = openId;
-        String keyBase = openId + System.currentTimeMillis();
+    private CustomerInfo customerInfo;
+
+    public Token(CustomerInfo userInfo) {
+        this.customerInfo = userInfo;
+        String keyBase = userInfo.getOpenId() + System.currentTimeMillis();
         setKey(new BigInteger(130, random).toString(32) + String.valueOf(keyBase.hashCode()));
         setLastTouched(new Date());
         tokens.put(key, this);

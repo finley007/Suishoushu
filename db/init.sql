@@ -14,9 +14,11 @@ drop table if exists MERCHANT;
 
 drop table if exists MERCHANT_TYPE;
 
-drop table if exists USER;
+drop table if exists CUSTOMER;
 
 drop table if exists ENTERPRISE;
+
+drop view if exists V_INVOICE;
 
 /*==============================================================*/
 /* Table: ENTERPRISE                                            */
@@ -25,21 +27,21 @@ create table ENTERPRISE
 (
    CREDIT_CODE          varchar(20) not null,
    NAME                 varchar(128) not null,
-   TYPE                 varchar(128) not null,
-   LEGAL_PERSON         varchar(64) not null,
-   REG_CAPITAL          decimal(10,2) not null,
-   ESTABLISH_DATE       date not null,
-   BIZ_PERIOD_START     date not null,
+   TYPE                 varchar(128),
+   LEGAL_PERSON         varchar(64),
+   REG_CAPITAL          decimal(10,2),
+   ESTABLISH_DATE       date,
+   BIZ_PERIOD_START     date,
    BIZ_PERIOD_END       date,
-   REG_AUTHORITY        varchar(128) not null,
+   REG_AUTHORITY        varchar(128),
    ADDRESS              varchar(256) not null,
    MAIN_BIZ             BLOB,
    PHONE                varchar(16) not null,
    BANK                 varchar(256) not null,
-   BANK_ACCOUNT         varchar(32) not null,
-   CREATE_TIME          datetime not null,
+   BANK_ACCT         varchar(32) not null,
+   CREATE_TIME          timestamp not null default CURRENT_TIMESTAMP,
    CREATE_BY            varchar(64) not null,
-   MODIFY_TIME          datetime,
+   MODIFY_TIME          timestamp default CURRENT_TIMESTAMP,
    MODIFY_BY            varchar(64),
    primary key (CREDIT_CODE)
 );
@@ -49,7 +51,7 @@ create table ENTERPRISE
 /*==============================================================*/
 create table ENTERPRISE_MODIFY_HISTORY
 (
-   ID                   int not null,
+   ID                   int not null AUTO_INCREMENT,
    CREDIT_CODE          varchar(20) not null,
    MODIFY_TIME          timestamp not null,
    MODIFY_BY            varchar(64) not null,
@@ -64,7 +66,7 @@ create table ENTERPRISE_MODIFY_HISTORY
 /*==============================================================*/
 create table INVOICE
 (
-   ID                   int not null,
+   ID                   int not null AUTO_INCREMENT,
    OPEN_ID              varchar(64) not null,
    TYPE                 smallint not null,
    USER_NAME            varchar(32),
@@ -80,7 +82,7 @@ create table INVOICE
 /*==============================================================*/
 create table MERCHANT
 (
-   ID                   int not null,
+   ID                   int not null AUTO_INCREMENT,
    MER_ID               int,
    NAME                 varchar(255) not null,
    TYPE                 smallint not null,
@@ -105,7 +107,7 @@ create table MERCHANT
 /*==============================================================*/
 create table MERCHANT_INVOICE
 (
-   ID                   int not null,
+   ID                   int not null AUTO_INCREMENT,
    INV_ID               int,
    MER_ID               int,
    MERCHANT_ID          int not null,
@@ -127,9 +129,9 @@ create table MERCHANT_TYPE
 );
 
 /*==============================================================*/
-/* Table: USER                                                  */
+/* Table: CUSTOMER                                                  */
 /*==============================================================*/
-create table USER
+create table CUSTOMER
 (
    OPEN_ID              varchar(64) not null,
    NICK_NAME            varchar(64) not null,
@@ -137,10 +139,12 @@ create table USER
    CITY                 varchar(64),
    PROVINCE             varchar(128),
    COUNTRY              varchar(128),
-   CREATE_TIME          timestamp not null,
-   LAST_LOGIN_TIME      datetime not null,
+   CREATE_TIME          timestamp not null default CURRENT_TIMESTAMP,
+   LAST_LOGIN_TIME      timestamp not null default CURRENT_TIMESTAMP,
    primary key (OPEN_ID)
 );
+
+CREATE VIEW V_INVOICE AS SELECT I.ID, I.OPEN_ID, I.TYPE, I.USER_NAME, I.CREDIT_CODE, I.CREATE_TIME, I.MODIFY_TIME, I.IS_DEFAULT, E.NAME AS CORP_NAME, E.ADDRESS, E.PHONE, E.BANK, E.BANK_ACCT FROM INVOICE I LEFT JOIN ENTERPRISE E ON I.CREDIT_CODE = E.CREDIT_CODE;
 
 alter table ENTERPRISE_MODIFY_HISTORY add constraint FK_ENTERPRISE_HISTORY foreign key (CREDIT_CODE)
       references ENTERPRISE (CREDIT_CODE) on delete restrict on update restrict;
@@ -148,8 +152,8 @@ alter table ENTERPRISE_MODIFY_HISTORY add constraint FK_ENTERPRISE_HISTORY forei
 alter table INVOICE add constraint FK_INVOICE_ENTERPRISE foreign key (CREDIT_CODE)
       references ENTERPRISE (CREDIT_CODE) on delete restrict on update restrict;
 
-alter table INVOICE add constraint FK_USER_INVOICE foreign key (OPEN_ID)
-      references USER (OPEN_ID) on delete restrict on update restrict;
+alter table INVOICE add constraint FK_CUSTOMER_INVOICE foreign key (OPEN_ID)
+      references CUSTOMER (OPEN_ID) on delete restrict on update restrict;
 
 alter table MERCHANT add constraint FK_MERCHANT_TYPE foreign key (TYPE)
       references MERCHANT_TYPE (ID) on delete restrict on update restrict;

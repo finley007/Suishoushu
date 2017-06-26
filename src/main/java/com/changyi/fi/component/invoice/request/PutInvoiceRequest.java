@@ -17,9 +17,9 @@ public class PutInvoiceRequest implements Request {
     @MatchPattern(pattern = "^0|1$")
     private String type;
 
-    private String userName;
-
-    private String corpName;
+    @NotNull
+    @NotEmpty
+    private String name;
 
     private String address;
 
@@ -31,6 +31,11 @@ public class PutInvoiceRequest implements Request {
 
     private String bankAcct;
 
+    @NotNull
+    @NotEmpty
+    @MatchPattern(pattern = "^0|1$")
+    private String isDefault;
+
     public String getType() {
         return type;
     }
@@ -39,20 +44,12 @@ public class PutInvoiceRequest implements Request {
         this.type = type;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCorpName() {
-        return corpName;
-    }
-
-    public void setCorpName(String corpName) {
-        this.corpName = corpName;
+    public void setName(String userName) {
+        this.name = userName;
     }
 
     public String getAddress() {
@@ -73,6 +70,14 @@ public class PutInvoiceRequest implements Request {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
     }
 
     public void setPhone(String phone) {
