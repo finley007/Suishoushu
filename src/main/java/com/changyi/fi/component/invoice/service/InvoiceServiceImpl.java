@@ -180,10 +180,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     public GetInvoiceResponse getInvoice(String openId, String id) throws Exception {
         LogUtil.info(this.getClass(), "Execute getInvoice service for: " + id);
         VInvoicePO invoice = this.invoiceDao.getInvoiceById(id);
-        if (!invoice.getOpenId().equals(openId)) {
-            throw new AuthenticationFailedException("The current customer is not the invoice owner!");
+        if (invoice != null) {
+            if (!invoice.getOpenId().equals(openId)) {
+                throw new AuthenticationFailedException("The current customer is not the invoice owner!");
+            }
+            return new GetInvoiceResponse(invoice);
+        } else {
+            LogUtil.info(this.getClass(), "The invoice doesn't exist");
+            return new GetInvoiceResponse(null);
         }
-        return new GetInvoiceResponse(invoice);
     }
 
 

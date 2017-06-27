@@ -47,17 +47,17 @@
         </javaClientGenerator>
 
         <table schema="${dev_schema}" tableName="INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
         <table schema="${dev_schema}" tableName="ENTERPRISE" domainObjectName="EnterprisePO" enableCountByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
         <table schema="${dev_schema}" tableName="ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" enableCountByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
@@ -87,7 +87,7 @@
         </table>
 
         <table schema="${dev_schema}" tableName="V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
