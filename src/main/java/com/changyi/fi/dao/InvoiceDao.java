@@ -7,6 +7,7 @@ import com.changyi.fi.model.VInvoicePO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface InvoiceDao {
 
@@ -42,4 +43,8 @@ public interface InvoiceDao {
     int insertEnterpriseHistory(EnterpriseHistoryPO record);
 
     int insertEnterpriseHistorySelective(EnterpriseHistoryPO record);
+
+    @Select("select credit_code, name from enterprise t where t.name like concat('%',#{key},'%')")
+    @Result(javaType = Map.class)
+    List<Map> matchEnterpriseList(@Param("key") String key);
 }

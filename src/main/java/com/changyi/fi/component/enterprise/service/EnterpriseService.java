@@ -1,5 +1,6 @@
 package com.changyi.fi.component.enterprise.service;
 
+import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 
 /**
@@ -7,5 +8,7 @@ import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
  */
 public interface EnterpriseService {
 
-    public MatchEnterpriseResponse matchEnterprise(String key);
+    public MatchEnterpriseResponse matchEnterprise(String key) throws Exception;
+
+    public GetEnterpriseResponse getEnterprise(String creditCode) throws Exception;
 }

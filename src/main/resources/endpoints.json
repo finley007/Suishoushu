@@ -1,0 +1,15 @@
+{
+  "endpoints": [
+    {
+      "url": "localhost:8080/suishoushu/auth?code=xx",
+      "remark": "登录接口",
+      "request": "code",
+      "response": {
+        "returnCode": "0",
+        "content": {
+          "token": ""
+        }
+      }
+    }
+  ]
+}

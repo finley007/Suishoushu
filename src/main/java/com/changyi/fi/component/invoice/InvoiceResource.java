@@ -60,7 +60,7 @@ public class InvoiceResource {
             LogUtil.info(this.getClass(), "Complete addInvoice service call");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Call addInvoice service failed: ", t);
+            LogUtil.error(this.getClass(), "Run addInvoice endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
@@ -70,13 +70,13 @@ public class InvoiceResource {
     @Produces("application/json")
     @Secured
     public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @QueryParam("id") String id) {
-        LogUtil.info(this.getClass(), "Call deleteInvoice service for id: " + id);
+        LogUtil.info(this.getClass(), "Enter deleteInvoice endpoint for id: " + id);
         try {
             invoiceService.deleteInvoice(Token.touch(token).getOpenId(), id);
-            LogUtil.info(this.getClass(), "Complete deleteInvoice service call");
+            LogUtil.info(this.getClass(), "Complete deleteInvoice endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Call deleteInvoice service failed: ", t);
+            LogUtil.error(this.getClass(), "Run deleteInvoice endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
@@ -87,14 +87,14 @@ public class InvoiceResource {
     @Produces("application/json")
     @Secured
     public Response getInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
-        LogUtil.info(this.getClass(), "Enter invoice endpoint for id: " + id);
+        LogUtil.info(this.getClass(), "Enter getInvoice endpoint for id: " + id);
         try {
             GetInvoiceResponse response = invoiceService.getInvoice(Token.touch(token).getOpenId(), id);
-            LogUtil.info(this.getClass(), "Complete invoice endpoint handle");
+            LogUtil.info(this.getClass(), "Complete getInvoice endpoint handle");
             LogUtil.debug(this.getClass(), "Response: {} ", response.build());
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Call getInvoice service failed: ", t);
+            LogUtil.error(this.getClass(), "Run getInvoice endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

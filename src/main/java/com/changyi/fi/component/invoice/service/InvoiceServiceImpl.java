@@ -35,8 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public InvoicesResponse listInvoice(String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute listInvoice service for: " + openId);
-        List<VInvoicePO> result = this.invoiceDao.listInvoices(openId);
-        return new InvoicesResponse(result);
+        return new InvoicesResponse(this.invoiceDao.listInvoices(openId));
     }
 
     @Validate(validator = "com.changyi.fi.component.invoice.validate.PutInvoiceValidator")

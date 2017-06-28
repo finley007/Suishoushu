@@ -2,6 +2,8 @@ package com.changyi.fi.util;
 
 public class FIConstants {
 
+    public static final String DEFAULT_CHARSET = "utf-8";
+
     public enum InvoiceType {
         Enterprise("1"), Person("0");
 

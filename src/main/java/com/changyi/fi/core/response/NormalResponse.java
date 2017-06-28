@@ -5,7 +5,7 @@ import com.changyi.fi.core.Payload;
 /**
  * Created by finley on 6/22/17.
  */
-public class NormalResponse {
+public class NormalResponse implements Response {
 
     public String build() {
         String content = new Payload(this).from(this.getClass());

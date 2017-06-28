@@ -1,5 +1,6 @@
 package com.changyi.fi.component.enterprise;
 
+import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.component.enterprise.service.EnterpriseService;
 import com.changyi.fi.core.LogUtil;
@@ -23,22 +24,40 @@ public class EnterpriseResource {
     private EnterpriseService enterpriseService;
 
     @GET
-    @Path("/{key}")
     @Produces("application/json")
     @Secured
     public Response matchEnterprise(@HeaderParam("token") String token, @QueryParam("key") String key) {
-        LogUtil.info(this.getClass(), "Call matchEnterprise service for key: " + key);
+        LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);
         try {
             MatchEnterpriseResponse response = enterpriseService.matchEnterprise(key);
-            LogUtil.info(this.getClass(), "Complete matchEnterprise service call");
-            LogUtil.info(this.getClass(), "Response: {} ", response.build());
+            LogUtil.info(this.getClass(), "Complete matchEnterprise endpoint handle");
+            LogUtil.debug(this.getClass(), "Response: {} ", response.build());
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Call matchEnterprise service failed: ", t);
+            LogUtil.error(this.getClass(), "Run matchEnterprise endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
     }
+
+    @GET
+    @Path("/{creditCode}")
+    @Produces("application/json")
+    @Secured
+    public Response getEnterprise(@HeaderParam("token") String token, @PathParam("creditCode") String creditCode) {
+        LogUtil.info(this.getClass(), "Enter getEnterprise endpint for creditCode: " + creditCode);
+        try {
+            GetEnterpriseResponse response = enterpriseService.getEnterprise(creditCode);
+            LogUtil.info(this.getClass(), "Complete getEnterprise endpoint handle");
+            LogUtil.debug(this.getClass(), "Response: {} ", response.build());
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run getEnterprise endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
 
 
 }
