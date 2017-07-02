@@ -13,9 +13,9 @@ public class ExceptionHandler {
         if (t instanceof BusinessException) {
             response = new ErrorResponse((BusinessException)t);
         } else if (t instanceof SystemException) {
-            response = new ErrorResponse(new SystemErrorException("System error, please contact the customer service"));
+            response = new ErrorResponse(new SystemErrorException("System error"));
         } else {
-            response = new ErrorResponse(new SystemErrorException("System error, please contact the customer service"));
+            response = new ErrorResponse(new SystemErrorException("System error"));
         }
         return response.build();
     }

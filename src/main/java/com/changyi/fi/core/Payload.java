@@ -1,6 +1,8 @@
 package com.changyi.fi.core;
 
+import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.mysql.cj.core.util.StringUtils;
 
@@ -11,6 +13,13 @@ public class Payload {
 
     private String payload;
     private Object bean;
+
+    private ExclusionStrategy exclusion;
+
+    public Payload setExclusion(ExclusionStrategy exclusion) {
+        this.exclusion = exclusion;
+        return this;
+    }
 
     public Payload(String payload) throws Exception {
         if (StringUtils.isNullOrEmpty(payload) || StringUtils.isNullOrEmpty(payload.trim())) {
@@ -32,7 +41,11 @@ public class Payload {
     }
 
     public <T> String from(Class<T> clz) {
-        return new Gson().toJson(bean, clz);
+        if (this.exclusion == null) {
+            return new Gson().toJson(bean, clz);
+        } else {
+            return new GsonBuilder().setExclusionStrategies(this.exclusion).create().toJson(bean, clz);
+        }
     }
 
 }

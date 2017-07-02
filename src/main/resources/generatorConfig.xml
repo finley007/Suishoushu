@@ -18,10 +18,10 @@
         </commentGenerator>
 
         <!-- jdbc连接 -->
-        <jdbcConnection driverClass="${jdbc_driver}"
-                        connectionURL="${jdbc_url}"
-                        userId="${jdbc_user}"
-                        password="${jdbc_password}">
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${jdbc.url}"
+                        userId="${jdbc.user}"
+                        password="${jdbc.password}">
         </jdbcConnection>
 
         <!-- 类型转换 -->

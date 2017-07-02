@@ -1,7 +1,10 @@
 package com.changyi.fi.component.invoice.response;
 
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.model.VInvoicePO;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 
 import java.util.List;
 
@@ -34,5 +37,26 @@ public class InvoicesResponse extends NormalResponse {
     }
 
     private List<VInvoicePO> invoiceList;
+
+    public String build() {
+        String content = new Payload(this).setExclusion(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getName().contains("createTime")
+                        || f.getName().contains("openId")
+                            || f.getName().contains("modifyTime");
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).from(this.getClass());
+        if (!"{}".equals(content)) {
+            return "{ \"returnCode\" : \"0\", \"content\" : " + content + " }";
+        } else {
+            return "{ \"returnCode\" : \"0\", \"content\" : \"success\" }";
+        }
+    }
 
 }

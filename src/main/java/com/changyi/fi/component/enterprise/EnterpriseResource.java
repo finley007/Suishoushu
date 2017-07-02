@@ -7,6 +7,7 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
+import com.changyi.fi.core.token.Token;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,7 +27,7 @@ public class EnterpriseResource {
     @GET
     @Produces("application/json")
     @Secured
-    public Response matchEnterprise(@HeaderParam("token") String token, @QueryParam("key") String key) {
+    public Response matchEnterprise(@HeaderParam(Token.KEY) String token, @QueryParam("key") String key) {
         LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);
         try {
             MatchEnterpriseResponse response = enterpriseService.matchEnterprise(key);
@@ -44,7 +45,7 @@ public class EnterpriseResource {
     @Path("/{creditCode}")
     @Produces("application/json")
     @Secured
-    public Response getEnterprise(@HeaderParam("token") String token, @PathParam("creditCode") String creditCode) {
+    public Response getEnterprise(@HeaderParam(Token.KEY) String token, @PathParam("creditCode") String creditCode) {
         LogUtil.info(this.getClass(), "Enter getEnterprise endpint for creditCode: " + creditCode);
         try {
             GetEnterpriseResponse response = enterpriseService.getEnterprise(creditCode);

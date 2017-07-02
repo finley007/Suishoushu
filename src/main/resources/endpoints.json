@@ -1,14 +1,138 @@
 {
   "endpoints": [
     {
-      "url": "localhost:8080/suishoushu/auth?code=xx",
+      "url": "localhost:8080/suishoushu/auth?code={code}",
+      "method": "POST",
       "remark": "登录接口",
-      "request": "code",
+      "request": "code:用户code",
       "response": {
-        "returnCode": "0",
+        "returnCode": "返回码：0-正常，xxxx-错误码",
         "content": {
-          "token": ""
-        }
+          "token": "令牌"
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/enterprise/{creditCode}",
+      "method": "GET",
+      "remark": "企业详情查询接口",
+      "request": "creditCode:企业工商号",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "creditCode": "企业工商号",
+          "name": "企业名称",
+          "address": "地址",
+          "phone": "电话",
+          "bank": "开户行",
+          "bankAcct": "开户账号"
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/enterprise?key={key}",
+      "method": "GET",
+      "remark": "企业模糊查询接口",
+      "request": "key:企业名关键字",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "count": "匹配数目",
+          "enterpriseList": [
+            {
+              "credit_code": "企业工商号",
+              "name": "企业名称"
+            }
+          ]
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/invoice/invoices",
+      "method": "GET",
+      "remark": "发票列表查询接口",
+      "request": "",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "count": "发票数目",
+          "invoiceList": [
+            {
+              "id": "发票id",
+              "type": "发票类型：0-个人，1-企业",
+              "creditCode": "企业工商号",
+              "isDefault": "是否默认：0-默认，1-非默认",
+              "corpName": "企业名",
+              "address": "地址",
+              "phone": "电话",
+              "bank": "开户行",
+              "bankAcct": "开户账号"
+            },
+            {
+              "id": "发票id",
+              "type": "发票类型：0-个人，1-企业",
+              "userName": "个人姓名",
+              "isDefault": "是否默认：0-默认，1-非默认"
+            }
+          ]
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/invoice?{id}",
+      "method": "DELETE",
+      "remark": "发票删除接口",
+      "request": "id:发票id",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": "success",
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/invoice/{id}",
+      "method": "GET",
+      "remark": "发票详情查询接口",
+      "request": "id:发票id",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "id": "发票id",
+          "type": "发票类型：0-个人，1-企业",
+          "creditCode": "企业工商号",
+          "isDefault": "是否默认：0-默认，1-非默认",
+          "corpName": "企业名称",
+          "address": "地址",
+          "phone": "电话",
+          "bank": "开户行",
+          "bankAcct": "开户账号"
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "url": "localhost:8080/suishoushu/invoice/",
+      "method": "POST",
+      "remark": "发票更新接口",
+      "request": {
+        "id": "发票id，如果为空则新建发票",
+        "type": "发票类型：0-个人，1-企业",
+        "name": "个人发票-个人名称，企业发票-企业名称",
+        "isDefault": "是否默认：0-默认，1-非默认",
+        "creditCode": "企业工商号",
+        "address": "地址",
+        "phone": "电话",
+        "bank": "开户行",
+        "bankAcct": "开户账号"
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": "success",
+        "message": "错误信息"
       }
     }
   ]

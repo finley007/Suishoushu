@@ -24,7 +24,7 @@ public class Token {
 
     private static final int SECOND = 1000;
     private static final String TOKEN_EXPIRATION_SECONDS = "token.expiration.seconds";
-    public static final String KEY = "token";
+    public static final String KEY = "auth-token";
 
     private String key;
     private Date lastTouched;

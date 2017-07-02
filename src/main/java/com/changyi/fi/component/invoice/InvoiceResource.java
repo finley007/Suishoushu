@@ -67,9 +67,10 @@ public class InvoiceResource {
     }
 
     @DELETE
+    @Path("/{id}")
     @Produces("application/json")
     @Secured
-    public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @QueryParam("id") String id) {
+    public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         LogUtil.info(this.getClass(), "Enter deleteInvoice endpoint for id: " + id);
         try {
             invoiceService.deleteInvoice(Token.touch(token).getOpenId(), id);
