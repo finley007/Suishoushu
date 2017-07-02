@@ -1,9 +1,9 @@
 {
   "endpoints": [
     {
+      "name": "登录接口",
       "url": "47.94.41.252:8080/suishoushu/auth?code={code}",
       "method": "POST",
-      "remark": "登录接口",
       "request": "code:用户code",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -14,9 +14,9 @@
       }
     },
     {
+      "name": "企业详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise/{creditCode}",
       "method": "GET",
-      "remark": "企业详情查询接口",
       "request": "creditCode:企业工商号",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -32,9 +32,9 @@
       }
     },
     {
+      "name": "企业模糊查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise?key={key}",
       "method": "GET",
-      "remark": "企业模糊查询接口",
       "request": "key:企业名关键字",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -51,9 +51,9 @@
       }
     },
     {
+      "name": "发票列表查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/invoices",
       "method": "GET",
-      "remark": "发票列表查询接口",
       "request": "",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -83,9 +83,9 @@
       }
     },
     {
+      "name": "发票删除接口",
       "url": "47.94.41.252:8080/suishoushu/invoice?{id}",
       "method": "DELETE",
-      "remark": "发票删除接口",
       "request": "id:发票id",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -94,9 +94,9 @@
       }
     },
     {
+      "name": "发票详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
       "method": "GET",
-      "remark": "发票详情查询接口",
       "request": "id:发票id",
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
@@ -115,9 +115,9 @@
       }
     },
     {
+      "name": "发票更新接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/",
       "method": "POST",
-      "remark": "发票更新接口",
       "request": {
         "id": "发票id，如果为空则新建发票",
         "type": "发票类型：0-个人，1-企业",
