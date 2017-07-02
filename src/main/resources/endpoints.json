@@ -1,7 +1,7 @@
 {
   "endpoints": [
     {
-      "url": "localhost:8080/suishoushu/auth?code={code}",
+      "url": "47.94.41.252:8080/suishoushu/auth?code={code}",
       "method": "POST",
       "remark": "登录接口",
       "request": "code:用户code",
@@ -14,7 +14,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/enterprise/{creditCode}",
+      "url": "47.94.41.252:8080/suishoushu/enterprise/{creditCode}",
       "method": "GET",
       "remark": "企业详情查询接口",
       "request": "creditCode:企业工商号",
@@ -32,7 +32,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/enterprise?key={key}",
+      "url": "47.94.41.252:8080/suishoushu/enterprise?key={key}",
       "method": "GET",
       "remark": "企业模糊查询接口",
       "request": "key:企业名关键字",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/invoice/invoices",
+      "url": "47.94.41.252:8080/suishoushu/invoice/invoices",
       "method": "GET",
       "remark": "发票列表查询接口",
       "request": "",
@@ -83,7 +83,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/invoice?{id}",
+      "url": "47.94.41.252:8080/suishoushu/invoice?{id}",
       "method": "DELETE",
       "remark": "发票删除接口",
       "request": "id:发票id",
@@ -94,7 +94,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/invoice/{id}",
+      "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
       "method": "GET",
       "remark": "发票详情查询接口",
       "request": "id:发票id",
@@ -115,7 +115,7 @@
       }
     },
     {
-      "url": "localhost:8080/suishoushu/invoice/",
+      "url": "47.94.41.252:8080/suishoushu/invoice/",
       "method": "POST",
       "remark": "发票更新接口",
       "request": {
