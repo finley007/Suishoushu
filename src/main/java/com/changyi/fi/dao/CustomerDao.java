@@ -42,7 +42,7 @@ public interface CustomerDao {
      */
     int update(CustomerPO record);
 
-    @Select("select count(*) from customer t where t.open_id = #{openId}")
+    @Select("select count(*) from CUSTOMER t where t.OPEN_ID = #{openId}")
     @Result(javaType = Long.class)
     public Long countCustomerById(@Param("openId") String openId);
 }
