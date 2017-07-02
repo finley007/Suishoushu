@@ -1,0 +1,321 @@
+-- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
+--
+-- Host: localhost    Database: fi_dev
+-- ------------------------------------------------------
+-- Server version	5.7.17
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `CUSTOMER`
+--
+
+DROP TABLE IF EXISTS `CUSTOMER`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CUSTOMER` (
+  `OPEN_ID` varchar(64) NOT NULL,
+  `NICK_NAME` varchar(64) NOT NULL,
+  `GENDER` smallint(6) DEFAULT NULL,
+  `CITY` varchar(64) DEFAULT NULL,
+  `PROVINCE` varchar(128) DEFAULT NULL,
+  `COUNTRY` varchar(128) DEFAULT NULL,
+  `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LAST_LOGIN_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`OPEN_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CUSTOMER`
+--
+
+LOCK TABLES `CUSTOMER` WRITE;
+/*!40000 ALTER TABLE `CUSTOMER` DISABLE KEYS */;
+INSERT INTO `CUSTOMER` VALUES ('19830310007','liuli',1,NULL,NULL,NULL,'2017-06-25 20:14:06','2017-06-29 03:18:36');
+/*!40000 ALTER TABLE `CUSTOMER` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ENTERPRISE`
+--
+
+DROP TABLE IF EXISTS `ENTERPRISE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ENTERPRISE` (
+  `CREDIT_CODE` varchar(20) NOT NULL,
+  `NAME` varchar(128) NOT NULL,
+  `TYPE` varchar(128) DEFAULT NULL,
+  `LEGAL_PERSON` varchar(64) DEFAULT NULL,
+  `REG_CAPITAL` decimal(10,2) DEFAULT NULL,
+  `ESTABLISH_DATE` date DEFAULT NULL,
+  `BIZ_PERIOD_START` date DEFAULT NULL,
+  `BIZ_PERIOD_END` date DEFAULT NULL,
+  `REG_AUTHORITY` varchar(128) DEFAULT NULL,
+  `ADDRESS` varchar(256) NOT NULL,
+  `MAIN_BIZ` blob,
+  `PHONE` varchar(16) NOT NULL,
+  `BANK` varchar(256) NOT NULL,
+  `BANK_ACCT` varchar(32) NOT NULL,
+  `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `CREATE_BY` varchar(64) NOT NULL,
+  `MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `MODIFY_BY` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`CREDIT_CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ENTERPRISE`
+--
+
+LOCK TABLES `ENTERPRISE` WRITE;
+/*!40000 ALTER TABLE `ENTERPRISE` DISABLE KEYS */;
+INSERT INTO `ENTERPRISE` VALUES ('112345678abcd','畅移科技',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'高新路科技路123',NULL,'123456789','建行','123421313','2017-06-26 23:15:23','19830310007','2017-06-26 23:15:23','19830310007'),('1234567890abcd','BCD',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'高新路科技路123',NULL,'123456789','建行','123421313','2017-06-26 20:50:06','19830310007','2017-06-26 20:50:06','19830310007'),('12345678abcd','畅移信息',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'高新路科技路123',NULL,'123456789','建行','123421313','2017-06-25 20:14:11','19830310007','2017-06-26 23:08:20','19830310007');
+/*!40000 ALTER TABLE `ENTERPRISE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ENTERPRISE_MODIFY_HISTORY`
+--
+
+DROP TABLE IF EXISTS `ENTERPRISE_MODIFY_HISTORY`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ENTERPRISE_MODIFY_HISTORY` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CREDIT_CODE` varchar(20) NOT NULL,
+  `MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `MODIFY_BY` varchar(64) NOT NULL,
+  `FIELD` varchar(32) NOT NULL,
+  `OLD_VALUE` varchar(255) NOT NULL,
+  `NEW_VALUE` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_ENTERPRISE_HISTORY` (`CREDIT_CODE`),
+  CONSTRAINT `FK_ENTERPRISE_HISTORY` FOREIGN KEY (`CREDIT_CODE`) REFERENCES `ENTERPRISE` (`CREDIT_CODE`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ENTERPRISE_MODIFY_HISTORY`
+--
+
+LOCK TABLES `ENTERPRISE_MODIFY_HISTORY` WRITE;
+/*!40000 ALTER TABLE `ENTERPRISE_MODIFY_HISTORY` DISABLE KEYS */;
+INSERT INTO `ENTERPRISE_MODIFY_HISTORY` VALUES (1,'12345678abcd','2017-06-25 20:15:14','19830310007','Address','高新路科技路123','高新路科技路'),(2,'12345678abcd','2017-06-25 20:23:47','19830310007','Address','高新路科技路','高新路科技路123'),(3,'12345678abcd','2017-06-26 23:08:11','19830310007','Name','高新路科技路123','高新路科技路123'),(4,'12345678abcd','2017-06-26 23:08:20','19830310007','Name','高新路科技路123','高新路科技路123');
+/*!40000 ALTER TABLE `ENTERPRISE_MODIFY_HISTORY` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `INVOICE`
+--
+
+DROP TABLE IF EXISTS `INVOICE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `INVOICE` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `OPEN_ID` varchar(64) NOT NULL,
+  `TYPE` smallint(6) NOT NULL,
+  `USER_NAME` varchar(32) DEFAULT NULL,
+  `CREDIT_CODE` varchar(32) DEFAULT NULL,
+  `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `IS_DEFAULT` smallint(6) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_INVOICE_ENTERPRISE` (`CREDIT_CODE`),
+  KEY `FK_CUSTOMER_INVOICE` (`OPEN_ID`),
+  CONSTRAINT `FK_CUSTOMER_INVOICE` FOREIGN KEY (`OPEN_ID`) REFERENCES `CUSTOMER` (`OPEN_ID`),
+  CONSTRAINT `FK_INVOICE_ENTERPRISE` FOREIGN KEY (`CREDIT_CODE`) REFERENCES `ENTERPRISE` (`CREDIT_CODE`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `INVOICE`
+--
+
+LOCK TABLES `INVOICE` WRITE;
+/*!40000 ALTER TABLE `INVOICE` DISABLE KEYS */;
+INSERT INTO `INVOICE` VALUES (1,'19830310007',1,NULL,'12345678abcd','2017-06-25 20:14:11','2017-06-25 20:14:11',0),(3,'19830310007',0,'ABC',NULL,'2017-06-25 20:15:49','2017-06-25 20:15:49',0),(5,'19830310007',0,'BCD',NULL,'2017-06-26 20:49:14','2017-06-26 20:49:14',0),(6,'19830310007',1,NULL,'1234567890abcd','2017-06-26 20:50:06','2017-06-26 20:50:06',0),(9,'19830310007',1,NULL,'12345678abcd','2017-06-26 23:08:11','2017-06-26 23:08:11',0),(10,'19830310007',1,NULL,'12345678abcd','2017-06-26 23:08:20','2017-06-26 23:08:20',0);
+/*!40000 ALTER TABLE `INVOICE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `MERCHANT`
+--
+
+DROP TABLE IF EXISTS `MERCHANT`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MERCHANT` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MER_ID` int(11) DEFAULT NULL,
+  `NAME` varchar(255) NOT NULL,
+  `TYPE` smallint(6) NOT NULL,
+  `ADDRESS` varchar(255) NOT NULL,
+  `EMAIL` varchar(64) DEFAULT NULL,
+  `PHONE1` varchar(32) DEFAULT NULL,
+  `PHONE2` varchar(32) DEFAULT NULL,
+  `LONGITUDE` decimal(10,3) NOT NULL,
+  `LETITUDE` decimal(10,3) NOT NULL,
+  `ZIP_CODE` varchar(10) DEFAULT NULL,
+  `STATUS` smallint(6) NOT NULL,
+  `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `CREATE_BY` varchar(32) NOT NULL,
+  `MODIFY_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `MODIFY_BY` varchar(32) DEFAULT NULL,
+  `EXPIRE_TIME` timestamp NOT NULL DEFAULT '2036-12-31 15:59:59',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `MERCHANT`
+--
+
+LOCK TABLES `MERCHANT` WRITE;
+/*!40000 ALTER TABLE `MERCHANT` DISABLE KEYS */;
+/*!40000 ALTER TABLE `MERCHANT` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `MERCHANT_INVOICE`
+--
+
+DROP TABLE IF EXISTS `MERCHANT_INVOICE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MERCHANT_INVOICE` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `INV_ID` int(11) DEFAULT NULL,
+  `MER_ID` int(11) DEFAULT NULL,
+  `MERCHANT_ID` int(11) NOT NULL,
+  `INVOICE_ID` int(11) NOT NULL,
+  `AMOUNT` decimal(10,2) DEFAULT NULL,
+  `CREATE_TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `FK_INVOICE_MERCHAT` (`INVOICE_ID`),
+  KEY `FK_MERCHAT_INVOICE` (`MERCHANT_ID`),
+  CONSTRAINT `FK_INVOICE_MERCHAT` FOREIGN KEY (`INVOICE_ID`) REFERENCES `INVOICE` (`ID`),
+  CONSTRAINT `FK_MERCHAT_INVOICE` FOREIGN KEY (`MERCHANT_ID`) REFERENCES `MERCHANT` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `MERCHANT_INVOICE`
+--
+
+LOCK TABLES `MERCHANT_INVOICE` WRITE;
+/*!40000 ALTER TABLE `MERCHANT_INVOICE` DISABLE KEYS */;
+/*!40000 ALTER TABLE `MERCHANT_INVOICE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `MERCHANT_TYPE`
+--
+
+DROP TABLE IF EXISTS `MERCHANT_TYPE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MERCHANT_TYPE` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(255) NOT NULL,
+  `REMARK` varchar(1024) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `MERCHANT_TYPE`
+--
+
+LOCK TABLES `MERCHANT_TYPE` WRITE;
+/*!40000 ALTER TABLE `MERCHANT_TYPE` DISABLE KEYS */;
+/*!40000 ALTER TABLE `MERCHANT_TYPE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `SYS_EXCEPTION`
+--
+
+DROP TABLE IF EXISTS `SYS_EXCEPTION`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SYS_EXCEPTION` (
+  `CLASS` varchar(255) NOT NULL,
+  `CODE` varchar(10) NOT NULL,
+  PRIMARY KEY (`CLASS`,`CODE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `SYS_EXCEPTION`
+--
+
+LOCK TABLES `SYS_EXCEPTION` WRITE;
+/*!40000 ALTER TABLE `SYS_EXCEPTION` DISABLE KEYS */;
+/*!40000 ALTER TABLE `SYS_EXCEPTION` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `v_invoice`
+--
+
+DROP TABLE IF EXISTS `v_invoice`;
+/*!50001 DROP VIEW IF EXISTS `v_invoice`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_invoice` AS SELECT 
+ 1 AS `ID`,
+ 1 AS `OPEN_ID`,
+ 1 AS `TYPE`,
+ 1 AS `USER_NAME`,
+ 1 AS `CREDIT_CODE`,
+ 1 AS `CREATE_TIME`,
+ 1 AS `MODIFY_TIME`,
+ 1 AS `IS_DEFAULT`,
+ 1 AS `CORP_NAME`,
+ 1 AS `ADDRESS`,
+ 1 AS `PHONE`,
+ 1 AS `BANK`,
+ 1 AS `BANK_ACCT`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `v_invoice`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_invoice`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_invoice` AS select `I`.`ID` AS `ID`,`I`.`OPEN_ID` AS `OPEN_ID`,`I`.`TYPE` AS `TYPE`,`I`.`USER_NAME` AS `USER_NAME`,`I`.`CREDIT_CODE` AS `CREDIT_CODE`,`I`.`CREATE_TIME` AS `CREATE_TIME`,`I`.`MODIFY_TIME` AS `MODIFY_TIME`,`I`.`IS_DEFAULT` AS `IS_DEFAULT`,`E`.`NAME` AS `CORP_NAME`,`E`.`ADDRESS` AS `ADDRESS`,`E`.`PHONE` AS `PHONE`,`E`.`BANK` AS `BANK`,`E`.`BANK_ACCT` AS `BANK_ACCT` from (`invoice` `I` left join `enterprise` `E` on((`I`.`CREDIT_CODE` = `E`.`CREDIT_CODE`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-07-01 22:52:30

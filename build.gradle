@@ -96,3 +96,9 @@ sourceSets {
         }
     }
 }
+
+task copyTask(type: Copy, dependsOn: war) {
+    from war
+    into serverLocation
+    rename '(suishoushu).*(\\.war)', '$1$2'
+}
