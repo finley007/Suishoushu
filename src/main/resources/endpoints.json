@@ -135,7 +135,6 @@
         "message": "错误信息"
       }
     },
-    ,
     {
       "name": "用户信息更新接口",
       "url": "47.94.41.252:8080/suishoushu/customer/",
