@@ -1,10 +1,11 @@
 package com.changyi.fi.core;
 
+import com.changyi.fi.core.exception.SystemException;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.mysql.cj.core.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by finley on 2/6/17.
@@ -22,8 +23,8 @@ public class Payload {
     }
 
     public Payload(String payload) throws Exception {
-        if (StringUtils.isNullOrEmpty(payload) || StringUtils.isNullOrEmpty(payload.trim())) {
-            throw new Exception();
+        if (StringUtils.isEmpty(payload)) {
+            throw new SystemException("Payload is empty");
         }
         this.payload = payload;
     }
@@ -36,7 +37,7 @@ public class Payload {
         try {
             return new Gson().fromJson(payload, clz);
         } catch (JsonSyntaxException e) {
-            throw new Exception();
+            throw new SystemException("Invalid format json: " + payload);
         }
     }
 

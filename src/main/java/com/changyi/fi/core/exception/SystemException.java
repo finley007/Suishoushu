@@ -10,4 +10,8 @@ public class SystemException extends BaseException {
         this.initCause(t);
     }
 
+    public SystemException(String msg) {
+        super(msg);
+    }
+
 }

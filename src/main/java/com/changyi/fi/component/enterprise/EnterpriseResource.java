@@ -8,6 +8,8 @@ import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.token.Token;
+import com.changyi.fi.exception.NullRequestException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -28,8 +30,11 @@ public class EnterpriseResource {
     @Produces("application/json")
     @Secured
     public Response matchEnterprise(@HeaderParam(Token.KEY) String token, @QueryParam("key") String key) {
-        LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);
         try {
+            LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);
+            if (StringUtils.isEmpty(key)) {
+                throw new NullRequestException("Key is required");
+            }
             MatchEnterpriseResponse response = enterpriseService.matchEnterprise(key);
             LogUtil.info(this.getClass(), "Complete matchEnterprise endpoint handle");
             LogUtil.debug(this.getClass(), "Response: {} ", response.build());
@@ -46,8 +51,11 @@ public class EnterpriseResource {
     @Produces("application/json")
     @Secured
     public Response getEnterprise(@HeaderParam(Token.KEY) String token, @PathParam("creditCode") String creditCode) {
-        LogUtil.info(this.getClass(), "Enter getEnterprise endpint for creditCode: " + creditCode);
         try {
+            LogUtil.info(this.getClass(), "Enter getEnterprise endpint for creditCode: " + creditCode);
+            if (StringUtils.isEmpty(creditCode)) {
+                throw new NullRequestException("Credit code is required");
+            }
             GetEnterpriseResponse response = enterpriseService.getEnterprise(creditCode);
             LogUtil.info(this.getClass(), "Complete getEnterprise endpoint handle");
             LogUtil.debug(this.getClass(), "Response: {} ", response.build());

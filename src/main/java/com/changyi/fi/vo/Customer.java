@@ -1,15 +1,19 @@
 package com.changyi.fi.vo;
 
-import com.changyi.fi.core.Payload;
+import com.changyi.fi.core.BaseVO;
+import net.sf.oval.constraint.MatchPattern;
+import net.sf.oval.constraint.NotEmpty;
+import net.sf.oval.constraint.NotNull;
 
-public class CustomerInfo {
+public class Customer extends BaseVO{
 
-    private String openId;
-
-    private String sessionKey;
-
+    @NotNull
+    @NotEmpty
     private String nickName;
 
+    @NotNull
+    @NotEmpty
+    @MatchPattern(pattern = "^0|1|2$")
     private String gendar;
 
     private String city;
@@ -17,22 +21,6 @@ public class CustomerInfo {
     private String province;
 
     private String country;
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    public String getSessionKey() {
-        return sessionKey;
-    }
-
-    public void setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
-    }
 
     public String getNickName() {
         return nickName;
@@ -73,13 +61,6 @@ public class CustomerInfo {
     public void setCountry(String country) {
         this.country = country;
     }
-
-    public String toJson() {
-        return new Payload(this).from(this.getClass());
-    }
-
-
-
 
 
 }

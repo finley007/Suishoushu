@@ -134,6 +134,24 @@
         "content": "success",
         "message": "错误信息"
       }
+    },
+    ,
+    {
+      "name": "用户信息更新接口",
+      "url": "47.94.41.252:8080/suishoushu/customer/",
+      "method": "PUT",
+      "request": {
+        "nickName": "昵称",
+        "gendar": "性别： 0-未知，1-男，2-女",
+        "city": "城市",
+        "province": "省份",
+        "country": "国家"
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": "success",
+        "message": "错误信息"
+      }
     }
   ]
 }

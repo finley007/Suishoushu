@@ -30,7 +30,7 @@ public class Auth {
         LogUtil.info(this.getClass(), "Do authentication for code: ", code);
         try {
             if (StringUtils.isEmpty(code)) {
-                throw new NullRequestException("User code is empty");
+                throw new NullRequestException("User code is required");
             }
             AuthResponse response = this.authService.authenticate(code);
             return Response.status(Response.Status.OK).entity(response.build()).build();

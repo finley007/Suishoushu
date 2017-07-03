@@ -1,9 +1,9 @@
 package com.changyi.fi.external.weixin;
 
-import com.changyi.fi.vo.CustomerInfo;
+import com.changyi.fi.vo.Session;
 
 public interface WeixinAPIService {
 
-    public CustomerInfo login(String code) throws Exception;
+    public Session login(String code) throws Exception;
 
 }
