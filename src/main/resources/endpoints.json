@@ -16,6 +16,7 @@
     {
       "name": "企业详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise/{creditCode}",
+      "head" : "auth_token",
       "method": "GET",
       "request": "creditCode:企业工商号",
       "response": {
@@ -34,6 +35,7 @@
     {
       "name": "企业模糊查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise?key={key}",
+      "head" : "auth_token",
       "method": "GET",
       "request": "key:企业名关键字",
       "response": {
@@ -53,6 +55,7 @@
     {
       "name": "发票列表查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/invoices",
+      "head" : "auth_token",
       "method": "GET",
       "request": "",
       "response": {
@@ -84,7 +87,8 @@
     },
     {
       "name": "发票删除接口",
-      "url": "47.94.41.252:8080/suishoushu/invoice?{id}",
+      "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
+      "head" : "auth_token",
       "method": "DELETE",
       "request": "id:发票id",
       "response": {
@@ -96,6 +100,7 @@
     {
       "name": "发票详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
+      "head" : "auth_token",
       "method": "GET",
       "request": "id:发票id",
       "response": {
@@ -117,6 +122,7 @@
     {
       "name": "发票更新接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/",
+      "head" : "auth_token",
       "method": "POST",
       "request": {
         "id": "发票id，如果为空则新建发票",
@@ -138,6 +144,7 @@
     {
       "name": "用户信息更新接口",
       "url": "47.94.41.252:8080/suishoushu/customer/",
+      "head" : "auth_token",
       "method": "PUT",
       "request": {
         "nickName": "昵称",

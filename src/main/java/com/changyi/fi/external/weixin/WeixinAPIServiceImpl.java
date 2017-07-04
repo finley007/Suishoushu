@@ -2,12 +2,10 @@ package com.changyi.fi.external.weixin;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
-import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.weixin.response.WeixinLoginResponse;
 import com.changyi.fi.vo.Session;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
