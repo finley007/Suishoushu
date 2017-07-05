@@ -23,4 +23,9 @@ public class ConfigService {
     public List<Map> getExceptionCode() {
         return configDao.getExceptionCode();
     }
+
+    public List<Map> getSysParameter() {
+        return configDao.getSysParameter();
+    }
+
 }

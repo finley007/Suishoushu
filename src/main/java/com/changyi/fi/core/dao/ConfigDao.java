@@ -17,4 +17,9 @@ public interface ConfigDao {
     @Options(useCache = true)
     public List<Map> getExceptionCode();
 
+    @Select("SELECT * FROM SYS_PARAMETER")
+    @Result(javaType = Map.class)
+    @Options(useCache = true)
+    public List<Map> getSysParameter();
+
 }

@@ -28,6 +28,8 @@ public class LogUtil {
         logger.error(getClassInfo(clz, info), t);
     }
 
+    public static void warn(Class clz, String info) {logger.warn(info);}
+
     private static String getClassInfo(Class clz, String info) {
         return "[" + clz.getName() + "]: " + info;
     }
