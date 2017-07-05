@@ -1,6 +1,8 @@
 package com.changyi.fi.core.config;
 
+import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.tool.DictionaryManager;
+import org.apache.commons.lang3.StringUtils;
 
 public class ConfigManager {
 
@@ -10,4 +12,29 @@ public class ConfigManager {
         }
         return ((ConfigDic) DictionaryManager.dic(ConfigDic.NAME)).get(name);
     }
+
+    public static Boolean getBooleanParameter(String name, Boolean defaultValue) {
+        String value = getParameter(name);
+        if (StringUtils.isNotBlank(value) && "true".equalsIgnoreCase(value)) {
+            return true;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public static Double getDoubleParameter(String name, Double defaultValue) {
+        String value = getParameter(name);
+        if (StringUtils.isNotBlank(value)) {
+            try {
+                return Double.valueOf(value);
+            } catch (Exception e) {
+                LogUtil.warn(ConfigManager.class, "Invalid parameter value: " + name);
+                return defaultValue;
+            }
+        } else {
+            return defaultValue;
+        }
+    }
+
+
 }

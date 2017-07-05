@@ -158,6 +158,24 @@
         "content": "success",
         "message": "错误信息"
       }
+    },
+    {
+      "name": "商户验证接口",
+      "url": "47.94.41.252:8080/suishoushu/merchant/validate",
+      "head" : "auth_token",
+      "method": "POST",
+      "request": {
+        "id": "商户id",
+        "position": {
+          "longitude": "经度",
+          "latitude": "纬度"
+        }
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": "success",
+        "message": "错误信息"
+      }
     }
   ]
 }
