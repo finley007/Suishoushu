@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface InvoiceDao {
 
-    List<VInvoicePO> listInvoices(@Param("openId") String openId);
+    List<VInvoicePO> listInvoices(@Param("openId") String openId, @Param("status") String status);
 
     VInvoicePO getInvoiceById(@Param(("id")) String id);
 

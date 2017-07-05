@@ -256,66 +256,6 @@ public class MerchantPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andMerIdIsNull() {
-            addCriterion("MER_ID is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdIsNotNull() {
-            addCriterion("MER_ID is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdEqualTo(Integer value) {
-            addCriterion("MER_ID =", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdNotEqualTo(Integer value) {
-            addCriterion("MER_ID <>", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdGreaterThan(Integer value) {
-            addCriterion("MER_ID >", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("MER_ID >=", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdLessThan(Integer value) {
-            addCriterion("MER_ID <", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdLessThanOrEqualTo(Integer value) {
-            addCriterion("MER_ID <=", value, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdIn(List<Integer> values) {
-            addCriterion("MER_ID in", values, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdNotIn(List<Integer> values) {
-            addCriterion("MER_ID not in", values, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdBetween(Integer value1, Integer value2) {
-            addCriterion("MER_ID between", value1, value2, "merId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("MER_ID not between", value1, value2, "merId");
-            return (Criteria) this;
-        }
-
         public Criteria andNameIsNull() {
             addCriterion("NAME is null");
             return (Criteria) this;

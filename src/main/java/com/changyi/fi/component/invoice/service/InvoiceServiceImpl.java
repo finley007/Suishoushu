@@ -35,7 +35,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public InvoicesResponse listInvoice(String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute listInvoice service for: " + openId);
-        return new InvoicesResponse(this.invoiceDao.listInvoices(openId));
+        String status = FIConstants.InvoiceStatus.Normal.getValue() + "";
+        return new InvoicesResponse(this.invoiceDao.listInvoices(openId, status));
     }
 
     @Validate(validator = "com.changyi.fi.component.invoice.validate.PutInvoiceValidator")
@@ -57,6 +58,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             po.setIsDefault(Short.valueOf(request.getIsDefault()));
             po.setUserName(request.getName());
             po.setOpenId(openId);
+            po.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
             po.setCreateTime(new Date());
             po.setModifyTime(new Date());
             invoiceDao.insert(po);
@@ -68,6 +70,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             ipo.setIsDefault(Short.valueOf(request.getIsDefault()));
             ipo.setCreditCode(request.getCreditCode());
             ipo.setOpenId(openId);
+            ipo.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
             ipo.setCreateTime(new Date());
             ipo.setModifyTime(new Date());
             invoiceDao.insert(ipo);
@@ -79,7 +82,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoicePO po = new InvoicePO();
             po.setId(Integer.valueOf(request.getId()));
             po.setType(Short.valueOf(request.getType()));
-            po.setIsDefault(Short.valueOf(request.getIsDefault()));
             po.setUserName(request.getName());
             po.setOpenId(openId);
             po.setModifyTime(new Date());
@@ -170,7 +172,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             if (!invoice.getOpenId().equals(openId)) {
                 throw new AuthenticationFailedException("The current customer is not the invoice owner!");
             }
-            this.invoiceDao.deleteInvoice(id);
+            InvoicePO invoicePO = new InvoicePO();
+            invoicePO.setId(invoice.getId());
+            invoicePO.setStatus(FIConstants.InvoiceStatus.Invalid.getValue());
+            invoicePO.setModifyTime(new Date());
+            this.invoiceDao.updateSelective(invoicePO);
         } else {
             LogUtil.info(this.getClass(), "The invoice doesn't exist");
         }

@@ -18,6 +18,16 @@ public class FIConstants {
         }
     }
 
+    public enum InvoiceStatus {
+        Normal(Integer.valueOf(0).shortValue()), Invalid(Integer.valueOf(1).shortValue());
+
+        private Short value;
+
+        private InvoiceStatus(Short value) { this.value = value; }
+
+        public Short getValue() { return value; }
+    }
+
     public enum EnterpriseField {
 
         Address("Address"), Phone("Phone"), Name("Name"), Bank("Bank"), BankAcct("BankAcct");

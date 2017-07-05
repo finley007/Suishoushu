@@ -705,6 +705,66 @@ public class VInvoicePOExample {
             return (Criteria) this;
         }
 
+        public Criteria andStatusIsNull() {
+            addCriterion("STATUS is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("STATUS is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Short value) {
+            addCriterion("STATUS =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Short value) {
+            addCriterion("STATUS <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Short value) {
+            addCriterion("STATUS >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Short value) {
+            addCriterion("STATUS >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Short value) {
+            addCriterion("STATUS <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Short value) {
+            addCriterion("STATUS <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Short> values) {
+            addCriterion("STATUS in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Short> values) {
+            addCriterion("STATUS not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Short value1, Short value2) {
+            addCriterion("STATUS between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Short value1, Short value2) {
+            addCriterion("STATUS not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
         public Criteria andCorpNameIsNull() {
             addCriterion("CORP_NAME is null");
             return (Criteria) this;
