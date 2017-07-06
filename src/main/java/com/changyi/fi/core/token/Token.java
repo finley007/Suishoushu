@@ -1,7 +1,6 @@
 package com.changyi.fi.core.token;
 
 import com.changyi.fi.core.tool.Properties;
-import com.changyi.fi.vo.Customer;
 import com.changyi.fi.vo.Session;
 
 import java.math.BigInteger;
@@ -18,17 +17,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class Token {
 
-    private static ConcurrentHashMap<String, Token> tokens = new ConcurrentHashMap<String, Token>();
-    private static ScheduledExecutorService tokenRemoverPool = Executors.newSingleThreadScheduledExecutor();
-
-    private static SecureRandom random = new SecureRandom();
-
     private static final int SECOND = 1000;
     private static final String TOKEN_EXPIRATION_SECONDS = "token.expiration.seconds";
     public static final String KEY = "auth-token";
 
+    private static ITokenRepository repository = new TokenRepository();
+
     private String key;
     private Date lastTouched;
+
+    private SecureRandom random = new SecureRandom();
 
     public Session getSession() {
         return session;
@@ -40,20 +38,16 @@ public class Token {
 
     public Token(Session session) {
         this.session = session;
-        String keyBase = session.getOpenId() + System.currentTimeMillis();
-        setKey(new BigInteger(130, random).toString(32) + String.valueOf(keyBase.hashCode()));
+        setKey(createKey(session));
         setLastTouched(new Date());
-        tokens.put(key, this);
-        tokenRemoverPool.schedule(new TokenRemover(key), getDelay() + SECOND, TimeUnit.MILLISECONDS);
-        traceTokens();
+        repository.addToken(this);
     }
 
-    private static void traceTokens() {
-        Enumeration<String> en = tokens.keys();
-        while (en.hasMoreElements()) {
-            System.out.println(en.nextElement());
-        }
+    private String createKey(Session session) {
+        String keyBase = session.getOpenId() + System.currentTimeMillis();
+        return new BigInteger(130, random).toString(32) + String.valueOf(keyBase.hashCode());
     }
+
     /**
      * Checks if token is still valid.
      * If it is - refreshes it's timer.
@@ -61,8 +55,7 @@ public class Token {
      * @return whether or not the token is present
      */
     public static Token touch(String key) {
-        traceTokens();
-        Token token = tokens.get(key);
+        Token token = repository.touchToken(key);
         if (token != null) {
             token.setLastTouched(new Date());
         }
@@ -73,7 +66,7 @@ public class Token {
      * Delay in milliseconds from properties file
      * Defaults to 24 hours
      */
-    private static long getDelay() {
+    public long getDelay() {
         long delaySeconds;
         try {
             delaySeconds = Long.parseLong(Properties.get(TOKEN_EXPIRATION_SECONDS));
@@ -96,35 +89,8 @@ public class Token {
         this.lastTouched = lastTouched;
     }
 
-    private void setKey(String body) {
-        this.key = body;
-    }
-
-    private class TokenRemover implements Runnable {
-        private String tokenKey;
-
-        public TokenRemover(String tokenKey) {
-            this.tokenKey = tokenKey;
-        }
-
-        public void run() {
-            Token currentToken = tokens.get(tokenKey);
-            if (currentToken == null) {
-                return;
-            }
-            Date expiration = currentToken.getExpiration();
-            if (expiration.after(new Date())) {
-                long checkAfter = expiration.getTime() - System.currentTimeMillis() + SECOND;
-                tokenRemoverPool.schedule(this, checkAfter, TimeUnit.MILLISECONDS);
-            } else {
-                tokens.remove(key);
-            }
-        }
-
-    }
-
-    public static void remove(String key) {
-        tokens.remove(key);
+    private void setKey(String key) {
+        this.key = key;
     }
 
 }

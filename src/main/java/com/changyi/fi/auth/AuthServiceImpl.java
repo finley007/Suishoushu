@@ -2,16 +2,11 @@ package com.changyi.fi.auth;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.token.Token;
-import com.changyi.fi.dao.CustomerDao;
 import com.changyi.fi.external.weixin.WeixinAPIService;
-import com.changyi.fi.model.CustomerPO;
-import com.changyi.fi.vo.Customer;
 import com.changyi.fi.vo.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * Created by finley on 1/25/17.

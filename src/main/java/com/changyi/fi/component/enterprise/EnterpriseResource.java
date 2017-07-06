@@ -4,7 +4,6 @@ import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.component.enterprise.service.EnterpriseService;
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.token.Token;

@@ -1,18 +1,15 @@
 package com.changyi.fi.core.aop;
 
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
+import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.UnauthorizedException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 /**
