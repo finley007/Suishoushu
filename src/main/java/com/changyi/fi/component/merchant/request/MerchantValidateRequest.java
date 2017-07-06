@@ -7,11 +7,11 @@ import net.sf.oval.constraint.NotNull;
 
 public class MerchantValidateRequest {
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "id is required")
+    @NotEmpty(message = "id is required")
     private String id;
 
-    @NotNull
+    @NotNull(message = "position is required")
     private Position position;
 
     public String getId() {

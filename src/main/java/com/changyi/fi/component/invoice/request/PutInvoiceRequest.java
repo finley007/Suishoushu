@@ -12,13 +12,13 @@ public class PutInvoiceRequest implements Request {
 
     private String id;
 
-    @NotNull
-    @NotEmpty
-    @MatchPattern(pattern = "^0|1$")
+    @NotNull(message = "type is required")
+    @NotEmpty(message = "type is required")
+    @MatchPattern(pattern = "^0|1$", message = "invalid type value, should be 0 or 1")
     private String type;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "name is required")
+    @NotEmpty(message = "name is required")
     private String name;
 
     private String address;
@@ -31,9 +31,9 @@ public class PutInvoiceRequest implements Request {
 
     private String bankAcct;
 
-    @NotNull
-    @NotEmpty
-    @MatchPattern(pattern = "^0|1$")
+    @NotNull(message = "isDefault is required")
+    @NotEmpty(message = "isDefault is required")
+    @MatchPattern(pattern = "^0|1$", message = "invalid isDefault value, should be 0 or 1")
     private String isDefault;
 
     public String getType() {

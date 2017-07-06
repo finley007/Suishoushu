@@ -1,5 +1,6 @@
 package com.changyi.fi.component.merchant.service;
 
+import com.changyi.fi.component.merchant.request.DoRecordRequest;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
@@ -9,10 +10,13 @@ import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.dao.MerchantDao;
 import com.changyi.fi.exception.MerchantNotFoundException;
 import com.changyi.fi.exception.OutOfBoundsException;
+import com.changyi.fi.model.MerchantInvoicePO;
 import com.changyi.fi.model.MerchantPO;
 import com.changyi.fi.vo.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service("merchantService")
 public class MerchantServiceImpl implements MerchantService {
@@ -50,5 +54,15 @@ public class MerchantServiceImpl implements MerchantService {
             LogUtil.info(this.getClass(), "Merchant validation is off");
         }
         return true;
+    }
+
+    @Validate
+    public void doRecord(DoRecordRequest req, String openId) throws Exception {
+        LogUtil.info(this.getClass(), "Execute doRecord service for: " + openId);
+        MerchantInvoicePO po = new MerchantInvoicePO();
+        po.setCreateTime(new Date());
+        po.setInvoiceId(Integer.valueOf(req.getInvoiceId()));
+        po.setMerchantId(Integer.valueOf(req.getMerchantId()));
+        this.merchantDao.insertMerchantInvoice(po);
     }
 }

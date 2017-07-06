@@ -1,6 +1,7 @@
 package com.changyi.fi.core;
 
 import com.changyi.fi.core.exception.SystemException;
+import com.changyi.fi.exception.InvalidJsonException;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +38,7 @@ public class Payload {
         try {
             return new Gson().fromJson(payload, clz);
         } catch (JsonSyntaxException e) {
-            throw new SystemException("Invalid format json: " + payload);
+            throw new InvalidJsonException("Invalid format json: " + payload);
         }
     }
 
