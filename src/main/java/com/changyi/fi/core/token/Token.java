@@ -1,16 +1,13 @@
 package com.changyi.fi.core.token;
 
-import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.vo.Session;
+import org.apache.commons.lang.StringUtils;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by finley on 1/30/17.
@@ -18,12 +15,27 @@ import java.util.concurrent.TimeUnit;
 public class Token {
 
     private static final int SECOND = 1000;
-    private static final String TOKEN_EXPIRATION_SECONDS = "token.expiration.seconds";
+    private static final String TOKEN_EXPIRATION_SECONDS = "TOKEN_EXPIRATION_SECONDS";
+    private static final String TOKEN_REPOSITORY_IMPL_CLZ = "TOKEN_REPOSITORY_IMPL_CLZ";
     public static final String KEY = "auth-token";
 
-    private static ITokenRepository repository = new TokenRepository();
+    private static ITokenRepository repository = new RedisTokenRepository();
+
+    static {
+        String implClz = "com.changyi.fi.core.token.TokenRepository";
+        if (!StringUtils.isEmpty(ConfigManager.getParameter(TOKEN_REPOSITORY_IMPL_CLZ))) {
+            implClz = ConfigManager.getParameter(TOKEN_REPOSITORY_IMPL_CLZ);
+        }
+        try {
+            repository = (ITokenRepository)Token.class.forName(implClz).newInstance();
+        } catch (Exception e) {
+            LogUtil.error(Token.class, "Init token repository error: ", e);
+            repository = new TokenRepository();
+        }
+    }
 
     private String key;
+
     private Date lastTouched;
 
     private SecureRandom random = new SecureRandom();
@@ -62,19 +74,26 @@ public class Token {
         return token;
     }
 
+    public static void update(Token token) {
+        repository.updateToken(token);
+    }
+
     /**
      * Delay in milliseconds from properties file
      * Defaults to 24 hours
      */
     public long getDelay() {
-        long delaySeconds;
+        return getDelaySeconds() * SECOND;
+    }
+
+    public Integer getDelaySeconds() {
+        Integer delaySeconds;
         try {
-            delaySeconds = Long.parseLong(Properties.get(TOKEN_EXPIRATION_SECONDS));
+            delaySeconds = Integer.parseInt(ConfigManager.getParameter(TOKEN_EXPIRATION_SECONDS));
         } catch(Exception e) {
             delaySeconds = 24 * 60 * 60;
         }
-
-        return delaySeconds * SECOND;
+        return delaySeconds;
     }
 
     public Date getExpiration() {
@@ -89,7 +108,7 @@ public class Token {
         this.lastTouched = lastTouched;
     }
 
-    private void setKey(String key) {
+    public void setKey(String key) {
         this.key = key;
     }
 

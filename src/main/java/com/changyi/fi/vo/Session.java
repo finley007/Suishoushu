@@ -34,4 +34,5 @@ public class Session extends BaseVO {
     }
 
     private String sessionKey;
+
 }

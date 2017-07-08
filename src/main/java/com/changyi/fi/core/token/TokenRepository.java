@@ -34,6 +34,8 @@ public class TokenRepository implements ITokenRepository{
         }
     }
 
+    public void updateToken(Token token) {};
+
     private class TokenRemover implements Runnable {
         private String tokenKey;
 

@@ -36,7 +36,9 @@ public class CustomerResource {
                 throw new NullRequestException("Request is required");
             }
             Customer customer = new Payload(request).as(Customer.class);
-            String openId = Token.touch(token).getSession().setCustomer(customer).getOpenId();
+            Token curToken = Token.touch(token);
+            String openId = curToken.getSession().setCustomer(customer).getOpenId();
+            Token.update(curToken);
             customerService.updateCustomer(customer, openId);
             LogUtil.info(this.getClass(), "Complete updateCustomer endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();

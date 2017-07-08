@@ -11,6 +11,8 @@ public interface ITokenRepository {
 
     public Token touchToken(String key);
 
+    public void updateToken(Token token);
+
     public void removeToken(String key);
 
 }
