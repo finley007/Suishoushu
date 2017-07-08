@@ -1,11 +1,14 @@
 package com.changyi.fi.component.enterprise.service;
 
+import com.changyi.fi.component.enterprise.request.GetEnterpriseRequest;
 import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.tianyancha.TianYanChaAPIService;
 import com.changyi.fi.external.weixin.WeixinAPIService;
+import com.changyi.fi.model.EnterprisePO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +68,15 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return result;
     }
 
-    public GetEnterpriseResponse getEnterprise(String creditCode) throws Exception {
-        LogUtil.info(this.getClass(), "Execute getEnterprise service for creditCode: " + creditCode);
-        return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(creditCode));
+    @Validate
+    public GetEnterpriseResponse getEnterprise(GetEnterpriseRequest req) throws Exception {
+        LogUtil.info(this.getClass(), "Execute getEnterprise service");
+        if (!Boolean.valueOf(req.getIsExternal())) {
+            return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(req.getCreditCode()));
+        } else {
+            EnterprisePO po = this.tianYanChaAPIService.getEnterpriseByCode(req.getCreditCode());
+            this.invoiceDao.insertEnterprise(po);
+            return new GetEnterpriseResponse(po);
+        }
     }
 }

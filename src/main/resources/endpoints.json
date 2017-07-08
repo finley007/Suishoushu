@@ -15,10 +15,13 @@
     },
     {
       "name": "企业详情查询接口",
-      "url": "47.94.41.252:8080/suishoushu/enterprise/{creditCode}",
+      "url": "47.94.41.252:8080/suishoushu/enterprise/",
       "head" : "auth_token",
       "method": "GET",
-      "request": "creditCode:企业工商号",
+      "request": {
+        "isExternal": "是否来自外部系统",
+        "creditCode": "企业工商号"
+      },
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
         "content": {
@@ -39,12 +42,12 @@
       "method": "GET",
       "request": "key:企业名关键字",
       "response": {
-        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "returnCode": "返回码: 0-正常，xxxx-错误码",
         "content": {
           "count": "匹配数目",
           "enterpriseList": [
             {
-              "isDefault": "是否调用外部接口",
+              "isExternal": "是否来自外部系统",
               "creditCode": "企业工商号",
               "name": "企业名称"
             }

@@ -1,15 +1,18 @@
 package com.changyi.fi.component.enterprise;
 
+import com.changyi.fi.component.enterprise.request.GetEnterpriseRequest;
 import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.component.enterprise.service.EnterpriseService;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.NullRequestException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
@@ -45,17 +48,18 @@ public class EnterpriseResource {
         }
     }
 
-    @GET
-    @Path("/{creditCode}")
+    @POST
+    @Consumes("application/json")
     @Produces("application/json")
     @Secured
-    public Response getEnterprise(@HeaderParam(Token.KEY) String token, @PathParam("creditCode") String creditCode) {
+    public Response getEnterprise(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
-            LogUtil.info(this.getClass(), "Enter getEnterprise endpint for creditCode: " + creditCode);
-            if (StringUtils.isEmpty(creditCode)) {
-                throw new NullRequestException("Credit code is required");
+            LogUtil.info(this.getClass(), "Enter getEnterprise endpint for request: " + request);
+            if (StringUtils.isEmpty(request)) {
+                throw new NullRequestException("Request is required");
             }
-            GetEnterpriseResponse response = enterpriseService.getEnterprise(creditCode);
+            GetEnterpriseRequest req = new Payload(request).as(GetEnterpriseRequest.class);
+            GetEnterpriseResponse response = enterpriseService.getEnterprise(req);
             LogUtil.info(this.getClass(), "Complete getEnterprise endpoint handle");
             LogUtil.debug(this.getClass(), "Response: {} ", response.build());
             return Response.status(Response.Status.OK).entity(response.build()).build();

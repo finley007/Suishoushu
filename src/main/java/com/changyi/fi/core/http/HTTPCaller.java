@@ -1,5 +1,6 @@
 package com.changyi.fi.core.http;
 
+import com.changyi.fi.core.tool.Properties;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -10,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,6 +75,11 @@ public class HTTPCaller {
         for (String key : this.header.keySet()) {
             get.setHeader(key, this.header.get(key));
         }
+    }
+
+    public static String createUrl(String prop, Object[] args) {
+        String template = Properties.get(prop);
+        return MessageFormat.format(template, args);
     }
 
 }

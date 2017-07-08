@@ -4,6 +4,8 @@ public class FIConstants {
 
     public static final String DEFAULT_CHARSET = "utf-8";
 
+    public static final String SYSTEM = "system";
+
     public enum InvoiceType {
         Enterprise("1"), Person("0");
 
