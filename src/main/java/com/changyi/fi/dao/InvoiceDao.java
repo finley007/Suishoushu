@@ -44,7 +44,7 @@ public interface InvoiceDao {
 
     int insertEnterpriseHistorySelective(EnterpriseHistoryPO record);
 
-    @Select("select credit_code, name from enterprise t where t.name like concat('%',#{key},'%')")
+    @Select("select credit_code as creditCode, name from enterprise t where t.name like concat('%',#{key},'%')")
     @Result(javaType = Map.class)
     List<Map> matchEnterpriseList(@Param("key") String key);
 }

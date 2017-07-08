@@ -44,7 +44,8 @@
           "count": "匹配数目",
           "enterpriseList": [
             {
-              "credit_code": "企业工商号",
+              "isDefault": "是否调用外部接口",
+              "creditCode": "企业工商号",
               "name": "企业名称"
             }
           ]

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
-@Service("appService")
+@Service("weixinAPIService")
 public class WeixinAPIServiceImpl implements WeixinAPIService {
 
     private static String APP_ID = "app.id";
@@ -35,7 +35,7 @@ public class WeixinAPIServiceImpl implements WeixinAPIService {
         LogUtil.info(this.getClass(), "Execute login service by calling Weixin API, code: " + code);
         String url = createLoginUrl(code);
         LogUtil.info(this.getClass(), "Call Weixin API, url: " + url);
-        String res = HTTPCaller.doGet(url);
+        String res = new HTTPCaller(url).doGet();
         LogUtil.info(this.getClass(), "Weixin API response: " + res);
         WeixinLoginResponse response = new Payload(res).as(WeixinLoginResponse.class);
 //        if (!StringUtils.isEmpty(response.getErrcode())) {

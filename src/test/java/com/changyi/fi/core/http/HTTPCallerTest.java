@@ -27,7 +27,8 @@ public class HTTPCallerTest {
     @Test
     public void testDoGet() throws Exception {
 //TODO: Test goes here...
-        String response = HTTPCaller.doGet("https://api.weixin.qq.com/sns/jscode2session?appid=wx8910b0b926fa81a9&secret=0d1afed8ecd9077731dacb2e7d13499f&js_code=JSCODE&grant_type=authorization_code");
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx8910b0b926fa81a9&secret=0d1afed8ecd9077731dacb2e7d13499f&js_code=JSCODE&grant_type=authorization_code";
+        String response = new HTTPCaller(url).doGet();
         System.out.println(response);
     }
 
