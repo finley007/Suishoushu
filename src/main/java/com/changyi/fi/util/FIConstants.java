@@ -1,10 +1,14 @@
 package com.changyi.fi.util;
 
+import java.text.SimpleDateFormat;
+
 public class FIConstants {
 
     public static final String DEFAULT_CHARSET = "utf-8";
 
     public static final String SYSTEM = "system";
+
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
     public enum InvoiceType {
         Enterprise("1"), Person("0");

@@ -23,6 +23,10 @@
     <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
     <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="MODIFY_BY" jdbcType="VARCHAR" property="modifyBy" />
+    <result column="BIZ_REG_NUM" jdbcType="VARCHAR" property="bizRegNum" />
+    <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+    <result column="TAXPAYER_CODE" jdbcType="VARCHAR" property="taxpayerCode" />
+    <result column="INDUSTRY" jdbcType="VARCHAR" property="industry" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.changyi.fi.model.EnterprisePO">
     <!--
@@ -104,7 +108,7 @@
     -->
     CREDIT_CODE, NAME, TYPE, LEGAL_PERSON, REG_CAPITAL, ESTABLISH_DATE, BIZ_PERIOD_START, 
     BIZ_PERIOD_END, REG_AUTHORITY, ADDRESS, PHONE, BANK, BANK_ACCT, CREATE_TIME, CREATE_BY, 
-    MODIFY_TIME, MODIFY_BY
+    MODIFY_TIME, MODIFY_BY, BIZ_REG_NUM, ORG_CODE, TAXPAYER_CODE, INDUSTRY
   </sql>
   <sql id="Blob_Column_List">
     <!--
@@ -161,15 +165,17 @@
       BIZ_PERIOD_START, BIZ_PERIOD_END, REG_AUTHORITY, 
       ADDRESS, PHONE, BANK, 
       BANK_ACCT, CREATE_TIME, CREATE_BY, 
-      MODIFY_TIME, MODIFY_BY, MAIN_BIZ
-      )
+      MODIFY_TIME, MODIFY_BY, BIZ_REG_NUM, 
+      ORG_CODE, TAXPAYER_CODE, INDUSTRY, 
+      MAIN_BIZ)
     values (#{creditCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{regCapital,jdbcType=DECIMAL}, #{establishDate,jdbcType=DATE}, 
       #{bizPeriodStart,jdbcType=DATE}, #{bizPeriodEnd,jdbcType=DATE}, #{regAuthority,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
       #{bankAcct,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{mainBiz,jdbcType=LONGVARBINARY}
-      )
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{bizRegNum,jdbcType=VARCHAR}, 
+      #{orgCode,jdbcType=VARCHAR}, #{taxpayerCode,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, 
+      #{mainBiz,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.changyi.fi.model.EnterprisePO">
     <!--
@@ -229,6 +235,18 @@
       <if test="modifyBy != null">
         MODIFY_BY,
       </if>
+      <if test="bizRegNum != null">
+        BIZ_REG_NUM,
+      </if>
+      <if test="orgCode != null">
+        ORG_CODE,
+      </if>
+      <if test="taxpayerCode != null">
+        TAXPAYER_CODE,
+      </if>
+      <if test="industry != null">
+        INDUSTRY,
+      </if>
       <if test="mainBiz != null">
         MAIN_BIZ,
       </if>
@@ -284,6 +302,18 @@
       </if>
       <if test="modifyBy != null">
         #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="bizRegNum != null">
+        #{bizRegNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerCode != null">
+        #{taxpayerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
       </if>
       <if test="mainBiz != null">
         #{mainBiz,jdbcType=LONGVARBINARY},
@@ -348,6 +378,18 @@
       <if test="record.modifyBy != null">
         MODIFY_BY = #{record.modifyBy,jdbcType=VARCHAR},
       </if>
+      <if test="record.bizRegNum != null">
+        BIZ_REG_NUM = #{record.bizRegNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgCode != null">
+        ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxpayerCode != null">
+        TAXPAYER_CODE = #{record.taxpayerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industry != null">
+        INDUSTRY = #{record.industry,jdbcType=VARCHAR},
+      </if>
       <if test="record.mainBiz != null">
         MAIN_BIZ = #{record.mainBiz,jdbcType=LONGVARBINARY},
       </if>
@@ -379,6 +421,10 @@
       CREATE_BY = #{record.createBy,jdbcType=VARCHAR},
       MODIFY_TIME = #{record.modifyTime,jdbcType=TIMESTAMP},
       MODIFY_BY = #{record.modifyBy,jdbcType=VARCHAR},
+      BIZ_REG_NUM = #{record.bizRegNum,jdbcType=VARCHAR},
+      ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
+      TAXPAYER_CODE = #{record.taxpayerCode,jdbcType=VARCHAR},
+      INDUSTRY = #{record.industry,jdbcType=VARCHAR},
       MAIN_BIZ = #{record.mainBiz,jdbcType=LONGVARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -406,7 +452,11 @@
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       CREATE_BY = #{record.createBy,jdbcType=VARCHAR},
       MODIFY_TIME = #{record.modifyTime,jdbcType=TIMESTAMP},
-      MODIFY_BY = #{record.modifyBy,jdbcType=VARCHAR}
+      MODIFY_BY = #{record.modifyBy,jdbcType=VARCHAR},
+      BIZ_REG_NUM = #{record.bizRegNum,jdbcType=VARCHAR},
+      ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
+      TAXPAYER_CODE = #{record.taxpayerCode,jdbcType=VARCHAR},
+      INDUSTRY = #{record.industry,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

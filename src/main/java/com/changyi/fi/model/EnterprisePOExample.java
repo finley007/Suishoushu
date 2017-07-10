@@ -1352,6 +1352,286 @@ public class EnterprisePOExample {
             addCriterion("MODIFY_BY not between", value1, value2, "modifyBy");
             return (Criteria) this;
         }
+
+        public Criteria andBizRegNumIsNull() {
+            addCriterion("BIZ_REG_NUM is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumIsNotNull() {
+            addCriterion("BIZ_REG_NUM is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumEqualTo(String value) {
+            addCriterion("BIZ_REG_NUM =", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumNotEqualTo(String value) {
+            addCriterion("BIZ_REG_NUM <>", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumGreaterThan(String value) {
+            addCriterion("BIZ_REG_NUM >", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumGreaterThanOrEqualTo(String value) {
+            addCriterion("BIZ_REG_NUM >=", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumLessThan(String value) {
+            addCriterion("BIZ_REG_NUM <", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumLessThanOrEqualTo(String value) {
+            addCriterion("BIZ_REG_NUM <=", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumLike(String value) {
+            addCriterion("BIZ_REG_NUM like", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumNotLike(String value) {
+            addCriterion("BIZ_REG_NUM not like", value, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumIn(List<String> values) {
+            addCriterion("BIZ_REG_NUM in", values, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumNotIn(List<String> values) {
+            addCriterion("BIZ_REG_NUM not in", values, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumBetween(String value1, String value2) {
+            addCriterion("BIZ_REG_NUM between", value1, value2, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizRegNumNotBetween(String value1, String value2) {
+            addCriterion("BIZ_REG_NUM not between", value1, value2, "bizRegNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIsNull() {
+            addCriterion("ORG_CODE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIsNotNull() {
+            addCriterion("ORG_CODE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeEqualTo(String value) {
+            addCriterion("ORG_CODE =", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotEqualTo(String value) {
+            addCriterion("ORG_CODE <>", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThan(String value) {
+            addCriterion("ORG_CODE >", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("ORG_CODE >=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThan(String value) {
+            addCriterion("ORG_CODE <", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThanOrEqualTo(String value) {
+            addCriterion("ORG_CODE <=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLike(String value) {
+            addCriterion("ORG_CODE like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotLike(String value) {
+            addCriterion("ORG_CODE not like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIn(List<String> values) {
+            addCriterion("ORG_CODE in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotIn(List<String> values) {
+            addCriterion("ORG_CODE not in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeBetween(String value1, String value2) {
+            addCriterion("ORG_CODE between", value1, value2, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotBetween(String value1, String value2) {
+            addCriterion("ORG_CODE not between", value1, value2, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeIsNull() {
+            addCriterion("TAXPAYER_CODE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeIsNotNull() {
+            addCriterion("TAXPAYER_CODE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeEqualTo(String value) {
+            addCriterion("TAXPAYER_CODE =", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeNotEqualTo(String value) {
+            addCriterion("TAXPAYER_CODE <>", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeGreaterThan(String value) {
+            addCriterion("TAXPAYER_CODE >", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("TAXPAYER_CODE >=", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeLessThan(String value) {
+            addCriterion("TAXPAYER_CODE <", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeLessThanOrEqualTo(String value) {
+            addCriterion("TAXPAYER_CODE <=", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeLike(String value) {
+            addCriterion("TAXPAYER_CODE like", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeNotLike(String value) {
+            addCriterion("TAXPAYER_CODE not like", value, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeIn(List<String> values) {
+            addCriterion("TAXPAYER_CODE in", values, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeNotIn(List<String> values) {
+            addCriterion("TAXPAYER_CODE not in", values, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeBetween(String value1, String value2) {
+            addCriterion("TAXPAYER_CODE between", value1, value2, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxpayerCodeNotBetween(String value1, String value2) {
+            addCriterion("TAXPAYER_CODE not between", value1, value2, "taxpayerCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryIsNull() {
+            addCriterion("INDUSTRY is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryIsNotNull() {
+            addCriterion("INDUSTRY is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryEqualTo(String value) {
+            addCriterion("INDUSTRY =", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNotEqualTo(String value) {
+            addCriterion("INDUSTRY <>", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryGreaterThan(String value) {
+            addCriterion("INDUSTRY >", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryGreaterThanOrEqualTo(String value) {
+            addCriterion("INDUSTRY >=", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryLessThan(String value) {
+            addCriterion("INDUSTRY <", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryLessThanOrEqualTo(String value) {
+            addCriterion("INDUSTRY <=", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryLike(String value) {
+            addCriterion("INDUSTRY like", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNotLike(String value) {
+            addCriterion("INDUSTRY not like", value, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryIn(List<String> values) {
+            addCriterion("INDUSTRY in", values, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNotIn(List<String> values) {
+            addCriterion("INDUSTRY not in", values, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryBetween(String value1, String value2) {
+            addCriterion("INDUSTRY between", value1, value2, "industry");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNotBetween(String value1, String value2) {
+            addCriterion("INDUSTRY not between", value1, value2, "industry");
+            return (Criteria) this;
+        }
     }
 
     /**
