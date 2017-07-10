@@ -75,7 +75,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(req.getCreditCode()));
         } else {
             EnterprisePO po = this.tianYanChaAPIService.getEnterpriseByCode(req.getCreditCode());
-            this.invoiceDao.insertEnterprise(po);
+            if (po != null) {
+                this.invoiceDao.insertEnterprise(po);
+            }
             return new GetEnterpriseResponse(po);
         }
     }

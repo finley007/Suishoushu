@@ -79,12 +79,17 @@ public class TianYanChaAPIServiceImpl implements TianYanChaAPIService {
     }
 
     private EnterprisePO createEnterprisePO(HTTPParser parser) {
-        EnterprisePO po = new EnterprisePO();
         Boolean isListed = this.checkIsListed(parser);
+        String creditCode = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER))).toString();
+        List<String> matchs = RegexMatches.match(creditCode, NUMBER_PATTERN);
+        if (matchs == null || matchs.size() < 0) {
+            return null;
+        }
+        EnterprisePO po = new EnterprisePO();
         parser.setHandler(new StringResultHandler());
         po.setName(parser.select(Properties.get(TIANYANCHA_GET_NAME_MATCHER)).toString());
         po.setPhone(parser.select(Properties.get(TIANYANCHA_GET_PHONE_MATCHER)).toString());
-        po.setCreditCode(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER))).toString());
+        po.setCreditCode(creditCode);
         po.setAddress(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_ADDRESS_MATCHER))).toString());
         po.setBizRegNum(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_BIZ_REG_NUM_MATCHER))).toString());
         po.setOrgCode(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_ORG_CODE_MATCHER))).toString());
