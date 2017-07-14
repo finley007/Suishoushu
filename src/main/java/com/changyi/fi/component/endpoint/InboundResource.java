@@ -2,7 +2,6 @@ package com.changyi.fi.component.endpoint;
 
 import com.changyi.fi.component.endpoint.response.InboundDetailResponse;
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +20,8 @@ import javax.ws.rs.core.Response;
 public class InboundResource {
 
     @GET
-    @Path("detail")
+    @Path("/detail")
     @Produces("application/json")
-    @Secured
     public Response inboundDetail(@Context HttpServletRequest req) {
         try {
             LogUtil.info(this.getClass(), "Enter inboundDetail endpoint");
