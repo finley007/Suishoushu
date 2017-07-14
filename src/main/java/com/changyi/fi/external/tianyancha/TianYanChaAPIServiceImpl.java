@@ -82,7 +82,7 @@ public class TianYanChaAPIServiceImpl implements TianYanChaAPIService {
         Boolean isListed = this.checkIsListed(parser);
         String creditCode = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER))).toString();
         List<String> matchs = RegexMatches.match(creditCode, NUMBER_PATTERN);
-        if (matchs == null || matchs.size() < 0) {
+        if (matchs == null ||    matchs.size() < 0) {
             return null;
         }
         EnterprisePO po = new EnterprisePO();
