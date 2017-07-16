@@ -18,8 +18,14 @@
     <servlet>
         <servlet-name>jersey-serlvet</servlet-name>
         <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <!-- 如果想加入多个拦截器，请用;隔开 -->
+            <param-value>com.changyi.fi.core.filter.AccessFilter</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/*</url-pattern>

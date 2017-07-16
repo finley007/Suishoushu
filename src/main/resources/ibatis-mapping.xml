@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <mappers>
+        <mapper resource="mapping/SysPOMapper.xml"/>
         <mapper resource="mapping/InvoicePOMapper.xml"/>
         <mapper resource="mapping/CustomerPOMapper.xml"/>
         <mapper resource="mapping/MerchantPOMapper.xml"/>
