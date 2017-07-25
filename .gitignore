@@ -1,0 +1,6 @@
+build/
+db/suishoushu.tar.gz
+log/
+out/
+.gradle/
+.idea/
