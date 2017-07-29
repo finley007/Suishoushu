@@ -4,3 +4,5 @@ log/
 out/
 .gradle/
 .idea/
+*.pyc
+scrapy/enterprise/enterprise/output/

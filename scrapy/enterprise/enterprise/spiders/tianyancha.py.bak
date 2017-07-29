@@ -1,0 +1,82 @@
+# -*- coding: utf-8 -*-
+import logging
+import re
+import sys
+import scrapy
+from scrapy import Selector
+from scrapy import Request
+from enterprise.items import EnterpriseItem
+
+logger = logging.getLogger('tianyancha')
+
+class TianyanchaSpider(scrapy.Spider):
+    name = "tianyancha"
+    allowed_domains = ["snx.tianyancha.com"]
+    start_urls = ['http://snx.tianyancha.com/search']
+    #start_urls = ['https://www.tianyancha.com/company/644630399']
+    provice = 'SNX'
+
+    def parse(self, response):
+        logger.info('Start to parse enterprise info')
+        items = response.xpath("/html/body/div[2]/div[1]/div/div/div[1]/div[1]/div[1]/div/div[4]/div/div[1]/div[2]/div").extract()
+        for item in items:
+            sl = Selector(text = item)
+            industry_urls = sl.xpath("//div/a/@href").extract()
+            for industry_url in industry_urls:
+                logger.info('Industry-----------------------------------------------')
+                match = re.match(r'.*\d$', industry_url)
+                if match:
+                    logger.info('Industry URL: ' + industry_url)
+                    industry_code = industry_url[industry_url.rfind("/")+1:]
+                    yield Request(url=industry_url, meta={'industry_code': industry_code}, callback=self.parse_industry)
+    
+    def parse_industry(self, response):
+        industry_code = response.meta['industry_code']
+        logger.info('Start to parse industry info: ' + industry_code)
+        items = response.xpath("/html/body/div[2]/div[1]/div/div/div[1]/div[3]/div").extract()
+        for item in items:
+            sl = Selector(text = item)
+            corp_urls = sl.xpath("//div[2]/div[1]/div[1]/a/@href").extract()
+            for corp_url in corp_urls:
+                logger.info('Corporation URL: ' + corp_url)
+                page = corp_url[corp_url.rfind("/")+1:]
+                yield Request(url=corp_url, meta={'industry_code': industry_code, 'page': page}, callback=self.parse_corp)
+        nextPage = response.xpath("/html/body/div[2]/div[1]/div/div/div[1]/div[4]/ul/li[13]/a/@href").extract()[0]
+        logger.info('***************Next url: ' + nextPage)
+        if nextPage:
+                yield Request(url=nextPage, meta={'industry_code': industry_code}, callback=self.parse_industry)
+
+    def parse_corp(self, response):
+        industry_code = response.meta['industry_code']
+        page = response.meta['page']
+        logger.info('Handler corperation info for industry: ' + industry_code + ' and page: ' + page)
+        item = EnterpriseItem()
+        item['name'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[1]/div[2]/div[2]/div/span/text()").extract()[0]
+        item['phone'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[1]/div[2]/div[2]/div/div[2]/div[1]/span[2]/text()").extract()[0]
+        item['address'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[1]/div[2]/div[2]/div/div[3]/div[2]/span[2]/text()").extract()[0]
+        item['province'] = self.provice
+        item['industry_code'] = industry_code
+        item['page'] = page
+        if response.xpath("//*[@id='nav-main-shangshiitem']/span").extract():
+            item['legal_person'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[2]/table/tbody/tr/td[1]/div/div[1]/div[2]/div/a/text()").extract()[0]
+            item['credit_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[2]/td[1]/div/span/text()").extract()[0]
+            item['reg_capital'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[2]/table/tbody/tr/td[2]/div[1]/div[2]/div/text()").extract()[0].strip()
+            item['establish_date'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[2]/table/tbody/tr/td[2]/div[2]/div[2]/div/text()").extract()[0].strip()
+            item['biz_period_start'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[4]/td[2]/div/span/text()").extract()[0].replace("\n", "").replace(' ', '')
+            item['reg_authority'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[5]/td[2]/div/span/text()").extract()[0]
+            item['biz_reg_num'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[1]/td[1]/div/span/text()").extract()[0]
+            item['org_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[1]/td[2]/div/span/text()").extract()[0]
+            item['taxpayer_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[3]/td/div/span/text()").extract()[0]
+            item['industry'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[3]/div[3]/table/tbody/tr[4]/td[1]/div/span/text()").extract()[0]
+        else:
+            item['legal_person'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[2]/table/tbody/tr/td[1]/div/div[1]/div[2]/div/a/text()").extract()[0]
+            item['credit_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[2]/td[1]/div/span/text()").extract()[0]
+            item['reg_capital'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[2]/table/tbody/tr/td[2]/div[1]/div[2]/div/text()").extract()[0].strip()
+            item['establish_date'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[2]/table/tbody/tr/td[2]/div[2]/div[2]/div/text()").extract()[0].strip()
+            item['biz_period_start'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[4]/td[2]/div/span/text()").extract()[0].replace("\n", "").replace(' ', '')
+            item['reg_authority'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[5]/td[2]/div/span/text()").extract()[0]
+            item['biz_reg_num'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[1]/td[1]/div/span/text()").extract()[0]
+            item['org_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[1]/td[2]/div/span/text()").extract()[0]
+            item['taxpayer_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[3]/td/div/span/text()").extract()[0]
+            item['industry'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[4]/td[1]/div/span/text()").extract()[0]
+        yield item
