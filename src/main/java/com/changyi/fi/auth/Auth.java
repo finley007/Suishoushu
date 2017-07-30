@@ -7,10 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,8 +22,9 @@ public class Auth {
     private AuthService authService;
 
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@QueryParam("code") String code) {
+    public Response auth(@FormParam("code") String code) {
         LogUtil.info(this.getClass(), "Do authentication for code: ", code);
         try {
             if (StringUtils.isEmpty(code)) {

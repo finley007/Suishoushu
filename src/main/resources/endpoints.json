@@ -2,7 +2,7 @@
   "endpoints": [
     {
       "name": "登录接口",
-      "url": "47.94.41.252:8080/suishoushu/auth?code={code}",
+      "url": "47.94.41.252:8080/suishoushu/auth",
       "method": "POST",
       "request": "code:用户code",
       "response": {

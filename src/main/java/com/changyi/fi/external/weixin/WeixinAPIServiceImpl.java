@@ -2,10 +2,12 @@ package com.changyi.fi.external.weixin;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
+import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.weixin.response.WeixinLoginResponse;
 import com.changyi.fi.vo.Session;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -38,10 +40,9 @@ public class WeixinAPIServiceImpl implements WeixinAPIService {
         String res = new HTTPCaller(url).doGet();
         LogUtil.info(this.getClass(), "Weixin API response: " + res);
         WeixinLoginResponse response = new Payload(res).as(WeixinLoginResponse.class);
-//        if (!StringUtils.isEmpty(response.getErrcode())) {
-//            throw new SystemException("Weixin API return error: " + res);
-//        }
-        response.setOpenid("111111");
+        if (!StringUtils.isEmpty(response.getErrcode())) {
+            throw new SystemException("Weixin API return error: " + res);
+        }
         Session resp = new Session();
         resp.setOpenId(response.getOpenid());
         resp.setSessionKey(response.getSession_key());
