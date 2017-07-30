@@ -52,9 +52,10 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'enterprise.proxymiddlewares.ProxyMiddleware': 100,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    #'enterprise.proxymiddlewares.ProxyMiddleware': 100,
+    'enterprise.downloadmiddlewares.DownloadMiddleware': 100,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html

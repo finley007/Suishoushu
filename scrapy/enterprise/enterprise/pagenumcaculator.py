@@ -15,14 +15,17 @@ min = 0
 
 start_index = 2
 end_index = 96
+proxyloader = ProxyLoader()
+proxy = proxyloader.getProxy()
 
 headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'}
 
 def main(argv):
 	redisclient = RadisClient()
 	config = Config()
-	proxyloader = ProxyLoader()
-	proxy = proxyloader.getProxy()
+	start_index = 2
+	end_index = 96
+
 	try:
 	  opts, args = getopt.getopt(argv,"hs:e:")
 	except getopt.pagenumcaculator.py:
@@ -39,7 +42,7 @@ def main(argv):
 
 	for num in range(int(start_index), int(end_index) + 1):
 		url = "https://" + config.getCurrentProviceCode() + ".tianyancha.com/search/oc" + toStr(num)
-	 	redisclient.set(url, getMaxPage(url, max, min, proxy))
+	 	redisclient.set(url, getMaxPage(url, max, min))
 
 def toStr(num):
 	str_num = str(num)
@@ -48,25 +51,33 @@ def toStr(num):
 	else:
 		return str_num
 
-def getMaxPage(url, max, min, proxy):
+def getMaxPage(url, max, min):
 	print(str(max) + "|" + str(min))
 	if max == min:
 		return max
 	if max == min + 1:
 		return min
 	middle = (max + min) / 2
-	if not loadPageSuccess(url + "/p" + str(middle), proxy):
+	if not loadPageSuccess(url + "/p" + str(middle)):
 		max = middle
 	else:
 		min = middle
-	return getMaxPage(url, max, min, proxy)
+	return getMaxPage(url, max, min)
 
 
-def loadPageSuccess(url, proxy):
+def loadPageSuccess(url):
 	#print(result)
+	print(proxy)
 	r = requests.get(url=url, headers=headers, proxies={'https': proxy})    # 最基本的GET请求
 	print(r.status_code)
 	print(r.url)
+	if 'login' in r.url:
+		global proxy
+		proxy = proxyloader.getProxy() 
+		print('Use new proxy: ' + proxy)
+		r = requests.get(url=url, headers=headers, proxies={'https': proxy})
+		print(r.status_code)
+		print(r.url)
 	#print(r.text)
 	return r.status_code == 200  and r.text.find("notFound-text.png") == -1# 获取返回状态
 	#print(r.elapsed.microseconds)

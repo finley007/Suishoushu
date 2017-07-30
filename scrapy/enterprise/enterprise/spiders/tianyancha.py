@@ -73,9 +73,9 @@ class TianyanchaSpider(scrapy.Spider):
                     corp_code = corp_url[corp_url.rfind("/")+1:]
                     if not self.redisclient.get(corp_code):
                         if self.proxy_url == "":
-                            yield Request(url=corp_url, meta={'page': page, 'corp_url': corp_url, 'corp_code': corp_code}, callback=self.parse_corp)
+                            yield Request(url=corp_url, meta={'page': page, 'corp_url': corp_url, 'corp_code': corp_code, 'industry_code': self.industry_code}, callback=self.parse_corp)
                         else:
-                            yield Request(url=corp_url, meta={'proxy': self.proxy_url, 'page': page, 'corp_url': corp_url, 'corp_code': corp_code}, callback=self.parse_corp)
+                            yield Request(url=corp_url, meta={'proxy': self.proxy_url, 'page': page, 'corp_url': corp_url, 'corp_code': corp_code, 'industry_code': self.industry_code}, callback=self.parse_corp)
             
             nextPage = response.xpath("/html/body/div[2]/div[1]/div/div/div[1]/div[4]/ul/li[14]/a/@href").extract()
             if not nextPage:
@@ -84,9 +84,9 @@ class TianyanchaSpider(scrapy.Spider):
                 logger.info('***************Next url: ' + nextPage[0])
                 self.page_count = self.page_count - 1
                 if self.proxy_url == "":
-                    yield Request(url=nextPage[0], meta={'url': nextPage[0]}, callback=self.parse)
+                    yield Request(url=nextPage[0], meta={'url': nextPage[0], 'industry_code': self.industry_code}, callback=self.parse)
                 else:
-                    yield Request(url=nextPage[0], meta={'proxy': self.proxy_url, 'url': nextPage[0]}, callback=self.parse)
+                    yield Request(url=nextPage[0], meta={'proxy': self.proxy_url, 'url': nextPage[0], 'industry_code': self.industry_code}, callback=self.parse)
 
         except BaseException, e:
             logger.info('***************Error parsing url: ' + url + ' and reload by using new proxy')
@@ -94,7 +94,7 @@ class TianyanchaSpider(scrapy.Spider):
             proxy = self.proxyloader.getProxy()
             if proxy != "":
                 self.proxy_url = self.proxyloader.getProtocal() + proxy
-                yield Request(url=url, meta={'url': url, 'proxy': self.proxy_url}, callback=self.parse, dont_filter=True)
+                yield Request(url=url, meta={'url': url, 'proxy': self.proxy_url, 'industry_code': self.industry_code}, callback=self.parse, dont_filter=True)
 
     def parse_corp(self, response):
         try:
@@ -156,7 +156,7 @@ class TianyanchaSpider(scrapy.Spider):
 
     def handleCorpError(self, url):
         record_id = uuid.uuid1()
-        updateSQL = "insert into ISSUE_URL values ('" + str(record_id)  + "', '" + url + "')"
+        updateSQL = "insert into ISSUE_URL values ('" + str(record_id)  + "', '" + url + "', '" + self.provice_code + "', '" + self.industry_code + "', '0')"
         self.dbclient.updateDB(updateSQL)
 
     def solveHttps(self, url):
