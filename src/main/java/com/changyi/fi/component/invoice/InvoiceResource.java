@@ -32,6 +32,7 @@ public class InvoiceResource {
 
     @GET
     @Path("/invoices")
+    @Consumes("application/json")
     @Produces("application/json")
     @Secured
     public Response listInvoices(@HeaderParam(Token.KEY) String token) {
