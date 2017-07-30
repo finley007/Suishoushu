@@ -24,6 +24,7 @@ public class AuthAspect {
         LogUtil.debug(this.getClass(), "Auth aspect handle for component: {} and service: {}",
                 new Object[]{aPoint.getTarget().getClass(), aPoint.getSignature()});
         String tokenKey = (String)aPoint.getArgs()[0];
+        LogUtil.debug(this.getClass(), "Token key: " + tokenKey);
         if (tokenKey != null) {
             Token token = Token.touch(tokenKey);
             if (token != null) {
