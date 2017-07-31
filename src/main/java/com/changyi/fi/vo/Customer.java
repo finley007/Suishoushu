@@ -7,13 +7,8 @@ import net.sf.oval.constraint.NotNull;
 
 public class Customer extends BaseVO{
 
-    @NotNull
-    @NotEmpty
     private String nickName;
 
-    @NotNull
-    @NotEmpty
-    @MatchPattern(pattern = "^0|1|2$")
     private String gendar;
 
     private String city;
