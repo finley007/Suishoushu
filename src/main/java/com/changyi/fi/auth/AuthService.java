@@ -10,4 +10,5 @@ public interface AuthService {
 
     public AuthResponse authenticate(String code) throws Exception;
 
+    public AuthResponse internalAuthenticate(String code) throws Exception;
 }

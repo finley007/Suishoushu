@@ -47,4 +47,29 @@ public class Auth {
         }
     }
 
+    @POST
+    @Path("/internal")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response internalAuth(@RequestParam String request) {
+        LogUtil.info(this.getClass(), "Do internal authentication for request: ", request);
+        try {
+            if (StringUtils.isEmpty(request)) {
+                throw new NullRequestException("Request is required");
+            }
+            HashMap<String, String> req = new Payload(request).as(HashMap.class);
+            String code = req.get("code");
+            if (StringUtils.isEmpty(code)) {
+                throw new NullRequestException("User code is required");
+            }
+            AuthResponse response = this.authService.internalAuthenticate(code);
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Internal authentication failed: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+
 }
