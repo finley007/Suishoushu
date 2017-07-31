@@ -34,6 +34,16 @@ public class FIConstants {
         public Short getValue() { return value; }
     }
 
+    public enum Gendar {
+        Male(Integer.valueOf(0).shortValue()), Female(Integer.valueOf(1).shortValue()), Unknow(Integer.valueOf(2).shortValue());
+
+        private Short value;
+
+        private Gendar(Short value) { this.value = value; }
+
+        public Short getValue() { return value; }
+    }
+
     public enum EnterpriseField {
 
         Address("Address"), Phone("Phone"), Name("Name"), Bank("Bank"), BankAcct("BankAcct");
