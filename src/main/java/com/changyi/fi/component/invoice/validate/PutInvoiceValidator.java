@@ -12,10 +12,12 @@ public class PutInvoiceValidator implements Validator<PutInvoiceRequest> {
 
     public void validate(PutInvoiceRequest request) throws BusinessException {
         LogUtil.info(this.getClass(), "Do validation for PutInvoiceRequest");
-        if (FIConstants.InvoiceType.Enterprise.getValue().equals(request.getType())) {
+        if (FIConstants.InvoiceType.EnterpriseNormal.getValue().equals(request.getType())
+                || FIConstants.InvoiceType.EnterpriseSpecial.getValue().equals(request.getType())) {
             if (StringUtils.isEmpty(request.getCreditCode())) {
                 throw new InvalidRequestException("Field creditCode is required");
             }
+            //目前只有
 //            else if (StringUtils.isEmpty(request.getAddress())) {
 //                throw new InvalidRequestException("Field address is required");
 //            } else if (StringUtils.isEmpty(request.getBank())) {

@@ -11,7 +11,7 @@ public class FIConstants {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
     public enum InvoiceType {
-        Enterprise("1"), Person("0");
+        EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
 
         private String value;
 

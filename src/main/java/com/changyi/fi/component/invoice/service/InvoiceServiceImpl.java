@@ -40,18 +40,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Validate(validator = "com.changyi.fi.component.invoice.validate.PutInvoiceValidator")
-    public void updateInvoice(PutInvoiceRequest request, String openId) throws Exception {
+    public String updateInvoice(PutInvoiceRequest request, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute updateInvoice service for: " + openId);
         if (StringUtils.isEmpty(request.getId())) {
             LogUtil.info(this.getClass(), "Create a new invoice");
-            createNewInvoice(request, openId);
+            return createNewInvoice(request, openId);
         } else {
             LogUtil.info(this.getClass(), "Update exited invoice for id: " + request.getId());
             updateExistedInvoice(request, openId);
+            return request.getId();
         }
     }
 
-    private void createNewInvoice(PutInvoiceRequest request, String openId) throws Exception {
+    private String createNewInvoice(PutInvoiceRequest request, String openId) throws Exception {
         if (FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
             InvoicePO po = new InvoicePO();
             po.setType(Short.valueOf(request.getType()));
@@ -59,9 +60,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             po.setUserName(request.getName());
             po.setOpenId(openId);
             po.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
+            po.setPhone(request.getPhone());
+            po.setEmail(request.getEmail());
             po.setCreateTime(new Date());
             po.setModifyTime(new Date());
             invoiceDao.insert(po);
+            return po.getId().toString();
         } else {
             updateEnterpriseInfo(request, openId);
 
@@ -74,6 +78,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             ipo.setCreateTime(new Date());
             ipo.setModifyTime(new Date());
             invoiceDao.insert(ipo);
+            return ipo.getId().toString();
         }
     }
 
@@ -83,6 +88,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             po.setId(Integer.valueOf(request.getId()));
             po.setType(Short.valueOf(request.getType()));
             po.setUserName(request.getName());
+            po.setPhone(request.getPhone());
+            po.setEmail(request.getEmail());
             po.setOpenId(openId);
             po.setModifyTime(new Date());
             invoiceDao.updateSelective(po);

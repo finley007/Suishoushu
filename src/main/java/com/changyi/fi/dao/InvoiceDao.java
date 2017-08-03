@@ -15,13 +15,13 @@ public interface InvoiceDao {
 
     VInvoicePO getInvoiceById(@Param(("id")) String id);
 
-    @Select("select count(*) from enterprise t where t.credit_code = #{creditCode}")
+    @Select("SELECT COUNT(*) FROM ENTERPRISE T WHERE T.CREDIT_CODE = #{creditCode}")
     @Result(javaType = Long.class)
     public Long countEnterpriseById(@Param("creditCode") String creditCode);
 
     public EnterprisePO getEnterpriseById(@Param("creditCode") String creditCode);
 
-    @Delete("delete from invoice where id = #{id}")
+    @Delete("DELETE FROM INVOICE WHERE ID = #{id}")
     public void deleteInvoice(@Param(("id")) String id);
 
     int insert(InvoicePO record);
@@ -44,7 +44,7 @@ public interface InvoiceDao {
 
     int insertEnterpriseHistorySelective(EnterpriseHistoryPO record);
 
-    @Select("select credit_code as creditCode, name from enterprise t where t.name like concat('%',#{key},'%')")
+    @Select("SELECT CREDIT_CODE AS CREDITCODE, NAME FROM ENTERPRISE T WHERE T.NAME LIKE CONCAT('%',#{key},'%')")
     @Result(javaType = Map.class)
     List<Map> matchEnterpriseList(@Param("key") String key);
 }

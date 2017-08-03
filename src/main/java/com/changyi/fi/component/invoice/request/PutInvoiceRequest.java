@@ -31,6 +31,8 @@ public class PutInvoiceRequest implements Request {
 
     private String bankAcct;
 
+    private String email;
+
     @NotNull(message = "isDefault is required")
     @NotEmpty(message = "isDefault is required")
     @MatchPattern(pattern = "^0|1$", message = "invalid isDefault value, should be 0 or 1")
@@ -108,5 +110,7 @@ public class PutInvoiceRequest implements Request {
         this.id = id;
     }
 
+    public String getEmail() { return email; }
 
+    public void setEmail(String email) { this.email = email; }
 }

@@ -3,6 +3,7 @@ package com.changyi.fi.component.invoice;
 import com.changyi.fi.component.invoice.request.PutInvoiceRequest;
 import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
+import com.changyi.fi.component.invoice.response.UpdateInvoiceResponse;
 import com.changyi.fi.component.invoice.service.InvoiceService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
@@ -61,9 +62,9 @@ public class InvoiceResource {
                 throw new NullRequestException("Request is required");
             }
             PutInvoiceRequest req = new Payload(request).as(PutInvoiceRequest.class);
-            invoiceService.updateInvoice(req, Token.touch(token).getOpenId());
+            String id = invoiceService.updateInvoice(req, Token.touch(token).getOpenId());
             LogUtil.info(this.getClass(), "Complete addInvoice service call");
-            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
+            return Response.status(Response.Status.OK).entity(new UpdateInvoiceResponse(id).build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run addInvoice endpoint error: ", t);
             String res = ExceptionHandler.handle(t);

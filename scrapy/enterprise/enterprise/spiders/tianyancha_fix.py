@@ -12,6 +12,7 @@ sys.path.append(r'../')
 from dbclient import DBClient
 from redisclient import RadisClient
 from config import Config
+from proxyloader import ProxyLoader
 import uuid
 
 logger = logging.getLogger('tianyancha_fix')
@@ -23,7 +24,11 @@ class TianyanchaFixSpider(scrapy.Spider):
     start_urls = ['https://www.tianyancha.com/']
     dbclient = DBClient()
     redisclient = RadisClient()
+    proxyloader = ProxyLoader()
     config = Config()
+    count = 0
+    proxy_url = ""
+    interval = 25
 
     def parse(self, response):
     	logger.info("Start to fix data")
@@ -33,11 +38,16 @@ class TianyanchaFixSpider(scrapy.Spider):
         for record in result:
             uuid = record[0]
             url = record[1]
+            if self.count == 0:
+                self.proxy_url = self.proxyloader.getProtocal() + self.proxyloader.getProxyz()
+                self.count = self.interval
             corp_code = url[url.rfind("/")+1:]
-            provice_code = record[2]
-            industry_code = record[3]
-            logger.info("Url:" + url + "to be solved")
-            yield Request(url=url, meta={'provice_code': provice_code, 'industry_code': industry_code, 'corp_code': corp_code, 'uuid': uuid}, callback=self.parse_corp)
+            if not self.redisclient.get(corp_code):
+                provice_code = record[2]
+                industry_code = record[3]
+                logger.info("Url:" + url + "to be solved")
+                self.count = self.count - 1
+                yield Request(url=url, meta={'proxy': self.proxy_url, 'provice_code': provice_code, 'industry_code': industry_code, 'corp_code': corp_code, 'uuid': uuid}, callback=self.parse_corp)
 
     def parse_corp(self, response):
         try:

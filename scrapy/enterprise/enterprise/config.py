@@ -2,13 +2,13 @@
 
 class Config:
 
-   current_provice_code = "snx"
+   current_provice_code = "bj"
    default_industry_code = "oc01"
    default_page_code = ""
    allow_domains = [current_provice_code + ".tianyancha.com", "www.tianyancha.com"]
    start_urls = "https://" + current_provice_code + ".tianyancha.com/search/" + default_industry_code
    root_urls = "https://" + current_provice_code + ".tianyancha.com/search/"
-   step = 10
+   step = 6
 
    def getCurrentProviceCode(self):
       return self.current_provice_code

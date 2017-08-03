@@ -11,7 +11,7 @@ public interface InvoiceService {
 
     public InvoicesResponse listInvoice(String openId) throws Exception;
 
-    public void updateInvoice(PutInvoiceRequest request, String openId) throws Exception;
+    public String updateInvoice(PutInvoiceRequest request, String openId) throws Exception;
 
     public void deleteInvoice(String openId, String invoiceId) throws Exception;
 

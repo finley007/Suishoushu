@@ -119,6 +119,7 @@
           "corpName": "企业名称",
           "address": "地址",
           "phone": "电话",
+          "email": "电子邮箱",
           "bank": "开户行",
           "bankAcct": "开户账号"
         },
@@ -139,11 +140,14 @@
         "address": "地址",
         "phone": "电话",
         "bank": "开户行",
-        "bankAcct": "开户账号"
+        "bankAcct": "开户账号",
+        "email": "电子邮箱"
       },
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
-        "content": "success",
+        "content": {
+          "id": "发票id"
+        },
         "message": "错误信息"
       }
     },
