@@ -64,7 +64,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             VInvoicePO po = invoiceDao.getInvoiceById(id);
             if (po != null) {
                 result = true;
-                LogUtil.info(this.getClass(), "Invoice: " + id + " is existed";
+                LogUtil.info(this.getClass(), "Invoice: " + id + " is existed");
             }
         }
         return result;
