@@ -1,6 +1,17 @@
 group 'changyi'
 version '1.0-SNAPSHOT'
 
+def env = System.getProperty("env") ?: "dev"
+def Properties props = new Properties()
+def propFile = file("src/main/profile/$env/build.properties")
+def serverLocation
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null) {
+        serverLocation = props['serverLocation']
+    }
+}
+
 buildscript {
     repositories {
         jcenter()
@@ -98,7 +109,7 @@ sourceSets {
             srcDir 'src/main'
         }
         resources {
-            srcDir 'resources'
+            srcDirs = ["src/main/resources", "src/main/profile/$env"]
         }
     }
 }
@@ -106,11 +117,5 @@ sourceSets {
 task deployWar(type: Copy, dependsOn: war) {
     from war
     into serverLocation
-    rename '(suishoushu).*(\\.war)', '$1$2'
-}
-
-task deployDev(type: Copy, dependsOn: war) {
-    from war
-    into serverLocationDev
     rename '(suishoushu).*(\\.war)', '$1$2'
 }
