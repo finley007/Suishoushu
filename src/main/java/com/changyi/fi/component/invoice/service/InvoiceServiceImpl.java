@@ -42,24 +42,42 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Validate(validator = "com.changyi.fi.component.invoice.validate.PutInvoiceValidator")
     public String updateInvoice(PutInvoiceRequest request, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute updateInvoice service for: " + openId);
-        if (StringUtils.isEmpty(request.getId())) {
+        String id = "";
+        if (!checkExists(request.getId())) {
             LogUtil.info(this.getClass(), "Create a new invoice");
-            return createNewInvoice(request, openId);
+            id = createNewInvoice(request, openId);
         } else {
             LogUtil.info(this.getClass(), "Update exited invoice for id: " + request.getId());
             updateExistedInvoice(request, openId);
-            return request.getId();
+            id = request.getId();
         }
+        //设置当前发票为默认发票则更新其它发票为为非默认
+        if (FIConstants.IsDefault.True.getValue().equals(request.getIsDefault())) {
+            this.invoiceDao.updateNotDefault(openId, id, FIConstants.IsDefault.False.getValue());
+        }
+        return id;
+    }
+
+    private Boolean checkExists(String id) {
+        Boolean result = false;
+        if (!StringUtils.isEmpty(id)) {
+            VInvoicePO po = invoiceDao.getInvoiceById(id);
+            if (po != null) {
+                result = true;
+                LogUtil.info(this.getClass(), "Invoice: " + id + " is existed";
+            }
+        }
+        return result;
     }
 
     private String createNewInvoice(PutInvoiceRequest request, String openId) throws Exception {
         if (FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
             InvoicePO po = new InvoicePO();
+            po.setOpenId(openId);
             po.setType(Short.valueOf(request.getType()));
             po.setIsDefault(Short.valueOf(request.getIsDefault()));
-            po.setUserName(request.getName());
-            po.setOpenId(openId);
             po.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
+            po.setUserName(request.getName());
             po.setPhone(request.getPhone());
             po.setEmail(request.getEmail());
             po.setCreateTime(new Date());
@@ -70,10 +88,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             updateEnterpriseInfo(request, openId);
 
             InvoicePO ipo = new InvoicePO();
+            ipo.setOpenId(openId);
             ipo.setType(Short.valueOf(request.getType()));
             ipo.setIsDefault(Short.valueOf(request.getIsDefault()));
             ipo.setCreditCode(request.getCreditCode());
-            ipo.setOpenId(openId);
             ipo.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
             ipo.setCreateTime(new Date());
             ipo.setModifyTime(new Date());
@@ -87,6 +105,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoicePO po = new InvoicePO();
             po.setId(Integer.valueOf(request.getId()));
             po.setType(Short.valueOf(request.getType()));
+            po.setIsDefault(Short.valueOf(request.getIsDefault()));
             po.setUserName(request.getName());
             po.setPhone(request.getPhone());
             po.setEmail(request.getEmail());

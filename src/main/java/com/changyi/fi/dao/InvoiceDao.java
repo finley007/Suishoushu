@@ -24,6 +24,9 @@ public interface InvoiceDao {
     @Delete("DELETE FROM INVOICE WHERE ID = #{id}")
     public void deleteInvoice(@Param(("id")) String id);
 
+    @Update("UPDATE INVOICE T SET T.IS_DEFAULT = #{value} where T.OPEN_ID = #{openId} and T.ID <> #{id}")
+    public void updateNotDefault(@Param(("openId")) String openId, @Param(("id")) String id, @Param(("value")) String value);
+
     int insert(InvoicePO record);
 
     int insertSelective(InvoicePO record);

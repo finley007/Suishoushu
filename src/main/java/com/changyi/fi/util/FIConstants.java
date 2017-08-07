@@ -54,4 +54,15 @@ public class FIConstants {
 
         public String getName() { return fieldName; }
     }
+
+    public enum IsDefault {
+
+        True("0"), False("1");
+
+        private String value;
+
+        private IsDefault(String value) { this.value = value; }
+
+        public String getValue() { return value; }
+    }
 }
