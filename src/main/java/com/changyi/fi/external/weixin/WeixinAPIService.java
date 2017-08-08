@@ -6,4 +6,8 @@ public interface WeixinAPIService {
 
     public Session login(String code) throws Exception;
 
+    public String getAccessToken() throws Exception;
+
+    public String createMerchantQRCode() throws Exception;
+
 }
