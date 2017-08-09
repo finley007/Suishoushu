@@ -19,7 +19,7 @@
       "name": "企业详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise/",
       "head" : "auth_token",
-      "method": "GET",
+      "method": "POST",
       "request": {
         "isExternal": "是否来自外部系统",
         "creditCode": "企业工商号"
