@@ -45,7 +45,6 @@ public class FIConstants {
     }
 
     public enum EnterpriseField {
-
         Address("Address"), Phone("Phone"), Name("Name"), Bank("Bank"), BankAcct("BankAcct");
 
         private String fieldName;
@@ -56,7 +55,6 @@ public class FIConstants {
     }
 
     public enum IsDefault {
-
         True("0"), False("1");
 
         private String value;

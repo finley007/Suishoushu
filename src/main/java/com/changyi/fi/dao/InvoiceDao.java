@@ -47,7 +47,7 @@ public interface InvoiceDao {
 
     int insertEnterpriseHistorySelective(EnterpriseHistoryPO record);
 
-    @Select("SELECT CREDIT_CODE AS CREDITCODE, NAME FROM ENTERPRISE T WHERE T.NAME LIKE CONCAT('%',#{key},'%')")
+    @Select("SELECT CREDIT_CODE AS CREDITCODE, NAME AS NAME FROM ENTERPRISE T WHERE T.NAME LIKE CONCAT('%',#{key},'%') LIMIT 0, #{count}")
     @Result(javaType = Map.class)
-    List<Map> matchEnterpriseList(@Param("key") String key);
+    List<Map> matchEnterpriseList(@Param("key") String key, @Param("count") int count);
 }

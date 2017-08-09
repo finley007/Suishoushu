@@ -1,4 +1,4 @@
-package com.changyi.fi.external.tianyancha;
+package com.changyi.fi.external.enterprise;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.RegexMatches;
@@ -18,7 +18,7 @@ import java.util.*;
  * Created by finley on 7/8/17.
  */
 @Service("tianYanChaAPIService")
-public class TianYanChaAPIServiceImpl implements TianYanChaAPIService {
+public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
 
     private static final String TIANYANCHA_SEARCH_URL_TEMPLATE = "tianyancha.search.url.template";
     private static final String TIANYANCHA_SEARCH_GET_TEMPLATE = "tianyancha.get.url.template";

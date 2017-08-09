@@ -36,5 +36,19 @@ public class ConfigManager {
         }
     }
 
+    public static Integer getIntegerParameter(String name, Integer defaultValue) {
+        String value = getParameter(name);
+        if (StringUtils.isNotBlank(value)) {
+            try {
+                return Integer.valueOf(value);
+            } catch (Exception e) {
+                LogUtil.warn(ConfigManager.class, "Invalid parameter value: " + name);
+                return defaultValue;
+            }
+        } else {
+            return defaultValue;
+        }
+    }
+
 
 }

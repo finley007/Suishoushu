@@ -1,4 +1,4 @@
-package com.changyi.fi.external.tianyancha;
+package com.changyi.fi.external.enterprise;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -27,7 +27,7 @@ public class TianYanChaAPIServiceImplTest {
     @Test
     public void testMatchEnterprise() throws Exception {
 //TODO: Test goes here...
-        TianYanChaAPIService apiService = new TianYanChaAPIServiceImpl();
+        ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
         apiService.matchEnterprise("天之健");
     }
 
