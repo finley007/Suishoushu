@@ -3,6 +3,7 @@ package com.changyi.fi.component.customer.service;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.dao.CustomerDao;
+import com.changyi.fi.model.CustomerLoginPO;
 import com.changyi.fi.model.CustomerPO;
 import com.changyi.fi.vo.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,10 @@ public class CustomerServiceImpl implements CustomerService {
             po.setCreateTime(new Date());
             customerDao.insert(po);
         }
+
+        CustomerLoginPO loginPO = new CustomerLoginPO();
+        loginPO.setOpenId(openId);
+        loginPO.setLoginTime(new Date());
+        customerDao.insertCustomerLogin(loginPO);
     }
 }
