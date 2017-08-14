@@ -13,7 +13,7 @@ from proxyloader import ProxyLoader
 max = 500
 min = 0
 
-start_index = 2
+start_index = 1
 end_index = 96
 proxyloader = ProxyLoader()
 proxy = proxyloader.getProxy()
@@ -23,7 +23,7 @@ headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleW
 def main(argv):
 	redisclient = RadisClient()
 	config = Config()
-	start_index = 2
+	start_index = 1
 	end_index = 96
 
 	try:

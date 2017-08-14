@@ -2,7 +2,7 @@
 
 class Config:
 
-   current_provice_code = "bj"
+   current_provice_code = "hen"
    default_industry_code = "oc01"
    default_page_code = ""
    allow_domains = [current_provice_code + ".tianyancha.com", "www.tianyancha.com"]
