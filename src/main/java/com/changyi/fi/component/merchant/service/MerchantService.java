@@ -9,4 +9,6 @@ public interface MerchantService {
 
     public void doRecord(DoRecordRequest req, String openId) throws Exception;
 
+    public String createQRCode(String merchantId) throws Exception;
+
 }

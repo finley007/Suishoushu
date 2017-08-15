@@ -134,7 +134,7 @@ try {
 
     @Test
     public void testCreateMerchantQRCode() throws Exception {
-        System.out.println(this.api.createMerchantQRCode());
+        this.api.createMerchantQRCode("", "");
     }
 
 

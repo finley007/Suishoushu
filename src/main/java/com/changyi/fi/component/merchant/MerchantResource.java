@@ -2,6 +2,7 @@ package com.changyi.fi.component.merchant;
 
 import com.changyi.fi.component.merchant.request.DoRecordRequest;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
+import com.changyi.fi.component.merchant.response.QRCodeResponse;
 import com.changyi.fi.component.merchant.service.MerchantService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
@@ -39,11 +40,11 @@ public class MerchantResource {
             MerchantValidateRequest req = new Payload(request).as(MerchantValidateRequest.class);
             merchantService.validate(req, Token.touch(token).getOpenId());
             LogUtil.info(this.getClass(), "Complete validate endpoint handle");
-            return Response.status(javax.ws.rs.core.Response.Status.OK).entity(new NormalResponse().build()).build();
+            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run validate endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
-            return Response.status(javax.ws.rs.core.Response.Status.OK).entity(res).build();
+            return Response.status(Response.Status.OK).entity(res).build();
         }
     }
 
@@ -61,11 +62,27 @@ public class MerchantResource {
             DoRecordRequest req = new Payload(request).as(DoRecordRequest.class);
             merchantService.doRecord(req, Token.touch(token).getOpenId());
             LogUtil.info(this.getClass(), "Complete doRecord endpoint handle");
-            return Response.status(javax.ws.rs.core.Response.Status.OK).entity(new NormalResponse().build()).build();
+            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run doRecord endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
-            return Response.status(javax.ws.rs.core.Response.Status.OK).entity(res).build();
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("/qrCode/{merchantId}")
+    @Produces
+    public Response createQRCode(@PathParam("merchantId") String merchantId) {
+        try {
+            LogUtil.info(this.getClass(), "Enter createQRCode endpoint");
+            String url = merchantService.createQRCode(merchantId);
+            LogUtil.info(this.getClass(), "Complete createQRCode endpoint handle");
+            return Response.status(Response.Status.OK).entity(new QRCodeResponse(merchantId, url).build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run createQRCode endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
         }
     }
 

@@ -82,21 +82,14 @@ public class WeixinAPIServiceImpl implements WeixinAPIService {
         return MessageFormat.format(template, getAppHost(), getAppId(), getAppSecret());
     }
 
-    public String createMerchantQRCode() throws Exception {
+    public void createMerchantQRCode(String merchantId, String downloadPath) throws Exception {
         LogUtil.info(this.getClass(), "Create QR code by calling Weixin API");
         String url = createMerchantQRCodeUrl();
         LogUtil.info(this.getClass(), "Call Weixin API, url: " + url);
-        String req = new Payload(new MerchantQRCodeRequest("test")).from(MerchantQRCodeRequest.class);
+        String req = new Payload(new MerchantQRCodeRequest(merchantId)).from(MerchantQRCodeRequest.class);
         LogUtil.debug(this.getClass(), "Request message: " + req);
-        String res = new HTTPCaller(url).downloadPost(req);
-        LogUtil.debug(this.getClass(), "Create QR code response: " + res);
-        return res;
-//        AccessTokenResponse response = new Payload(res).as(AccessTokenResponse.class);
-//        if (!StringUtils.isEmpty(response.getErrcode())) {
-//            throw new SystemException("Weixin API return error: " + res);
-//        }
-//        LogUtil.info(this.getClass(),"Get access token complete and token: " + response.getAccess_token());
-//        return response.getAccess_token();
+        new HTTPCaller(url).downloadPost(req, downloadPath);
+        LogUtil.info(this.getClass(),"Complete creating QR code and save to: " + downloadPath);
     }
 
     private String createMerchantQRCodeUrl() throws Exception {

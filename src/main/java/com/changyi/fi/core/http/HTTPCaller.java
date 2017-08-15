@@ -130,7 +130,7 @@ public class HTTPCaller {
         return httpclient.execute(post, responseHandler);
     }
 
-    public String downloadPost(String json) throws Exception {
+    public void downloadPost(String json, String path) throws Exception {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
         initHeader(post);
@@ -139,26 +139,7 @@ public class HTTPCaller {
             entity.setContentType(CONTENT_TYPE_JSON);
             post.setEntity(entity);
         }
-        ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-            @Override
-            public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
-                String path = "/Users/finley/Finley/workspace/java/Suishoushu/code.img";
-                File xml = new File(path);
-                FileOutputStream outputStream = new FileOutputStream(xml);
-                InputStream inputStream = response.getEntity().getContent();
-                byte buff[] = new byte[4096];
-                int counts = 0;
-                while ((counts = inputStream.read(buff)) != -1) {
-                    System.out.println(".......");
-                    outputStream.write(buff, 0, counts);
-
-                }
-                outputStream.flush();
-                outputStream.close();
-                return path;
-            }
-        };
-        return httpclient.execute(post, responseHandler);
+        httpclient.execute(post, new DownloadHandler(path));
     }
 
     private void initHeader(HttpRequestBase requestBase) {
@@ -174,6 +155,35 @@ public class HTTPCaller {
     public static String createUrl(String prop, Object[] args) {
         String template = Properties.get(prop);
         return MessageFormat.format(template, args);
+    }
+
+    private static class DownloadHandler implements ResponseHandler {
+
+        public DownloadHandler(String path) {
+            this.path = path;
+        }
+
+        private String path;
+
+        public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
+            File qrcode = new File(path);
+            if (!qrcode.getParentFile().exists()) {
+                qrcode.getParentFile().mkdir();
+            }
+            if (!qrcode.exists()) {
+                qrcode.createNewFile();
+            }
+            FileOutputStream outputStream = new FileOutputStream(qrcode);
+            InputStream inputStream = response.getEntity().getContent();
+            byte buff[] = new byte[4096];
+            int counts = 0;
+            while ((counts = inputStream.read(buff)) != -1) {
+                outputStream.write(buff, 0, counts);
+            }
+            outputStream.flush();
+            outputStream.close();
+            return path;
+        }
     }
 
 }

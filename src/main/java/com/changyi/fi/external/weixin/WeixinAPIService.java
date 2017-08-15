@@ -8,6 +8,6 @@ public interface WeixinAPIService {
 
     public String getAccessToken() throws Exception;
 
-    public String createMerchantQRCode() throws Exception;
+    public void createMerchantQRCode(String merchantId, String downloadPath) throws Exception;
 
 }
