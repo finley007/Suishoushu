@@ -99,7 +99,7 @@ public class MerchantServiceImpl implements MerchantService {
     private QRCodeURI createQRCodeDownloadPath(String merchantId) {
         String extend = Properties.get(QRCODE_EXTEND);
         String path = Properties.get(QRCODE_BASE_PATH) + "/" + merchantId + "/qrcode." + extend;
-        String url = Properties.get(QRCODE_BASE_PATH) + "/" + merchantId + "/qrcode." + extend;
+        String url = Properties.get(QRCODE_ROOT_URL) + "/" + merchantId + "/qrcode." + extend;
         return new QRCodeURI(path, url);
     }
 
