@@ -1,5 +1,6 @@
 package com.changyi.fi.external.enterprise;
 
+import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -28,7 +29,7 @@ public class TianYanChaAPIServiceImplTest {
     public void testMatchEnterprise() throws Exception {
 //TODO: Test goes here...
         ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
-        apiService.matchEnterprise("天之健");
+        apiService.matchEnterprise("乔丹");
     }
 
 
@@ -50,4 +51,9 @@ try {
 */
     }
 
+    @Test
+    public void testLogin() throws Exception {
+        ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
+        System.out.println(apiService.login());
+    }
 } 

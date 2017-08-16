@@ -7,6 +7,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -47,6 +48,17 @@ public class HTTPCaller {
         return this;
     }
 
+    private CookieStore cookieStore;
+
+    public CookieStore getCookieStore() {
+        return cookieStore;
+    }
+
+    public HTTPCaller setCookieStore(CookieStore cookieStore) {
+        this.cookieStore = cookieStore;
+        return this;
+    }
+
     public HTTPCaller(String url) {
         this.url = url;
     }
@@ -61,7 +73,7 @@ public class HTTPCaller {
     }
 
     public String doGet() throws Exception {
-        HttpClient httpclient = HttpClients.createDefault();
+        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         HttpGet get = new HttpGet(url);
         initHeader(get);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -80,7 +92,7 @@ public class HTTPCaller {
     }
 
     public String doPost(Map<String, String> map) throws Exception {
-        HttpClient httpclient = HttpClients.createDefault();
+        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         HttpPost post = new HttpPost(url);
         initHeader(post);
         if (map != null && map.size() > 0) {
@@ -107,7 +119,7 @@ public class HTTPCaller {
     }
 
     public String doPost(String json) throws Exception {
-        HttpClient httpclient = HttpClients.createDefault();
+        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         HttpPost post = new HttpPost(url);
         initHeader(post);
         if (StringUtils.isNoneBlank(json)) {

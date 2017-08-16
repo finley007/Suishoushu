@@ -1,12 +1,19 @@
-package com.changyi.fi.external.enterprise;
+package com.changyi.fi.external.enterprise.tyc;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
+import com.changyi.fi.external.enterprise.tyc.request.LoginRequest;
+import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
+import org.apache.http.client.CookieStore;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -20,6 +27,14 @@ import java.util.*;
 @Service("tianYanChaAPIService")
 public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
 
+    private static final String TIANYANCHA_DOMAIN = ".tianyancha.com";
+
+    private static final String COOKIE_AUTH_TOKEN = "auth_token";
+
+    private static final String TINAYANCHA_USERNAME = "tianyancha.username";
+    private static final String TINAYANCHA_PASSWORD = "tianyancha.password";
+
+    private static final String TIANYANCHA_LOGIN_TEMPLATE = "tianyancha.login.template";
     private static final String TIANYANCHA_SEARCH_URL_TEMPLATE = "tianyancha.search.url.template";
     private static final String TIANYANCHA_SEARCH_GET_TEMPLATE = "tianyancha.get.url.template";
     private static final String TIANYANCHA_SEARCH_MATCHER = "tianyancha.search.matcher";
@@ -40,6 +55,7 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
     private static final String FIELD_CREDIT_CODE = "creditCode";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_HREF = "href";
+    private static final String FIELD_TOKEN = "token";
 
     private static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
     private static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
@@ -48,7 +64,7 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
-        String html = new HTTPCaller(url).doGet();
+        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
         String matcher = Properties.get(TIANYANCHA_SEARCH_MATCHER);
         LogUtil.info(this.getClass(), "Parser matcher: " + matcher);
         return new HTTPParser(html).setHandler(new HTTPParser.ResultHandler<List<Map<String, String>>>() {
@@ -63,6 +79,17 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
                 return result;
             }
         }).select(matcher);
+    }
+
+    private CookieStore createCookieStore() throws Exception {
+        LoginResponse response = this.login();
+        String token = response.getData().get(FIELD_TOKEN);
+        CookieStore cookieStore = new BasicCookieStore();
+        BasicClientCookie cookie = new BasicClientCookie(COOKIE_AUTH_TOKEN, token);
+        cookie.setDomain(TIANYANCHA_DOMAIN);
+        cookie.setPath("/");
+        cookieStore.addCookie(cookie);
+        return cookieStore;
     }
 
     private String getCode(String url) {
@@ -156,5 +183,20 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
             }
         }
     }
+
+    public LoginResponse login() throws Exception {
+        String url = HTTPCaller.createUrl(TIANYANCHA_LOGIN_TEMPLATE, new Object[]{});
+        LogUtil.info(this.getClass(), "Login TianYanCha: " + url);
+        String res = new HTTPCaller(url).doPost(createLoginRequest());
+        return new Payload(res).as(LoginResponse.class);
+    }
+
+    private String createLoginRequest() {
+        String username = Properties.get(TINAYANCHA_USERNAME);
+        String password = Properties.get(TINAYANCHA_PASSWORD);
+        LoginRequest request = new LoginRequest(username, password);
+        return new Payload(request).from(LoginRequest.class);
+    }
+
 
 }
