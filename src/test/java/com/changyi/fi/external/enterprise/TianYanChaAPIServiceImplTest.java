@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
+import java.util.List;
+
 /**
  * TianYanChaAPIServiceImpl Tester.
  *
@@ -29,7 +31,7 @@ public class TianYanChaAPIServiceImplTest {
     public void testMatchEnterprise() throws Exception {
 //TODO: Test goes here...
         ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
-        apiService.matchEnterprise("乔丹");
+        List result = apiService.matchEnterprise("乔丹");
     }
 
 

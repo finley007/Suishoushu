@@ -9,6 +9,7 @@ import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.tyc.request.LoginRequest;
 import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
+import com.changyi.fi.external.enterprise.tyc.response.MatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.apache.http.client.CookieStore;
@@ -64,21 +65,19 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
-        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
-        String matcher = Properties.get(TIANYANCHA_SEARCH_MATCHER);
-        LogUtil.info(this.getClass(), "Parser matcher: " + matcher);
-        return new HTTPParser(html).setHandler(new HTTPParser.ResultHandler<List<Map<String, String>>>() {
-            public List<Map<String, String>> handleResult(Elements elems) {
-                List result = new ArrayList();
-                for (Element elem : elems) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put(FIELD_CREDIT_CODE, getCode(elem.attr(FIELD_HREF)));
-                    map.put(FIELD_NAME, elem.child(0).text());
-                    result.add(map);
-                }
-                return result;
+        String json = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
+        LogUtil.info(this.getClass(), "Match result: " + json);
+        MatchResponse response = new Payload(json).as(MatchResponse.class);
+        List result = new ArrayList();
+        if (response != null && response.getData() != null && response.getData().size() > 0) {
+            for (Map<String, String> m : response.getData()) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put(FIELD_CREDIT_CODE, m.get(MatchResponse.FIELD_ID));
+                map.put(FIELD_NAME, m.get(MatchResponse.FIELD_NAME));
+                result.add(map);
             }
-        }).select(matcher);
+        }
+        return result;
     }
 
     private CookieStore createCookieStore() throws Exception {

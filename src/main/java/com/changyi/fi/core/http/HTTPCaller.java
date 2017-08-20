@@ -14,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -30,6 +31,8 @@ public class HTTPCaller {
 
     private static int RESPONSE_CODE_200 = 200;
     private static int RESPONSE_CODE_300 = 300;
+
+    private static String COOKIE_KEY = "Cookie";
 
     public static final String HEADER_USER_AGENT = "User-Agent";
 
@@ -64,7 +67,6 @@ public class HTTPCaller {
     }
 
     public String getUrl() {
-
         return url;
     }
 
@@ -73,9 +75,10 @@ public class HTTPCaller {
     }
 
     public String doGet() throws Exception {
-        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+        HttpClient httpclient = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
         initHeader(get);
+        initCookie(get);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
@@ -95,6 +98,7 @@ public class HTTPCaller {
         HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         HttpPost post = new HttpPost(url);
         initHeader(post);
+        initCookie(post);
         if (map != null && map.size() > 0) {
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             for (Iterator<String> itor = map.keySet().iterator(); itor.hasNext(); ) {
@@ -122,6 +126,7 @@ public class HTTPCaller {
         HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         HttpPost post = new HttpPost(url);
         initHeader(post);
+        initCookie(post);
         if (StringUtils.isNoneBlank(json)) {
             StringEntity entity = new StringEntity(json, FIConstants.DEFAULT_CHARSET);   // 中文乱码在此解决
             entity.setContentType(CONTENT_TYPE_JSON);
@@ -146,6 +151,7 @@ public class HTTPCaller {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
         initHeader(post);
+        initCookie(post);
         if (StringUtils.isNoneBlank(json)) {
             StringEntity entity = new StringEntity(json, FIConstants.DEFAULT_CHARSET);   // 中文乱码在此解决
             entity.setContentType(CONTENT_TYPE_JSON);
@@ -160,7 +166,19 @@ public class HTTPCaller {
             this.header.put(HEADER_USER_AGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
         }
         for (String key : this.header.keySet()) {
-            requestBase.setHeader(key, this.header.get(key));
+            requestBase.addHeader(key, this.header.get(key));
+        }
+    }
+
+    private void initCookie(HttpRequestBase requestBase) {
+        if (this.cookieStore != null && this.cookieStore.getCookies() != null && this.cookieStore.getCookies().size() > 0) {
+            String cookieExp = "";
+            for (Cookie cookie : this.cookieStore.getCookies()) {
+                cookieExp += cookie.getName() + "=" + cookie.getValue() + ";";
+            }
+            if (StringUtils.isNotBlank(cookieExp)) {
+                requestBase.addHeader(COOKIE_KEY, cookieExp);
+            }
         }
     }
 

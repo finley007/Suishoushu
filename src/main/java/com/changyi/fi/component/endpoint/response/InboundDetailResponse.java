@@ -1,11 +1,11 @@
 package com.changyi.fi.component.endpoint.response;
 
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.response.NormalResponse;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by finley on 7/14/17.
@@ -13,6 +13,7 @@ import java.util.Map;
 public class InboundDetailResponse extends NormalResponse {
 
     public InboundDetailResponse(HttpServletRequest req) {
+        this.setCookies(req.getCookies());
         this.setRemoteAddr(req.getRemoteAddr());
         this.setRemoteHost(req.getRemoteHost());
         this.setRemotePort(req.getRemotePort());
@@ -25,6 +26,8 @@ public class InboundDetailResponse extends NormalResponse {
             header.put(name, req.getHeader(name));
         }
     }
+
+    private String[] cookies;
 
     private Map<String, String> header = new HashMap<String, String>();
 
@@ -72,10 +75,7 @@ public class InboundDetailResponse extends NormalResponse {
         this.requestURL = requestURL;
     }
 
-    public String getRemoteAddr() {
-        return remoteAddr;
-
-    }
+    public String getRemoteAddr() { return remoteAddr; }
 
     public void setRemoteAddr(String remoteAddr) {
         this.remoteAddr = remoteAddr;
@@ -95,5 +95,19 @@ public class InboundDetailResponse extends NormalResponse {
 
     public void setRemotePort(int remotePort) {
         this.remotePort = remotePort;
+    }
+
+    public String[] getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(Cookie[] cookies) {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < cookies.length; i++) {
+            list.add(new Payload(cookies[i]).from(Cookie.class));
+        }
+        if (list.size() > 0) {
+            this.cookies = list.toArray(new String[list.size()]);
+        }
     }
 }

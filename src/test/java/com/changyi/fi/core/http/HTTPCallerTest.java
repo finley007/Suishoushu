@@ -1,5 +1,8 @@
 package com.changyi.fi.core.http;
 
+import org.apache.http.client.CookieStore;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -27,8 +30,13 @@ public class HTTPCallerTest {
     @Test
     public void testDoGet() throws Exception {
 //TODO: Test goes here...
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx8910b0b926fa81a9&secret=0d1afed8ecd9077731dacb2e7d13499f&js_code=JSCODE&grant_type=authorization_code";
-        String response = new HTTPCaller(url).doGet();
+        CookieStore cookieStore = new BasicCookieStore();
+        BasicClientCookie cookie = new BasicClientCookie("auth_token", "test");
+        cookie.setDomain("");
+        cookie.setPath("/");
+        cookieStore.addCookie(cookie);
+        String url = "http://localhost:8080/suishoushu/inbound/detail";
+        String response = new HTTPCaller(url).setCookieStore(cookieStore).doGet();
         System.out.println(response);
     }
 

@@ -32,20 +32,20 @@ class TianyanchaFixSpider(scrapy.Spider):
 
     def parse(self, response):
     	logger.info("Start to fix data")
-        query = "select * from ISSUE_URL t where t.provice_code = '" + config.getCurrentProviceCode() + "' and t.status = '0'"
-        result = self.dbclient.queryDB(self.query)
+        query = "select * from ISSUE_URL t where t.provice_code = '" + self.config.getCurrentProviceCode() + "' and t.status = '0'"
+        result = self.dbclient.queryDB(query)
         logger.info("************************Total data number: " + str(len(result)))
         for record in result:
             uuid = record[0]
             url = record[1]
             if self.count == 0:
-                self.proxy_url = self.proxyloader.getProtocal() + self.proxyloader.getProxyz()
+                self.proxy_url = self.proxyloader.getProtocal() + self.proxyloader.getProxy()
                 self.count = self.interval
             corp_code = url[url.rfind("/")+1:]
             if not self.redisclient.get(corp_code):
                 provice_code = record[2]
                 industry_code = record[3]
-                logger.info("Url:" + url + "to be solved")
+                logger.info("Url: " + url + " to be solved")
                 self.count = self.count - 1
                 yield Request(url=url, meta={'proxy': self.proxy_url, 'provice_code': provice_code, 'industry_code': industry_code, 'corp_code': corp_code, 'uuid': uuid}, callback=self.parse_corp)
 
@@ -95,7 +95,9 @@ class TianyanchaFixSpider(scrapy.Spider):
                 item['taxpayer_code'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[3]/td/div/span/text()").extract()[0]
                 item['industry'] = response.xpath("/html/body/div[2]/div[1]/div/div/div/div[2]/div/div[2]/div[2]/div[3]/table/tbody/tr[4]/td[1]/div/span/text()").extract()[0]
             self.redisclient.set(corp_code, corp_code)
+            updateSQL = "update ISSUE_URL t set t.status = '1' where t.id = '" + uuid +"'"
+            self.dbclient.updateDB(updateSQL)
             yield item
         except BaseException, e:
-            updateSQL = "update ISSUE_URL t set t.status = '1' where t.id = '" + uuid +"'"
+            updateSQL = "update ISSUE_URL t set t.status = '-1' where t.id = '" + uuid +"'"
             self.dbclient.updateDB(updateSQL)
