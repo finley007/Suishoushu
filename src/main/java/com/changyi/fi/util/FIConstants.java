@@ -8,6 +8,8 @@ public class FIConstants {
 
     public static final String SYSTEM = "system";
 
+    public static final String OK = "ok";
+
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
     public enum InvoiceType {

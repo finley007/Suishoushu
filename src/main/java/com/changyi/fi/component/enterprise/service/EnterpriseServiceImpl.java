@@ -8,7 +8,9 @@ import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
+import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
 import com.changyi.fi.model.EnterprisePO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     private static final String ENTERPRISE_EXTERNAL_SERVICE_TOGGLE = "ENTERPRISE_EXTERNAL_SERVICE_TOGGLE";
     private static final String ENTERPRISE_MATCH_RESULT_LENGTH = "ENTERPRISE_MATCH_RESULT_LENGTH";
-    private static final String ENTERPRISE_EXTERNAL_SERVICE_IMPL_CLZ = "ENTERPRISE_EXTERNAL_SERVICE_IMPL_CLZ";
+    private static final String ENTERPRISE_EXTERNAL_SERVICE_IMPL = "ENTERPRISE_EXTERNAL_SERVICE_IMPL";
 
     private static final String DB_FIELD_CREDITCODE = "CREDITCODE";
     private static final String DB_FIELD_NAME = "NAME";
@@ -31,18 +33,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_IS_EXTERNAL = "isExternal";
 
-
-    private ExternalEnterpriseAPIService enterpriseAPIService;
-
     private InvoiceDao invoiceDao;
-
-    private ExternalEnterpriseAPIService getEnterpriseAPIService() throws Exception {
-        if (enterpriseAPIService == null) {
-            enterpriseAPIService = (ExternalEnterpriseAPIService)Class.forName(ConfigManager.getParameter(ENTERPRISE_EXTERNAL_SERVICE_IMPL_CLZ)).newInstance();
-        }
-        return enterpriseAPIService;
-    }
-
 
     @Autowired(required = true)
     public void setInvoiceDao(InvoiceDao invoiceDao) {
@@ -57,7 +48,17 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         //从外部获取企业信息开关
         if (ConfigManager.getBooleanParameter(ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
-            externalList = getEnterpriseAPIService().matchEnterprise(key);
+            String apiImpls = ConfigManager.getParameter(ENTERPRISE_EXTERNAL_SERVICE_IMPL);
+            if (StringUtils.isNotBlank(apiImpls)) {
+                String[] impls = apiImpls.split("\\|");
+                for (int i = 0; i < impls.length; i++) {
+                    ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl(impls[i]);
+                    externalList = enterpriseAPIService.matchEnterprise(key);
+                    if (externalList.size() > 0) {
+                        break;
+                    }
+                }
+            }
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList));
     }
@@ -104,7 +105,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         if (!Boolean.valueOf(req.getIsExternal())) {
             return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(req.getCreditCode()));
         } else {
-            EnterprisePO po = this.getEnterpriseAPIService().getEnterpriseByCode(req.getCreditCode());
+            ExternalEnterpriseAPIService service = EnternalEnterpriseAPIManager.getAPIImpl(req.getApiProvider());
+            EnterprisePO po = service.getEnterpriseByCode(req.getCreditCode());
             if (po != null) {
                 this.invoiceDao.insertEnterprise(po);
             }

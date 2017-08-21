@@ -1,6 +1,9 @@
 package com.changyi.fi.external.enterprise;
 
+import com.changyi.fi.core.Payload;
 import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
+import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
+import com.changyi.fi.model.EnterprisePO;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -36,26 +39,18 @@ public class TianYanChaAPIServiceImplTest {
 
 
     /**
-     * Method: createSearchUrl(String key)
+     * Method: getEnterpriseByCode(String creditCode)
      */
     @Test
-    public void testCreateSearchUrl() throws Exception {
+    public void testGetEnterpriseByCode() throws Exception {
 //TODO: Test goes here... 
-/* 
-try { 
-   Method method = TianYanChaAPIServiceImpl.getClass().getMethod("createSearchUrl", String.class); 
-   method.setAccessible(true); 
-   method.invoke(<Object>, <Parameters>); 
-} catch(NoSuchMethodException e) { 
-} catch(IllegalAccessException e) { 
-} catch(InvocationTargetException e) { 
-} 
-*/
+        ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
+        EnterprisePO po = apiService.getEnterpriseByCode("264417394");
     }
 
     @Test
     public void testLogin() throws Exception {
-        ExternalEnterpriseAPIService apiService = new TianYanChaAPIServiceImpl();
+        ExternalEnterpriseAPIAbstractImpl apiService = new TianYanChaAPIServiceImpl();
         System.out.println(apiService.login());
     }
 } 

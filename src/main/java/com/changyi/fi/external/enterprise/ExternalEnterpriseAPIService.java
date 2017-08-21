@@ -15,6 +15,6 @@ public interface ExternalEnterpriseAPIService {
 
     public EnterprisePO getEnterpriseByCode(String code) throws Exception;
 
-    public LoginResponse login() throws Exception;
+
 
 }

@@ -3,9 +3,11 @@ package com.changyi.fi.external.enterprise.tyc;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
+import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.tyc.request.LoginRequest;
 import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
@@ -15,7 +17,6 @@ import com.changyi.fi.util.FIConstants;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,13 @@ import java.util.*;
  * Created by finley on 7/8/17.
  */
 @Service("tianYanChaAPIService")
-public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
+public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
     private static final String TIANYANCHA_DOMAIN = ".tianyancha.com";
 
     private static final String COOKIE_AUTH_TOKEN = "auth_token";
+
+    private static final String REDIS_TOKEN_EXPIRED_TIME = "tyc_token_expired_time";
 
     private static final String TINAYANCHA_USERNAME = "tianyancha.username";
     private static final String TINAYANCHA_PASSWORD = "tianyancha.password";
@@ -61,6 +64,12 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
     private static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
     private static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
 
+    private static final int SECONDS_FOR_ONE_WEEK = 604800;
+
+    protected int getTokenExpiredTime() {
+        return SECONDS_FOR_ONE_WEEK;
+    }
+
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
@@ -81,8 +90,7 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
     }
 
     private CookieStore createCookieStore() throws Exception {
-        LoginResponse response = this.login();
-        String token = response.getData().get(FIELD_TOKEN);
+        String token = this.getToken(REDIS_TOKEN_EXPIRED_TIME);
         CookieStore cookieStore = new BasicCookieStore();
         BasicClientCookie cookie = new BasicClientCookie(COOKIE_AUTH_TOKEN, token);
         cookie.setDomain(TIANYANCHA_DOMAIN);
@@ -183,11 +191,15 @@ public class TianYanChaAPIServiceImpl implements ExternalEnterpriseAPIService {
         }
     }
 
-    public LoginResponse login() throws Exception {
+    public String login() throws Exception {
         String url = HTTPCaller.createUrl(TIANYANCHA_LOGIN_TEMPLATE, new Object[]{});
         LogUtil.info(this.getClass(), "Login TianYanCha: " + url);
         String res = new HTTPCaller(url).doPost(createLoginRequest());
-        return new Payload(res).as(LoginResponse.class);
+        LoginResponse response = new Payload(res).as(LoginResponse.class);
+        if (!FIConstants.OK.equals(response.getState())) {
+            throw new SystemException("");
+        }
+        return response.getData().get(FIELD_TOKEN);
     }
 
     private String createLoginRequest() {
