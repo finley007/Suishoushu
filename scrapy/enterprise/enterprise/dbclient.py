@@ -25,3 +25,7 @@ class DBClient:
    def getRecord(self, prov, ind, page):
 		sql = "select id from crawler_record t where t.provice_code = '" + prov + "' and t.industry_code = '" + ind + "' and t.page_code = '" + page + "'"
 		return self.queryDB(sql)
+
+   def getIssueUrlNum(self, prov):
+      sql = "select count(*) from issue_url t where t.status = 0 and t.provice_code = '" + prov + "'"
+      return self.queryDB(sql)

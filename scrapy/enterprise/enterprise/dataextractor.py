@@ -18,11 +18,11 @@ def main(argv):
 	try:
 	  opts, args = getopt.getopt(argv,"hp:i:g:")
 	except getopt.GetoptError:
-	  print 'ipextractor.py -p <provice> -i <industry> -g <page>'
+	  print 'dataextractor.py -p <provice> -i <industry> -g <page>'
 	  sys.exit(2)
 	for opt, arg in opts:
 	  if opt == '-h':
-	     print 'ipextractor.py -p <provice> -i <industry> -g <page>'
+	     print 'dataextractor.py -p <provice> -i <industry> -g <page>'
 	     sys.exit()
 	  elif opt in ("-p"):
 	     provice_code = arg
