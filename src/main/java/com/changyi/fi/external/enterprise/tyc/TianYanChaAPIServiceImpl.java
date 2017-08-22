@@ -17,6 +17,7 @@ import com.changyi.fi.util.FIConstants;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
@@ -107,14 +108,18 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling TianYanCha API, code: " + code);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_GET_TEMPLATE, new Object[]{code});
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
-        String html = new HTTPCaller(url).doGet();
+        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
         HTTPParser parser = new HTTPParser(html);
         return createEnterprisePO(parser);
     }
 
     private EnterprisePO createEnterprisePO(HTTPParser parser) {
         Boolean isListed = this.checkIsListed(parser);
-        String creditCode = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER))).toString();
+        Elements ccodeElems = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER)));
+        String creditCode = "";
+        if (ccodeElems != null && ccodeElems.size() > 0) {
+            creditCode  = ccodeElems.get(0).text();
+        }
         List<String> matchs = RegexMatches.match(creditCode, NUMBER_PATTERN);
         if (matchs == null || matchs.size() <= 0) {
             return null;
@@ -166,11 +171,12 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     //检查是否是上市公司，如果是需要做处理
     private Boolean checkIsListed(HTTPParser parser) {
-        return parser.setHandler(new HTTPParser.ResultHandler<Boolean>() {
-            public Boolean handleResult(Elements elems) {
-                return elems != null && elems.size() > 0;
-            }
-        }).select(Properties.get(TIANYANCHA_GET_LISTED_SECTION_MATCHER));
+//        return parser.setHandler(new HTTPParser.ResultHandler<Boolean>() {
+//            public Boolean handleResult(Elements elems) {
+//                return elems != null && elems.size() > 0;
+//            }
+//        }).select(Properties.get(TIANYANCHA_GET_LISTED_SECTION_MATCHER));
+        return false;
     }
 
     private String handleListed(Boolean isListed, String prop) {

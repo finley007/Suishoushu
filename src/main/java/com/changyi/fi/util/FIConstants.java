@@ -10,7 +10,7 @@ public class FIConstants {
 
     public static final String OK = "ok";
 
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
