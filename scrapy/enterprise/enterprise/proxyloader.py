@@ -12,7 +12,7 @@ class ProxyLoader:
 
 	template_file = "../proxymiddlewares.tmpl"
 	target_file = "../proxymiddlewares.py" 
-	url = "http://http-webapi.zhimaruanjian.com/getip?num=1&type=2&pro=&city=0&yys=0&port=1&pack=307&ts=0&ys=0&cs=0&lb=1&sb=0&pb=4&mr=1" 
+	url = "http://http-webapi.zhimaruanjian.com/getip?num=1&type=2&pro=&city=0&yys=0&port=1&pack=386&ts=0&ys=0&cs=0&lb=1&sb=0&pb=4&mr=1" 
 	headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'}
 	replacer = "######"
 	protocal = "http://"
