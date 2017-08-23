@@ -20,12 +20,7 @@ public class ConfigDic implements Dictionary<String> {
     private static final String FIELD_VALUE = "VALUE";
 
     public ConfigDic() {
-        ConfigService configService = CtxProvider.getContext().getBean(ConfigService.class);
-        List<Map> list = configService.getSysParameter();
-        cfgDic_ = new HashMap<String, String>();
-        for (Map map : list) {
-            cfgDic_.put(map.get(FIELD_CODE).toString(), map.get(FIELD_VALUE).toString());
-        }
+        refresh();
     }
 
     private Map<String, String> cfgDic_ = new HashMap<String, String>();
@@ -58,6 +53,15 @@ public class ConfigDic implements Dictionary<String> {
 
     public List<Map<String, String>> listAll() {
         return null;
+    }
+
+    public void refresh() {
+        ConfigService configService = CtxProvider.getContext().getBean(ConfigService.class);
+        List<Map> list = configService.getSysParameter();
+        cfgDic_ = new HashMap<String, String>();
+        for (Map map : list) {
+            cfgDic_.put(map.get(FIELD_CODE).toString(), map.get(FIELD_VALUE).toString());
+        }
     }
 
 }

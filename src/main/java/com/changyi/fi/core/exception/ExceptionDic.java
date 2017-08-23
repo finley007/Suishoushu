@@ -20,12 +20,7 @@ public class ExceptionDic implements Dictionary<String> {
     private static final String FIELD_CODE = "CODE";
 
     public ExceptionDic() {
-        ConfigService configService = CtxProvider.getContext().getBean(ConfigService.class);
-        List<Map> list = configService.getExceptionCode();
-        exDic_ = new HashMap<String, String>();
-        for (Map map : list) {
-            exDic_.put(map.get(FIELD_CLASS).toString(), map.get(FIELD_CODE).toString());
-        }
+        this.refresh();
     }
 
     private Map<String, String> exDic_ = new HashMap<String, String>();
@@ -58,5 +53,14 @@ public class ExceptionDic implements Dictionary<String> {
 
     public List<Map<String, String>> listAll() {
         return null;
+    }
+
+    public void refresh() {
+        ConfigService configService = CtxProvider.getContext().getBean(ConfigService.class);
+        List<Map> list = configService.getExceptionCode();
+        exDic_ = new HashMap<String, String>();
+        for (Map map : list) {
+            exDic_.put(map.get(FIELD_CLASS).toString(), map.get(FIELD_CODE).toString());
+        }
     }
 }

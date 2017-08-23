@@ -22,4 +22,6 @@ public interface Dictionary<T> {
 
     public List<Map<String, T>> listAll();
 
+    public void refresh();
+
 }

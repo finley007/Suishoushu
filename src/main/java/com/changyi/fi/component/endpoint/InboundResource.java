@@ -3,10 +3,12 @@ package com.changyi.fi.component.endpoint;
 import com.changyi.fi.component.endpoint.response.InboundDetailResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.exception.ExceptionHandler;
+import com.changyi.fi.core.tool.DictionaryManager;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -31,6 +33,21 @@ public class InboundResource {
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run inboundDetail endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("/refresh")
+    public Response refresh() {
+        try {
+            LogUtil.info(this.getClass(), "Enter refresh endpoint");
+            DictionaryManager.refresh();
+            LogUtil.info(this.getClass(), "Complete refresh endpoint handle");
+            return Response.status(Response.Status.OK).entity("success").build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run refresh endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
