@@ -137,6 +137,8 @@ public class HTTPCaller {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
                 int status = response.getStatusLine().getStatusCode();
+                HttpEntity entity = response.getEntity();
+                LogUtil.debug(this.getClass(), "********************" + EntityUtils.toString(entity));
                 if (status >= RESPONSE_CODE_200 && status < RESPONSE_CODE_300) {
                     HttpEntity entity = response.getEntity();
                     LogUtil.debug(this.getClass(), "********************" + EntityUtils.toString(entity));
