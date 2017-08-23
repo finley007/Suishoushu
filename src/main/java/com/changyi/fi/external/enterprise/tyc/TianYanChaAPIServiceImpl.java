@@ -14,6 +14,7 @@ import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.external.enterprise.tyc.response.MatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
+import com.mysql.cj.core.util.LogUtils;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -200,7 +201,9 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     public String login() throws Exception {
         String url = HTTPCaller.createUrl(TIANYANCHA_LOGIN_TEMPLATE, new Object[]{});
         LogUtil.info(this.getClass(), "Login TianYanCha: " + url);
-        String res = new HTTPCaller(url).doPost(createLoginRequest());
+        String request = createLoginRequest();
+        LogUtil.debug(this.getClass(), "Login request: " + request);
+        String res = new HTTPCaller(url).doPost(request);
         LoginResponse response = new Payload(res).as(LoginResponse.class);
         if (!FIConstants.OK.equals(response.getState())) {
             throw new SystemException("");

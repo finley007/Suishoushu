@@ -1,5 +1,6 @@
 package com.changyi.fi.core.http;
 
+import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -138,6 +139,7 @@ public class HTTPCaller {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= RESPONSE_CODE_200 && status < RESPONSE_CODE_300) {
                     HttpEntity entity = response.getEntity();
+                    LogUtil.debug(this.getClass(), "********************" + EntityUtils.toString(entity));
                     return entity != null ? EntityUtils.toString(entity) : null;
                 } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
