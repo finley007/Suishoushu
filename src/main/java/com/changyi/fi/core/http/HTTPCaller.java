@@ -140,7 +140,6 @@ public class HTTPCaller {
                 HttpEntity entity = response.getEntity();
                 LogUtil.debug(this.getClass(), "********************" + EntityUtils.toString(entity));
                 if (status >= RESPONSE_CODE_200 && status < RESPONSE_CODE_300) {
-                    HttpEntity entity = response.getEntity();
                     LogUtil.debug(this.getClass(), "********************" + EntityUtils.toString(entity));
                     return entity != null ? EntityUtils.toString(entity) : null;
                 } else {
