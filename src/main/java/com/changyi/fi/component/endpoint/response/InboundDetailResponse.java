@@ -102,6 +102,9 @@ public class InboundDetailResponse extends NormalResponse {
     }
 
     public void setCookies(Cookie[] cookies) {
+        if (cookies == null) {
+            return;
+        }
         List<String> list = new ArrayList<String>();
         for (int i = 0; i < cookies.length; i++) {
             list.add(new Payload(cookies[i]).from(Cookie.class));
