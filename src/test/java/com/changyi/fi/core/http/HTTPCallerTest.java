@@ -6,6 +6,9 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * HTTPCaller Tester.
@@ -14,6 +17,8 @@ import org.junit.After;
  * @version 1.0
  * @since <pre>Jun 28, 2017</pre>
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/applicationContext.xml"})
 public class HTTPCallerTest {
 
     @Before
@@ -35,8 +40,8 @@ public class HTTPCallerTest {
         cookie.setDomain("");
         cookie.setPath("/");
         cookieStore.addCookie(cookie);
-        String url = "http://localhost:8080/suishoushu/inbound/detail";
-        String response = new HTTPCaller(url).setCookieStore(cookieStore).doGet();
+        String url = "http://47.94.41.252:8080/suishoushu/inbound/detail";
+        String response = new HTTPCaller(url).setCookieStore(cookieStore).enableProxy().doGet();
         System.out.println(response);
     }
 

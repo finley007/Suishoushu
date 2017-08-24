@@ -1,9 +1,11 @@
 package com.changyi.fi.core.http;
 
+import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -16,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -29,6 +32,9 @@ import java.util.*;
 
 public class HTTPCaller {
 
+    private static final String PROXY_IP = "proxy.ip";
+    private static final String PROXY_PORT = "proxy.port";
+
     private static int RESPONSE_CODE_200 = 200;
     private static int RESPONSE_CODE_300 = 300;
 
@@ -39,6 +45,26 @@ public class HTTPCaller {
     public static final String CONTENT_TYPE_JSON = "application/json";
 
     private String url;
+
+    private int proxyPort;
+
+    public int getProxyPort() {
+        return proxyPort;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    private String proxyIp;
+
+    public String getProxyIp() {
+        return proxyIp;
+    }
+
+    public void setProxyIp(String proxyIp) {
+        this.proxyIp = proxyIp;
+    }
 
     private Map<String, String> header;
 
@@ -66,6 +92,17 @@ public class HTTPCaller {
         this.url = url;
     }
 
+    public HTTPCaller enableProxy() {
+        this.proxyIp = Properties.get(PROXY_IP);
+        String proxyPort = Properties.get(PROXY_PORT);
+        try {
+            this.proxyPort = Integer.valueOf(proxyPort);
+        } catch (Exception e) {
+            LogUtil.error(this.getClass(), "Invalid proxy port in config.properties", e);
+        }
+        return this;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -75,7 +112,7 @@ public class HTTPCaller {
     }
 
     public String doGet() throws Exception {
-        HttpClient httpclient = HttpClients.createDefault();
+        HttpClient httpClient = getHttpClient();
         HttpGet get = new HttpGet(url);
         initHeader(get);
         initCookie(get);
@@ -91,11 +128,19 @@ public class HTTPCaller {
                 }
             }
         };
-        return httpclient.execute(get, responseHandler);
+        return httpClient.execute(get, responseHandler);
+    }
+
+    private HttpClient getHttpClient() {
+        HttpClientBuilder builder = HttpClients.custom();
+        if (this.getProxy() != null) {
+            builder.setProxy(this.getProxy());
+        }
+        return builder.build();
     }
 
     public String doPost(Map<String, String> map) throws Exception {
-        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+        HttpClient httpClient = getHttpClient();
         HttpPost post = new HttpPost(url);
         initHeader(post);
         initCookie(post);
@@ -119,11 +164,11 @@ public class HTTPCaller {
                 }
             }
         };
-        return httpclient.execute(post, responseHandler);
+        return httpClient.execute(post, responseHandler);
     }
 
     public String doPost(String json) throws Exception {
-        HttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+        HttpClient httpClient = getHttpClient();
         HttpPost post = new HttpPost(url);
         initHeader(post);
         initCookie(post);
@@ -144,7 +189,7 @@ public class HTTPCaller {
                 }
             }
         };
-        return httpclient.execute(post, responseHandler);
+        return httpClient.execute(post, responseHandler);
     }
 
     public void downloadPost(String json, String path) throws Exception {
@@ -180,6 +225,13 @@ public class HTTPCaller {
                 requestBase.addHeader(COOKIE_KEY, cookieExp);
             }
         }
+    }
+
+    private HttpHost getProxy() {
+        if (StringUtils.isNotBlank(this.proxyIp) && this.proxyPort > 0) {
+            return new HttpHost(this.proxyIp, this.proxyPort);
+        }
+        return null;
     }
 
     public static String createUrl(String prop, Object[] args) {
