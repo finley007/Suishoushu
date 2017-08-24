@@ -76,7 +76,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
-        String json = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
+        String json = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         LogUtil.info(this.getClass(), "Match result: " + json);
         MatchResponse response = new Payload(json).as(MatchResponse.class);
         List result = new ArrayList();
@@ -109,7 +109,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling TianYanCha API, code: " + code);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_GET_TEMPLATE, new Object[]{code});
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
-        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
+        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         HTTPParser parser = new HTTPParser(html);
         return createEnterprisePO(parser);
     }
