@@ -44,6 +44,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         LogUtil.info(this.getClass(), "Execute matchEnterprise service for key: " + key);
         //从内部获取
         List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ENTERPRISE_MATCH_RESULT_LENGTH, 20));
+        if (internalList.size() == 0) {
+            LogUtil.info(this.getClass(), "No match enterprise with key: " + key + " in DB");
+        }
         List<Map> externalList = new ArrayList<Map>();
         //从外部获取企业信息开关
         if (ConfigManager.getBooleanParameter(ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
@@ -52,13 +55,19 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             if (StringUtils.isNotBlank(apiImpls)) {
                 String[] impls = apiImpls.split("\\|");
                 for (int i = 0; i < impls.length; i++) {
-                    ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl(impls[i]);
-                    externalList = enterpriseAPIService.matchEnterprise(key);
-                    if (externalList.size() > 0) {
-                        break;
+                    LogUtil.info(this.getClass(), "Search key: " + key +  " by using external API: " + impls[i]);
+                    try {
+                        ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl(impls[i]);
+                        externalList = enterpriseAPIService.matchEnterprise(key);
+                        if (externalList.size() > 0) {
+                            break;
+                        }
+                    } catch (Exception e) {
+                        LogUtil.error(this.getClass(), "Error when search key by using external API", e);
                     }
                 }
             }
+            LogUtil.info(this.getClass(),"No match enterprise with key: " + key + " by using external API");
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList));
     }
