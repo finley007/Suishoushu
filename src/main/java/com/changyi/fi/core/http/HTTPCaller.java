@@ -1,6 +1,7 @@
 package com.changyi.fi.core.http;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -34,6 +36,7 @@ public class HTTPCaller {
 
     private static final String PROXY_IP = "proxy.ip";
     private static final String PROXY_PORT = "proxy.port";
+    private static final String HTTP_TIMEOUT = "HTTP_TIMEOUT";
 
     private static int RESPONSE_CODE_200 = 200;
     private static int RESPONSE_CODE_300 = 300;
@@ -48,25 +51,39 @@ public class HTTPCaller {
 
     private int proxyPort;
 
+    private String proxyIp;
+
+    private Map<String, String> header;
+
+    private CookieStore cookieStore;
+
+    private int timeout = 30000;
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
     public int getProxyPort() {
         return proxyPort;
     }
 
-    public void setProxyPort(int proxyPort) {
+    public HTTPCaller setProxyPort(int proxyPort) {
         this.proxyPort = proxyPort;
+        return this;
     }
-
-    private String proxyIp;
 
     public String getProxyIp() {
         return proxyIp;
     }
 
-    public void setProxyIp(String proxyIp) {
+    public HTTPCaller setProxyIp(String proxyIp) {
         this.proxyIp = proxyIp;
+        return this;
     }
-
-    private Map<String, String> header;
 
     public Map<String, String> getHeader() {
         return header;
@@ -76,8 +93,6 @@ public class HTTPCaller {
         this.header = header;
         return this;
     }
-
-    private CookieStore cookieStore;
 
     public CookieStore getCookieStore() {
         return cookieStore;
@@ -107,15 +122,20 @@ public class HTTPCaller {
         return url;
     }
 
-    public void setUrl(String url) {
+    public HTTPCaller setUrl(String url) {
         this.url = url;
+        return this;
+    }
+
+    public static String createUrl(String prop, Object[] args) {
+        String template = Properties.get(prop);
+        return MessageFormat.format(template, args);
     }
 
     public String doGet() throws Exception {
         HttpClient httpClient = getHttpClient();
         HttpGet get = new HttpGet(url);
-        initHeader(get);
-        initCookie(get);
+        init(get);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
@@ -131,19 +151,12 @@ public class HTTPCaller {
         return httpClient.execute(get, responseHandler);
     }
 
-    private HttpClient getHttpClient() {
-        HttpClientBuilder builder = HttpClients.custom();
-        if (this.getProxy() != null) {
-            builder.setProxy(this.getProxy());
-        }
-        return builder.build();
-    }
+
 
     public String doPost(Map<String, String> map) throws Exception {
         HttpClient httpClient = getHttpClient();
         HttpPost post = new HttpPost(url);
-        initHeader(post);
-        initCookie(post);
+        init(post);
         if (map != null && map.size() > 0) {
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             for (Iterator<String> itor = map.keySet().iterator(); itor.hasNext(); ) {
@@ -170,8 +183,7 @@ public class HTTPCaller {
     public String doPost(String json) throws Exception {
         HttpClient httpClient = getHttpClient();
         HttpPost post = new HttpPost(url);
-        initHeader(post);
-        initCookie(post);
+        init(post);
         if (StringUtils.isNoneBlank(json)) {
             StringEntity entity = new StringEntity(json, FIConstants.DEFAULT_CHARSET);   // 中文乱码在此解决
             entity.setContentType(CONTENT_TYPE_JSON);
@@ -192,11 +204,16 @@ public class HTTPCaller {
         return httpClient.execute(post, responseHandler);
     }
 
+    public void init(HttpRequestBase requestBase) {
+        initHeader(requestBase);
+        initCookie(requestBase);
+        initTimeout(requestBase);
+    }
+
     public void downloadPost(String json, String path) throws Exception {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
-        initHeader(post);
-        initCookie(post);
+        init(post);
         if (StringUtils.isNoneBlank(json)) {
             StringEntity entity = new StringEntity(json, FIConstants.DEFAULT_CHARSET);   // 中文乱码在此解决
             entity.setContentType(CONTENT_TYPE_JSON);
@@ -227,16 +244,27 @@ public class HTTPCaller {
         }
     }
 
+    private void initTimeout(HttpRequestBase requestBase) {
+        this.timeout = ConfigManager.getIntegerParameter(HTTP_TIMEOUT, timeout);
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(this.timeout).setConnectionRequestTimeout(this.timeout)
+                .setSocketTimeout(this.timeout).build();
+        requestBase.setConfig(requestConfig);
+    }
+
+    private HttpClient getHttpClient() {
+        HttpClientBuilder builder = HttpClients.custom();
+        if (this.getProxy() != null) {
+            builder.setProxy(this.getProxy());
+        }
+        return builder.build();
+    }
+
     private HttpHost getProxy() {
         if (StringUtils.isNotBlank(this.proxyIp) && this.proxyPort > 0) {
             return new HttpHost(this.proxyIp, this.proxyPort);
         }
         return null;
-    }
-
-    public static String createUrl(String prop, Object[] args) {
-        String template = Properties.get(prop);
-        return MessageFormat.format(template, args);
     }
 
     private static class DownloadHandler implements ResponseHandler {
