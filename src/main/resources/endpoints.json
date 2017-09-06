@@ -18,7 +18,7 @@
     {
       "name": "企业详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise/",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "POST",
       "request": {
         "isExternal": "是否来自外部系统",
@@ -40,7 +40,7 @@
     {
       "name": "企业模糊查询接口",
       "url": "47.94.41.252:8080/suishoushu/enterprise?key={key}",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "GET",
       "request": "key:企业名关键字",
       "response": {
@@ -61,7 +61,7 @@
     {
       "name": "发票列表查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/invoices",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "GET",
       "request": "",
       "response": {
@@ -94,7 +94,7 @@
     {
       "name": "发票删除接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "DELETE",
       "request": "id:发票id",
       "response": {
@@ -106,7 +106,7 @@
     {
       "name": "发票详情查询接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/{id}",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "GET",
       "request": "id:发票id",
       "response": {
@@ -129,7 +129,7 @@
     {
       "name": "发票更新接口",
       "url": "47.94.41.252:8080/suishoushu/invoice/",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "PUT",
       "request": {
         "id": "发票id，如果为空则新建发票",
@@ -154,7 +154,7 @@
     {
       "name": "用户信息更新接口",
       "url": "47.94.41.252:8080/suishoushu/customer/",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "PUT",
       "request": {
         "nickName": "昵称",
@@ -172,7 +172,7 @@
     {
       "name": "商户验证接口",
       "url": "47.94.41.252:8080/suishoushu/merchant/validate",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "POST",
       "request": {
         "id": "商户id",
@@ -190,7 +190,7 @@
     {
       "name": "扫码动作记录接口",
       "url": "47.94.41.252:8080/suishoushu/merchant/doRecord",
-      "head" : "auth_token",
+      "head" : "auth-token",
       "method": "POST",
       "request": {
         "merchantId" : "当前商户id",

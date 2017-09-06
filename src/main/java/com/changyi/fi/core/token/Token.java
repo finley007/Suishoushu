@@ -17,7 +17,7 @@ public class Token {
     private static final int SECOND = 1000;
     private static final String TOKEN_EXPIRATION_SECONDS = "TOKEN_EXPIRATION_SECONDS";
     private static final String TOKEN_REPOSITORY_IMPL_CLZ = "TOKEN_REPOSITORY_IMPL_CLZ";
-    public static final String KEY = "auth_token";
+    public static final String KEY = "auth-token";
 
     private static ITokenRepository repository = new RedisTokenRepository();
 
