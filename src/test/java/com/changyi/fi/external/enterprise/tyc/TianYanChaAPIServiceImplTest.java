@@ -1,6 +1,8 @@
-package com.changyi.fi.external.enterprise;
+package com.changyi.fi.external.enterprise.tyc;
 
 import com.changyi.fi.core.Payload;
+import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
+import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
 import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.model.EnterprisePO;
@@ -50,7 +52,7 @@ public class TianYanChaAPIServiceImplTest {
 
     @Test
     public void testLogin() throws Exception {
-        ExternalEnterpriseAPIAbstractImpl apiService = new TianYanChaAPIServiceImpl();
+        TianYanChaAPIServiceImpl apiService = new TianYanChaAPIServiceImpl();
         System.out.println(apiService.login());
     }
 } 

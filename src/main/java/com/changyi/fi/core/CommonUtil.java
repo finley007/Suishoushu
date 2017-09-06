@@ -10,4 +10,8 @@ public class CommonUtil {
         return Math.sqrt(x*x+y*y);
     }
 
+    public static long toUnsigned(long signed) {
+        return signed & 0x0FFFFFFFFl;
+    }
+
 }

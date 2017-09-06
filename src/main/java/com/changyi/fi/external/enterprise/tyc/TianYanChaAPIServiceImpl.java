@@ -14,11 +14,9 @@ import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.external.enterprise.tyc.response.MatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
-import com.mysql.cj.core.util.LogUtils;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
