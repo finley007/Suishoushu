@@ -1,8 +1,12 @@
 package com.changyi.fi.external.enterprise.qxb;
 
+import com.changyi.fi.core.CommonUtil;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +18,8 @@ import java.lang.reflect.Method;
  * @version 1.0
  * @since <pre>Sep 1, 2017</pre>
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/applicationContext.xml"})
 public class QiXinBaoAPIServiceImplTest {
 
     @Before
@@ -45,7 +51,9 @@ public class QiXinBaoAPIServiceImplTest {
      */
     @Test
     public void testLogin() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
+        QiXinBaoAPIServiceImpl apiService = new QiXinBaoAPIServiceImpl();
+        System.out.println(apiService.login());
     }
 
     /**
@@ -70,7 +78,7 @@ public class QiXinBaoAPIServiceImplTest {
             method.setAccessible(true);
             //"jGFBjtzGv8zjtGPPztEBclPjzzzGGjGFBjtzGv8zjtGPPztEBclPjzzzGG"
             System.out.println(method.invoke(api, "/api/user/login"));
-
+            System.out.println(method.invoke(api, "/api/search/suggestion?key=%E4%B8%87%E8%BE%BE"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -33,5 +33,10 @@ public class CommonUtilTest {
         System.out.println(CommonUtil.getDistance(p1, p2));
     }
 
+    @Test
+    public void testURLEncoder() throws Exception {
+        System.out.println(CommonUtil.urlEncode("万达", "UTF-8"));
+    }
+
 
 } 

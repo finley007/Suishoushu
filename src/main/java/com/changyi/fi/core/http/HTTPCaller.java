@@ -193,12 +193,12 @@ public class HTTPCaller {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
                 int status = response.getStatusLine().getStatusCode();
-                if (status >= RESPONSE_CODE_200 && status < RESPONSE_CODE_300) {
+//                if (status >= RESPONSE_CODE_200 && status < RESPONSE_CODE_300) {
                     HttpEntity entity = response.getEntity();
                     return entity != null ? EntityUtils.toString(entity) : null;
-                } else {
-                    throw new ClientProtocolException("Unexpected response status: " + status);
-                }
+//                } else {
+//                    throw new ClientProtocolException("Unexpected response status: " + status);
+//                }
             }
         };
         return httpClient.execute(post, responseHandler);
@@ -225,8 +225,8 @@ public class HTTPCaller {
     private void initHeader(HttpRequestBase requestBase) {
         if (this.header == null) {
             this.header = new HashMap<String, String>();
-            this.header.put(HEADER_USER_AGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
         }
+        this.header.put(HEADER_USER_AGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
         for (String key : this.header.keySet()) {
             requestBase.addHeader(key, this.header.get(key));
         }
