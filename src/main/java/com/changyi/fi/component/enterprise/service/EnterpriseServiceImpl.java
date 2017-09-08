@@ -54,6 +54,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         if (ConfigManager.getBooleanParameter(ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
             String apiImpls = ConfigManager.getParameter(ENTERPRISE_EXTERNAL_SERVICE_IMPL);
+            LogUtil.debug(this.getClass(), "Enterprise api impls: " + apiImpls);
             if (StringUtils.isNotBlank(apiImpls)) {
                 String[] impls = apiImpls.split("\\|");
                 for (int i = 0; i < impls.length; i++) {
