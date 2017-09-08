@@ -9,6 +9,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     private static final String FIELD_CREDIT_CODE = "creditCode";
     private static final String FIELD_NAME = "name";
+    private static final String FIELD_SOURCE = "source";
 
     abstract protected String login() throws Exception;
 
@@ -33,6 +34,10 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     protected String getNameKey() {
         return FIELD_NAME;
+    }
+
+    protected String getSourceKey() {
+        return FIELD_SOURCE;
     }
 
     public class StringResultHandler implements HTTPParser.ResultHandler<String> {

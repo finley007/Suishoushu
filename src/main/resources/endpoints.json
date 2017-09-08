@@ -21,7 +21,7 @@
       "head" : "auth-token",
       "method": "POST",
       "request": {
-        "isExternal": "是否来自外部系统",
+        "source": "数据来源",
         "creditCode": "企业工商号"
       },
       "response": {
@@ -49,7 +49,7 @@
           "count": "匹配数目",
           "enterpriseList": [
             {
-              "isExternal": "是否来自外部系统",
+              "source": "数据来源",
               "creditCode": "企业工商号",
               "name": "企业名称"
             }

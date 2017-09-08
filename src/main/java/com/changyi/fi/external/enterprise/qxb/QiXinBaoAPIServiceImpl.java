@@ -26,6 +26,8 @@ import java.util.*;
 
 public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
+    private static final String SOURCE_QXB = "qxb";
+
     private static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
 
     private static final String COOKIE_NAME_SID = "sid";
@@ -69,6 +71,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 Map<String, String> map = new HashMap<String, String>();
                 map.put(getCreditCodeKey(), m.get(QXBMatchResponse.FIELD_ID));
                 map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
+                map.put(getSourceKey(), SOURCE_QXB);
                 result.add(map);
             }
         }

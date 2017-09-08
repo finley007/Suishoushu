@@ -29,6 +29,8 @@ import java.util.*;
 @Service("tianYanChaAPIService")
 public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
+    private static final String SOURCE_TYC = "tyx";
+
     private static final String TIANYANCHA_DOMAIN = ".tianyancha.com";
 
     private static final String COOKIE_AUTH_TOKEN = "auth_token";
@@ -60,8 +62,6 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     private static final String FIELD_HREF = "href";
     private static final String FIELD_TOKEN = "token";
 
-
-
     private static final int SECONDS_FOR_ONE_WEEK = 604800;
 
     protected int getTokenExpiredTime() {
@@ -81,6 +81,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
                 Map<String, String> map = new HashMap<String, String>();
                 map.put(getCreditCodeKey(), m.get(TYCMatchResponse.FIELD_ID));
                 map.put(getNameKey(), m.get(TYCMatchResponse.FIELD_NAME));
+                map.put(getSourceKey(), SOURCE_TYC);
                 result.add(map);
             }
         }

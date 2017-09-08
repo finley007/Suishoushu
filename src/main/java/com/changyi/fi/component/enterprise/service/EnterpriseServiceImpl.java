@@ -31,7 +31,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     private static final String FIELD_CREDITCODE = "creditCode";
     private static final String FIELD_NAME = "name";
-    private static final String FIELD_IS_EXTERNAL = "isExternal";
+    private static final String FIELD_SOURCE = "source";
+
+    private static final String SOURCE_INTERNAL = "internal";
 
     private InvoiceDao invoiceDao;
 
@@ -81,7 +83,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
                 if (map.get(DB_FIELD_NAME) != null && map.get(DB_FIELD_CREDITCODE) != null) {
                     String name = map.get(DB_FIELD_NAME).toString();
                     Map m = new HashMap();
-                    m.put(FIELD_IS_EXTERNAL, "false");
+                    m.put(FIELD_SOURCE, SOURCE_INTERNAL);
                     m.put(FIELD_NAME, name);
                     m.put(FIELD_CREDITCODE, map.get(DB_FIELD_CREDITCODE).toString());
                     result.add(m);
@@ -91,7 +93,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             count -= result.size();
             for (Map map : external) {
                 if (!set.contains(map.get(FIELD_NAME).toString()) && count > 0) {
-                    map.put(FIELD_IS_EXTERNAL, "true");
                     result.add(map);
                     count --;
                 }
@@ -99,7 +100,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         } else {
             for (Map map : external) {
                 if (count > 0) {
-                    map.put(FIELD_IS_EXTERNAL, "true");
                     result.add(map);
                     count--;
                 }
@@ -111,10 +111,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Validate
     public GetEnterpriseResponse getEnterprise(GetEnterpriseRequest req) throws Exception {
         LogUtil.info(this.getClass(), "Execute getEnterprise service");
-        if (!Boolean.valueOf(req.getIsExternal())) {
+        if (!Boolean.valueOf(SOURCE_INTERNAL.equals(req.getSource()))) {
             return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(req.getCreditCode()));
         } else {
-            ExternalEnterpriseAPIService service = EnternalEnterpriseAPIManager.getAPIImpl(req.getApiProvider());
+            LogUtil.info(this.getClass(), "Get enterprise info from api: " + req.getSource());
+            ExternalEnterpriseAPIService service = EnternalEnterpriseAPIManager.getAPIImpl(req.getSource());
             EnterprisePO po = service.getEnterpriseByCode(req.getCreditCode());
             if (po != null) {
                 this.invoiceDao.insertEnterprise(po);

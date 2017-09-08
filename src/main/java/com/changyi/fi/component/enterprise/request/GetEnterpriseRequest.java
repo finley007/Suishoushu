@@ -11,24 +11,21 @@ import net.sf.oval.constraint.NotNull;
  */
 public class GetEnterpriseRequest implements Request {
 
-    @NotNull(message = "isExternal is required")
-    @NotEmpty(message = "isExternal is required")
-    @MatchPattern(pattern = "^true|false$", message = "invalid type value, should be true or false")
-    private String isExternal;
-
-    //默认天眼查
-    private String apiProvider = EnternalEnterpriseAPIManager.API_TIANYANCHA;
+    @NotNull(message = "source is required")
+    @NotEmpty(message = "source is required")
+    @MatchPattern(pattern = "^internal|qxb|tyc$", message = "invalid type value, should be true or false")
+    private String source;
 
     @NotNull(message = "creditCode is required")
     @NotEmpty(message = "creditCode is required")
     private String creditCode;
 
-    public String getIsExternal() {
-        return isExternal;
+    public String getSource() {
+        return source;
     }
 
-    public void setIsExternal(String isExternal) {
-        this.isExternal = isExternal;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getCreditCode() {
@@ -39,11 +36,4 @@ public class GetEnterpriseRequest implements Request {
         this.creditCode = creditCode;
     }
 
-    public String getApiProvider() {
-        return apiProvider;
-    }
-
-    public void setApiProvider(String apiProvider) {
-        this.apiProvider = apiProvider;
-    }
 }
