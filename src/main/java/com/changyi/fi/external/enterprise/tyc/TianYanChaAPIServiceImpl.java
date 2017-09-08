@@ -60,8 +60,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     private static final String FIELD_HREF = "href";
     private static final String FIELD_TOKEN = "token";
 
-    private static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
-    private static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
+
 
     private static final int SECONDS_FOR_ONE_WEEK = 604800;
 
@@ -118,7 +117,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         if (ccodeElems != null && ccodeElems.size() > 0) {
             creditCode  = ccodeElems.get(0).text();
         }
-        List<String> matchs = RegexMatches.match(creditCode, NUMBER_PATTERN);
+        List<String> matchs = RegexMatches.match(creditCode, FIConstants.NUMBER_PATTERN);
         if (matchs == null || matchs.size() <= 0) {
             return null;
         }
@@ -145,7 +144,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     private void setBizPeriod(HTTPParser parser, EnterprisePO po, Boolean isListed) {
         List<String> bizPeriod = RegexMatches.match(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_BIZ_PERIOD_MATCHER))).toString(),
-                DATE_PATTERN);
+                FIConstants.DATE_PATTERN);
         if (bizPeriod != null && bizPeriod.size() > 0) {
             try {
                 po.setBizPeriodStart(FIConstants.sdf.parse(bizPeriod.get(0)));
@@ -161,7 +160,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     private void setRegCapital(HTTPParser parser, EnterprisePO po, Boolean isListed) {
         String str = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CAPITAL_MATCHER))).toString();
-        List<String> capital = RegexMatches.match(str, NUMBER_PATTERN);
+        List<String> capital = RegexMatches.match(str, FIConstants.NUMBER_PATTERN);
         if (capital != null && capital.size() > 0) {
             po.setRegCapital(BigDecimal.valueOf(Double.valueOf(capital.get(0))));
         }
@@ -182,16 +181,6 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
             return prop + ".listed";
         } else {
             return prop;
-        }
-    }
-
-    private class StringResultHandler implements HTTPParser.ResultHandler<String> {
-        public String handleResult(Elements elems) {
-            if (elems != null && elems.size() > 0) {
-                return elems.get(0).text();
-            } else {
-                return "";
-            }
         }
     }
 

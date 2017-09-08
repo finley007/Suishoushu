@@ -45,7 +45,9 @@ public class QiXinBaoAPIServiceImplTest {
      */
     @Test
     public void testGetEnterpriseByCode() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
+        QiXinBaoAPIServiceImpl apiService = new QiXinBaoAPIServiceImpl();
+        System.out.println(apiService.getEnterpriseByCode("9eda1ceb-4d50-4b02-9ef0-ad1437d24f75"));
     }
 
     /**

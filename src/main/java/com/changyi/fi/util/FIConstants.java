@@ -12,6 +12,10 @@ public class FIConstants {
 
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    public static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
+    public static final String DATE_PATTERN1 = "\\d{4}年\\d{2}月\\d{2}日";
+    public static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
+
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
 

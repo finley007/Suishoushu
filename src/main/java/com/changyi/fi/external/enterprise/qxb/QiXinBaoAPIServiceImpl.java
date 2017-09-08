@@ -3,7 +3,9 @@ package com.changyi.fi.external.enterprise.qxb;
 import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
+import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.http.HTTPCaller;
+import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -19,10 +21,8 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
@@ -37,6 +37,22 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_LOGIN_REFERER_URL = "qixinbao.login.referer.url";
     private static final String QIXINBAO_HOST = "qixinbao.host";
     private static final String QIXINBAO_MAINPAGE_URL = "qixinbao.mainpage.url";
+    private static final String QIXINBAO_DETAIL_TEMPLATE = "qixinbao.detail.template";
+
+    private static final String QIXINBAO_SEARCH_MATCHER = "qixinbao.search.matcher";
+    private static final String QIXINBAO_GET_NAME_MATCHER = "qixinbao.get.name.matcher";
+    private static final String QIXINBAO_GET_CREDIT_CODE_MATCHER = "qixinbao.get.credit.code.matcher";
+    private static final String QIXINBAO_GET_PHONE_MATCHER = "qixinbao.get.phone.matcher";
+    private static final String QIXINBAO_GET_ADDRESS_MATCHER = "qixinbao.get.address.matcher";
+    private static final String QIXINBAO_GET_BIZ_REG_NUM_MATCHER = "qixinbao.get.biz.reg.num.matcher";
+    private static final String QIXINBAO_GET_ORG_CODE_MATCHER = "qixinbao.get.org.code.matcher";
+    private static final String QIXINBAO_GET_TAXPAYER_CODE_MATCHER = "qixinbao.get.taxpayer.code.matcher";
+    private static final String QIXINBAO_GET_INDUSTRY_MATCHER = "qixinbao.get.industry.matcher";
+    private static final String QIXINBAO_GET_BIZ_PERIOD_MATCHER = "qixinbao.get.biz.period.matcher";
+    private static final String QIXINBAO_GET_LEGAL_PERSON_MATCHER = "qixinbao.get.legal.person.matcher";
+    private static final String QIXINBAO_GET_LISTED_SECTION_MATCHER = "qixinbao.get.listed.section.matcher";
+    private static final String QIXINBAO_GET_CAPITAL_MATCHER = "qixinbao.get.capital.matcher";
+    private static final String QIXINBAO_GET_REG_AUTHORITY_MATCHER = "qixinbao.get.reg.authority.matcher";
 
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling QiXinBao API, key: " + key);
@@ -92,7 +108,58 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     }
 
     public EnterprisePO getEnterpriseByCode(String code) throws Exception {
-        return null;
+        LogUtil.info(this.getClass(), "Execute get enterprise info service by calling QiXinBao API, code: " + code);
+        String url = HTTPCaller.createUrl(QIXINBAO_DETAIL_TEMPLATE, new Object[]{code});
+        LogUtil.info(this.getClass(), "QiXinBao API, url: " + url);
+        String html = new HTTPCaller(url).doGet();
+        HTTPParser parser = new HTTPParser(html);
+        return createEnterprisePO(parser);
+    }
+
+    private EnterprisePO createEnterprisePO(HTTPParser parser) {
+        EnterprisePO po = new EnterprisePO();
+        parser.setHandler(new StringResultHandler());
+        po.setName(parser.select(Properties.get(QIXINBAO_GET_NAME_MATCHER)).toString());
+        po.setPhone(parser.select(Properties.get(QIXINBAO_GET_PHONE_MATCHER)).toString());
+        po.setCreditCode(parser.select(Properties.get(QIXINBAO_GET_CREDIT_CODE_MATCHER)).toString());
+        po.setAddress(parser.select(Properties.get(QIXINBAO_GET_ADDRESS_MATCHER)).toString());
+        po.setBizRegNum(parser.select(Properties.get(QIXINBAO_GET_BIZ_REG_NUM_MATCHER)).toString());
+        po.setOrgCode(parser.select(Properties.get(QIXINBAO_GET_ORG_CODE_MATCHER)).toString());
+        po.setIndustry(parser.select(Properties.get(QIXINBAO_GET_INDUSTRY_MATCHER)).toString());
+//        po.setTaxpayerCode(parser.select(Properties.get(QIXINBAO_GET_TAXPAYER_CODE_MATCHER)).toString());
+        po.setLegalPerson(parser.select(Properties.get(QIXINBAO_GET_LEGAL_PERSON_MATCHER)).toString());
+        po.setRegAuthority(parser.select(Properties.get(QIXINBAO_GET_REG_AUTHORITY_MATCHER)).toString());
+        po.setCreateBy(FIConstants.SYSTEM);
+        po.setCreateTime(new Date());
+        po.setModifyBy(FIConstants.SYSTEM);
+        po.setModifyTime(new Date());
+        setRegCapital(parser, po);
+        setBizPeriod(parser, po);
+        return po;
+    }
+
+    private void setBizPeriod(HTTPParser parser, EnterprisePO po) {
+        List<String> bizPeriod = RegexMatches.match(parser.select(Properties.get(QIXINBAO_GET_BIZ_PERIOD_MATCHER)).toString(),
+                FIConstants.DATE_PATTERN1);
+        if (bizPeriod != null && bizPeriod.size() > 0) {
+            try {
+                po.setBizPeriodStart(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
+                po.setEstablishDate(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
+                if (bizPeriod.size() > 1) {
+                    po.setBizPeriodEnd(FIConstants.sdf.parse(bizPeriod.get(1).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
+                }
+            } catch (Exception e) {
+                LogUtil.error(this.getClass(), "Parse bizPeriod field for EnterprisePO error: ", e);
+            }
+        }
+    }
+
+    private void setRegCapital(HTTPParser parser, EnterprisePO po) {
+        String str = parser.select(Properties.get(QIXINBAO_GET_CAPITAL_MATCHER).toString());
+        List<String> capital = RegexMatches.match(str, FIConstants.NUMBER_PATTERN);
+        if (capital != null && capital.size() > 0) {
+            po.setRegCapital(BigDecimal.valueOf(Double.valueOf(capital.get(0))));
+        }
     }
 
     protected String login() throws Exception {

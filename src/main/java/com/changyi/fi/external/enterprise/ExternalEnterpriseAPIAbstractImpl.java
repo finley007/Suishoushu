@@ -1,7 +1,9 @@
 package com.changyi.fi.external.enterprise;
 
+import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.redis.RedisClient;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.select.Elements;
 
 public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
@@ -31,5 +33,15 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     protected String getNameKey() {
         return FIELD_NAME;
+    }
+
+    public class StringResultHandler implements HTTPParser.ResultHandler<String> {
+        public String handleResult(Elements elems) {
+            if (elems != null && elems.size() > 0) {
+                return elems.get(0).text();
+            } else {
+                return "";
+            }
+        }
     }
 }
