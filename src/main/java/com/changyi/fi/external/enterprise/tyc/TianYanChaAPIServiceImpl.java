@@ -190,7 +190,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "Login TianYanCha: " + url);
         String request = createLoginRequest();
         LogUtil.debug(this.getClass(), "Login request: " + request);
-        String res = new HTTPCaller(url).enableProxy().doPost(request);
+        String res = new HTTPCaller(url).enableProxy().setTimeout(10000).doPost(request);
         TYCLoginResponse response = new Payload(res).as(TYCLoginResponse.class);
         if (!FIConstants.OK.equals(response.getState())) {
             throw new SystemException("");

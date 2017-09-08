@@ -63,8 +63,9 @@ public class HTTPCaller {
         return timeout;
     }
 
-    public void setTimeout(int timeout) {
+    public HTTPCaller setTimeout(int timeout) {
         this.timeout = timeout;
+        return this;
     }
 
     public int getProxyPort() {
