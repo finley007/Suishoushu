@@ -1,10 +1,6 @@
 package com.changyi.fi.external.enterprise.tyc;
 
-import com.changyi.fi.core.Payload;
-import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
-import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
-import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.model.EnterprisePO;
 import org.junit.Test;
 import org.junit.Before;

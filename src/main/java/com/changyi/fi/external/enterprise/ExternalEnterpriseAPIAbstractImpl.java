@@ -5,6 +5,9 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
+    private static final String FIELD_CREDIT_CODE = "creditCode";
+    private static final String FIELD_NAME = "name";
+
     abstract protected String login() throws Exception;
 
     abstract protected int getTokenExpiredTime();
@@ -13,8 +16,20 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         String token = RedisClient.get(tokenName);
         if (StringUtils.isBlank(token)) {
             token = this.login();
-            RedisClient.setex(tokenName, getTokenExpiredTime(), token);
+            if (getTokenExpiredTime() > 0) {
+                RedisClient.setex(tokenName, getTokenExpiredTime(), token);
+            } else {
+                RedisClient.set(tokenName, token);
+            }
         }
         return token;
+    }
+
+    protected String getCreditCodeKey() {
+        return FIELD_CREDIT_CODE;
+    }
+
+    protected String getNameKey() {
+        return FIELD_NAME;
     }
 }

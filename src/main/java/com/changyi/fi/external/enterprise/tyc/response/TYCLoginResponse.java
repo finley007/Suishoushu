@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Created by finley on 8/15/17.
  */
-public class LoginResponse {
+public class TYCLoginResponse {
 
     public static final String SUCCESS = "ok";
 

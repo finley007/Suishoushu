@@ -35,7 +35,9 @@ public class QiXinBaoAPIServiceImplTest {
      */
     @Test
     public void testMatchEnterprise() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
+        QiXinBaoAPIServiceImpl apiService = new QiXinBaoAPIServiceImpl();
+        System.out.println(apiService.matchEnterprise("万达"));
     }
 
     /**

@@ -9,9 +9,9 @@ import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
-import com.changyi.fi.external.enterprise.tyc.request.LoginRequest;
-import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
-import com.changyi.fi.external.enterprise.tyc.response.MatchResponse;
+import com.changyi.fi.external.enterprise.tyc.request.TYCLoginRequest;
+import com.changyi.fi.external.enterprise.tyc.response.TYCLoginResponse;
+import com.changyi.fi.external.enterprise.tyc.response.TYCMatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.apache.http.client.CookieStore;
@@ -33,7 +33,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     private static final String COOKIE_AUTH_TOKEN = "auth_token";
 
-    private static final String REDIS_TOKEN_EXPIRED_TIME = "tyc_token_expired_time";
+    private static final String REDIS_TYC_SESSION_TOKEN = "tyc_session_token";
 
     private static final String TINAYANCHA_USERNAME = "tianyancha.username";
     private static final String TINAYANCHA_PASSWORD = "tianyancha.password";
@@ -56,8 +56,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     private static final String TIANYANCHA_GET_CAPITAL_MATCHER = "tianyancha.get.capital.matcher";
     private static final String TIANYANCHA_GET_REG_AUTHORITY_MATCHER = "tianyancha.get.reg.authority.matcher";
 
-    private static final String FIELD_CREDIT_CODE = "creditCode";
-    private static final String FIELD_NAME = "name";
+
     private static final String FIELD_HREF = "href";
     private static final String FIELD_TOKEN = "token";
 
@@ -76,13 +75,13 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
         String json = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         LogUtil.info(this.getClass(), "Match result: " + json);
-        MatchResponse response = new Payload(json).as(MatchResponse.class);
+        TYCMatchResponse response = new Payload(json).as(TYCMatchResponse.class);
         List result = new ArrayList();
         if (response != null && response.getData() != null && response.getData().size() > 0) {
             for (Map<String, String> m : response.getData()) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put(FIELD_CREDIT_CODE, m.get(MatchResponse.FIELD_ID));
-                map.put(FIELD_NAME, m.get(MatchResponse.FIELD_NAME));
+                map.put(getCreditCodeKey(), m.get(TYCMatchResponse.FIELD_ID));
+                map.put(getNameKey(), m.get(TYCMatchResponse.FIELD_NAME));
                 result.add(map);
             }
         }
@@ -90,7 +89,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     }
 
     private CookieStore createCookieStore() throws Exception {
-        String token = this.getToken(REDIS_TOKEN_EXPIRED_TIME);
+        String token = this.getToken(REDIS_TYC_SESSION_TOKEN);
         CookieStore cookieStore = new BasicCookieStore();
         BasicClientCookie cookie = new BasicClientCookie(COOKIE_AUTH_TOKEN, token);
         cookie.setDomain(TIANYANCHA_DOMAIN);
@@ -202,7 +201,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         String request = createLoginRequest();
         LogUtil.debug(this.getClass(), "Login request: " + request);
         String res = new HTTPCaller(url).enableProxy().doPost(request);
-        LoginResponse response = new Payload(res).as(LoginResponse.class);
+        TYCLoginResponse response = new Payload(res).as(TYCLoginResponse.class);
         if (!FIConstants.OK.equals(response.getState())) {
             throw new SystemException("");
         }
@@ -212,8 +211,8 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     private String createLoginRequest() {
         String username = Properties.get(TINAYANCHA_USERNAME);
         String password = Properties.get(TINAYANCHA_PASSWORD);
-        LoginRequest request = new LoginRequest(username, password);
-        return new Payload(request).from(LoginRequest.class);
+        TYCLoginRequest request = new TYCLoginRequest(username, password);
+        return new Payload(request).from(TYCLoginRequest.class);
     }
 
 

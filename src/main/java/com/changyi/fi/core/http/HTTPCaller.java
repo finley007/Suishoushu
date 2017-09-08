@@ -257,6 +257,9 @@ public class HTTPCaller {
         if (this.getProxy() != null) {
             builder.setProxy(this.getProxy());
         }
+        if (this.getCookieStore() != null) {
+            builder.setDefaultCookieStore(this.getCookieStore());
+        }
         return builder.build();
     }
 

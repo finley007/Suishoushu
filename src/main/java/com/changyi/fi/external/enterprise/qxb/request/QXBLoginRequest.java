@@ -3,12 +3,12 @@ package com.changyi.fi.external.enterprise.qxb.request;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginRequest {
+public class QXBLoginRequest {
 
-    public LoginRequest(String acc, String pass) {
+    public QXBLoginRequest(String acc, String pass) {
         this.acc = acc;
         this.pass = pass;
-        this.captcha.put("isTrusted", "true");
+        this.captcha.put("isTrusted", true);
     }
 
     private String acc;

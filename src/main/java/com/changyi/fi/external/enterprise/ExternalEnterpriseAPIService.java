@@ -1,6 +1,5 @@
 package com.changyi.fi.external.enterprise;
 
-import com.changyi.fi.external.enterprise.tyc.response.LoginResponse;
 import com.changyi.fi.model.EnterprisePO;
 
 import java.util.List;

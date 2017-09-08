@@ -1,24 +1,37 @@
 package com.changyi.fi.external.enterprise.qxb;
 
+import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
-import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
-import com.changyi.fi.external.enterprise.qxb.request.LoginRequest;
+import com.changyi.fi.external.enterprise.qxb.hmac.HmacManager;
+import com.changyi.fi.external.enterprise.qxb.hmac.HmacTool;
+import com.changyi.fi.external.enterprise.qxb.request.QXBLoginRequest;
+import com.changyi.fi.external.enterprise.qxb.response.QXBMatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.CookieStore;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
+    private static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
+
+    private static final String COOKIE_NAME_SID = "sid";
+
     private static final String QIXINBAO_LOGIN_TEMPLATE = "qixinbao.login.template";
+    private static final String QIXINBAO_SUGGESTION_TEMPLATE = "qixinbao.suggestion.template";
     private static final String QIXINBAO_USERNAME = "qixinbao.username";
     private static final String QIXINBAO_PASSWORD = "qixinbao.password";
     private static final String QIXINBAO_LOGIN_REFERER_URL = "qixinbao.login.referer.url";
@@ -26,7 +39,56 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_MAINPAGE_URL = "qixinbao.mainpage.url";
 
     public List<Map> matchEnterprise(String key) throws Exception {
-        return null;
+        LogUtil.info(this.getClass(), "Execute enterprise search service by calling QiXinBao API, key: " + key);
+        String encodedKey = CommonUtil.urlEncode(key, FIConstants.DEFAULT_CHARSET);
+        LogUtil.info(this.getClass(),"Encoded key: " + encodedKey);
+        String url = HTTPCaller.createUrl(QIXINBAO_SUGGESTION_TEMPLATE, new Object[]{encodedKey});
+        LogUtil.info(this.getClass(), "QiXinBao API, url: " + url);
+        String res = new HTTPCaller(url).setCookieStore(createCookieStore()).setHeader(this.createSuggestionHeader(url)).doGet();
+        LogUtil.info(this.getClass(), "Match result: " + res);
+        QXBMatchResponse response = new Payload("{ \"data\" : " + res + " }").as(QXBMatchResponse.class);
+        List result = new ArrayList();
+        if (response != null && response.getData() != null && response.getData().size() > 0) {
+            for (Map<String, String> m : response.getData()) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put(getCreditCodeKey(), m.get(QXBMatchResponse.FIELD_ID));
+                map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
+                result.add(map);
+            }
+        }
+        return result;
+    }
+
+    private CookieStore createCookieStore() throws Exception {
+        String token = this.getToken(REDIS_QXB_SESSION_TOKEN);
+        CookieStore cookieStore = new BasicCookieStore();
+        BasicClientCookie cookie = new BasicClientCookie(COOKIE_NAME_SID, token);
+        cookie.setDomain(Properties.get(QIXINBAO_MAINPAGE_URL));
+        cookie.setPath("/");
+        cookieStore.addCookie(cookie);
+        return cookieStore;
+    }
+
+    private Map<String, String> createSuggestionHeader(String url) throws Exception {
+        HmacManager manager = new HmacManager();
+        String servicePath = this.getServicePath(url).toLowerCase();
+        String key = manager.init(new HmacTool(), this.getKey(servicePath)).finalize(servicePath).stringify().substring(10, 30);
+        LogUtil.debug(this.getClass(), "Key: " + key);
+        String valInput = servicePath + servicePath + "{}";
+        String value = manager.init(new HmacTool(), this.getKey(servicePath)).finalize(valInput).stringify();
+        LogUtil.debug(this.getClass(), "Value: " + value);
+        Map<String, String> result = new HashMap<String, String>();
+        result.put(key, value);
+        return result;
+    }
+
+    private String getServicePath(String url) {
+        String server = Properties.get(QIXINBAO_MAINPAGE_URL);
+        if (url.indexOf(server) >= 0) {
+            return url.substring(url.indexOf(server) + server.length());
+        } else {
+            return url;
+        }
     }
 
     public EnterprisePO getEnterpriseByCode(String code) throws Exception {
@@ -38,7 +100,16 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "Login QiXinBao: " + url);
         String request = createLoginRequest();
         LogUtil.debug(this.getClass(), "Login request: " + request);
-        String res = new HTTPCaller(url).setHeader(this.createLoginHeader()).doPost(request);
+        CookieStore cookie = new BasicCookieStore();
+        String res = new HTTPCaller(url).setHeader(this.createLoginHeader()).setCookieStore(cookie).doPost(request);
+        List<Cookie> cookies = cookie.getCookies();
+        if (cookies != null && cookies.size() > 0) {
+            for (int i = 0; i < cookies.size(); i++) {
+                if (cookies.get(i).getName().equals(COOKIE_NAME_SID)) {
+                    return cookies.get(i).getValue();
+                }
+            }
+        }
         return "";
     }
 
@@ -55,8 +126,8 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private String createLoginRequest() {
         String username = Properties.get(QIXINBAO_USERNAME);
         String password = Properties.get(QIXINBAO_PASSWORD);
-        LoginRequest request = new LoginRequest(username, password);
-        return new Payload(request).from(LoginRequest.class);
+        QXBLoginRequest request = new QXBLoginRequest(username, password);
+        return new Payload(request).from(QXBLoginRequest.class);
     }
 
     protected int getTokenExpiredTime() {

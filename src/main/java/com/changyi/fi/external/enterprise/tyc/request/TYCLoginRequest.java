@@ -3,9 +3,9 @@ package com.changyi.fi.external.enterprise.tyc.request;
 /**
  * Created by finley on 8/15/17.
  */
-public class LoginRequest {
+public class TYCLoginRequest {
 
-    public LoginRequest(String mobile, String cdpassword) {
+    public TYCLoginRequest(String mobile, String cdpassword) {
         this.mobile = mobile;
         this.cdpassword = cdpassword;
     }
