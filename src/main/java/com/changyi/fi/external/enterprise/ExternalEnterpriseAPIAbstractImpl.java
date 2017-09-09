@@ -30,13 +30,14 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         if (StringUtils.isBlank(token)) {
             LogUtil.debug(this.getClass(), "Session token: " + tokenName + " does not exist and will login again");
             token = this.login();
+            LogUtil.debug(this.getClass(), "Obtain token: " + token);
             if (getTokenExpiredTime() > 0) {
                 RedisClient.setex(tokenName, getTokenExpiredTime(), token);
             } else {
                 RedisClient.set(tokenName, token);
             }
         } else {
-            LogUtil.debug(this.getClass(),"Use session token: " + token + " and value: " + token);
+            LogUtil.debug(this.getClass(),"Use session token: " + tokenName + " and value: " + token);
         }
         return token;
     }
