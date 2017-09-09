@@ -100,7 +100,8 @@ public class HmacData implements Cloneable {
     }
 
     protected Object clone() throws CloneNotSupportedException {
-        HmacData data = (HmacData)super.clone();
+        long[] arr = Arrays.copyOf(this.words, this.words.length);
+        HmacData data = new HmacData(arr, this.sigBytes);
         return data;
     }
 

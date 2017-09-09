@@ -32,7 +32,7 @@ public class HmacManagerTest {
         HmacManager manager = new HmacManager();
         //HmacData result = manager.init(new HmacTool(), "jGFBjtzGv8zjtGPPztEBclPjzzz8zAzjGFBjtzGv8zjtGPPztEBclPjzzz8zAz").finalize("/api/search/suggestion?key=cebe");
 //        HmacData result = manager.init(new HmacTool(), "jGFBjtzGv8zjtGPPztEBclPjzzz8zAzjGFBjtzGv8zjtGPPztEBclPjzzz8zAz").finalize("/api/search/suggestion?key=cebe/api/search/suggestion?key=cebe{}");
-        HmacData result = manager.init(new HmacTool(), "jGFBjtzGv8zjtGPPztEBclPjzzzGzFGAEGEtGzEGAzGAzjGFBjtzGv8zjtGPPztEBclPjzzzGzFGAEGEtGzEGAzGAz").finalize("/api/search/suggestion?key=%e4%b8%87%e8%be%be");
+        HmacData result = manager.init(new HmacTool(), "jGFBjtzGv8zjtGPPztEBclPjzzzGzvGA0GGqGzEGEAGEqGztGGKGEKGztGGtGAAjGFBjtzGv8zjtGPPztEBclPjzzzGzvGA0GGqGzEGEAGEqGztGGKGEKGztGGtGAA").finalize("/api/search/suggestion?key=%e6%b1%9f%e8%8b%8f%e7%95%85%e7%a7%bb");
         System.out.println(result.stringify());
     }
 
