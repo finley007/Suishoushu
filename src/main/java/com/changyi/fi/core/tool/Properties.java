@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Properties {
 
-    private static final String CONFIGURATION_PROP = "/Users/finley/Finley/workspace/java/Suishoushu/src/test/resources/config.properties";
+    private static final String CONFIGURATION_PROP = "/config.properties";
 
     private static PropertiesConfiguration propertiesConfiguration = null;
 
