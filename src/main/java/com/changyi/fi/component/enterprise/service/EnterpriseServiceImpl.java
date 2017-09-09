@@ -112,7 +112,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Validate
     public GetEnterpriseResponse getEnterprise(GetEnterpriseRequest req) throws Exception {
         LogUtil.info(this.getClass(), "Execute getEnterprise service");
-        if (!Boolean.valueOf(SOURCE_INTERNAL.equals(req.getSource()))) {
+        if (SOURCE_INTERNAL.equals(req.getSource())) {
             return new GetEnterpriseResponse(this.invoiceDao.getEnterpriseById(req.getCreditCode()));
         } else {
             LogUtil.info(this.getClass(), "Get enterprise info from api: " + req.getSource());
