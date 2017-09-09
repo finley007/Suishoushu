@@ -1,5 +1,6 @@
 package com.changyi.fi.external.enterprise;
 
+import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.redis.RedisClient;
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
     public static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
 
     static {
+        LogUtil.debug(ExternalEnterpriseAPIAbstractImpl.class, "Clear enterprise external session token");
         RedisClient.del(REDIS_TYC_SESSION_TOKEN);
         RedisClient.del(REDIS_QXB_SESSION_TOKEN);
     }
@@ -26,12 +28,15 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
     protected String getToken(String tokenName) throws Exception {
         String token = RedisClient.get(tokenName);
         if (StringUtils.isBlank(token)) {
+            LogUtil.debug(this.getClass(), "Session token: " + tokenName + " does not exist and will login again");
             token = this.login();
             if (getTokenExpiredTime() > 0) {
                 RedisClient.setex(tokenName, getTokenExpiredTime(), token);
             } else {
                 RedisClient.set(tokenName, token);
             }
+        } else {
+            LogUtil.debug(this.getClass(),"Use session token: " + token + " and value: " + token);
         }
         return token;
     }
