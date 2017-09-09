@@ -109,13 +109,13 @@ public class HTTPCaller {
     }
 
     public HTTPCaller enableProxy() {
-//        this.proxyIp = Properties.get(PROXY_IP);
-//        String proxyPort = Properties.get(PROXY_PORT);
-//        try {
-//            this.proxyPort = Integer.valueOf(proxyPort);
-//        } catch (Exception e) {
-//            LogUtil.error(this.getClass(), "Invalid proxy port in config.properties", e);
-//        }
+        this.proxyIp = Properties.get(PROXY_IP);
+        String proxyPort = Properties.get(PROXY_PORT);
+        try {
+            this.proxyPort = Integer.valueOf(proxyPort);
+        } catch (Exception e) {
+            LogUtil.error(this.getClass(), "Invalid proxy port in config.properties", e);
+        }
         return this;
     }
 
