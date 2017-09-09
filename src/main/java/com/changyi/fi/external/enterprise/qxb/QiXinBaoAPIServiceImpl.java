@@ -114,7 +114,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling QiXinBao API, code: " + code);
         String url = HTTPCaller.createUrl(QIXINBAO_DETAIL_TEMPLATE, new Object[]{code});
         LogUtil.info(this.getClass(), "QiXinBao API, url: " + url);
-        String html = new HTTPCaller(url).doGet();
+        String html = new HTTPCaller(url).setCookieStore(this.createCookieStore()).doGet();
         HTTPParser parser = new HTTPParser(html);
         return createEnterprisePO(parser);
     }
