@@ -28,8 +28,6 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     private static final String SOURCE_QXB = "qxb";
 
-    private static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
-
     private static final String COOKIE_NAME_SID = "sid";
 
     private static final String QIXINBAO_LOGIN_TEMPLATE = "qixinbao.login.template";

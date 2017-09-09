@@ -7,6 +7,14 @@ import org.jsoup.select.Elements;
 
 public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
+    public static final String REDIS_TYC_SESSION_TOKEN = "tyc_session_token";
+    public static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
+
+    static {
+        RedisClient.del(REDIS_TYC_SESSION_TOKEN);
+        RedisClient.del(REDIS_QXB_SESSION_TOKEN);
+    }
+
     private static final String FIELD_CREDIT_CODE = "creditCode";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_SOURCE = "source";

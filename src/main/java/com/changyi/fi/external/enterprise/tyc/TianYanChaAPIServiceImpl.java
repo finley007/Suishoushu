@@ -35,8 +35,6 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     private static final String COOKIE_AUTH_TOKEN = "auth_token";
 
-    private static final String REDIS_TYC_SESSION_TOKEN = "tyc_session_token";
-
     private static final String TINAYANCHA_USERNAME = "tianyancha.username";
     private static final String TINAYANCHA_PASSWORD = "tianyancha.password";
 
