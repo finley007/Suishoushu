@@ -170,7 +170,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.debug(this.getClass(), "Login request: " + request);
         CookieStore cookie = new BasicCookieStore();
         String res = new HTTPCaller(url).setHeader(this.createLoginHeader()).setCookieStore(cookie).doPost(request);
-        LogUtil.debug(this.getClass(), "Login response: " + request);
+        LogUtil.debug(this.getClass(), "Login response: " + res);
         List<Cookie> cookies = cookie.getCookies();
         if (cookies != null && cookies.size() > 0) {
             for (int i = 0; i < cookies.size(); i++) {
