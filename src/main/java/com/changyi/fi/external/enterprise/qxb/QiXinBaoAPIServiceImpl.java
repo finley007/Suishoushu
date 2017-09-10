@@ -34,6 +34,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_SUGGESTION_TEMPLATE = "qixinbao.suggestion.template";
     private static final String QIXINBAO_USERNAME = "qixinbao.username";
     private static final String QIXINBAO_PASSWORD = "qixinbao.password";
+    private static final String QIXINBAO_LOGIN_SIGN = "qixinbao.login.sign";
     private static final String QIXINBAO_LOGIN_REFERER_URL = "qixinbao.login.referer.url";
     private static final String QIXINBAO_HOST = "qixinbao.host";
     private static final String QIXINBAO_MAINPAGE_URL = "qixinbao.mainpage.url";
@@ -189,7 +190,8 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         header.put("Referer", Properties.get(QIXINBAO_LOGIN_REFERER_URL));
         header.put("Host", Properties.get(QIXINBAO_HOST));
         header.put("Origin", Properties.get(QIXINBAO_MAINPAGE_URL));
-        header.put("76eac628969e70eab74f", "d3bc4148b1f2da7ec043d0279569f61a91c7b599f56c79b0902fe25af01e689a09a82cddb128bafcf4b798d17771c37e190ed6e3cd77c58a9fcb27d1bddfe9cd");
+        String sign = Properties.get(QIXINBAO_LOGIN_SIGN + "." + Properties.get(QIXINBAO_USERNAME));
+        header.put("76eac628969e70eab74f", sign);
         return header;
     }
 
