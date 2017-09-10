@@ -44,6 +44,7 @@ public class HTTPCaller {
     private static String COOKIE_KEY = "Cookie";
 
     public static final String HEADER_USER_AGENT = "User-Agent";
+    public static final String HEADER_CONNECTION = "Connection";
 
     public static final String CONTENT_TYPE_JSON = "application/json";
 
@@ -228,6 +229,7 @@ public class HTTPCaller {
             this.header = new HashMap<String, String>();
         }
         this.header.put(HEADER_USER_AGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
+        this.header.put(HEADER_CONNECTION, "keep-alive");
         for (String key : this.header.keySet()) {
             requestBase.addHeader(key, this.header.get(key));
         }
