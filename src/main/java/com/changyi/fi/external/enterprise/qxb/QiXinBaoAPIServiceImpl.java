@@ -122,7 +122,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         EnterprisePO po = new EnterprisePO();
         parser.setHandler(new StringResultHandler());
         po.setName(parser.select(Properties.get(QIXINBAO_GET_NAME_MATCHER)).toString());
-        po.setPhone(parser.select(Properties.get(QIXINBAO_GET_PHONE_MATCHER)).toString());
+        po.setPhone(solvePhone(parser.select(Properties.get(QIXINBAO_GET_PHONE_MATCHER)).toString()));
         po.setCreditCode(parser.select(Properties.get(QIXINBAO_GET_CREDIT_CODE_MATCHER)).toString());
         po.setAddress(parser.select(Properties.get(QIXINBAO_GET_ADDRESS_MATCHER)).toString());
         po.setBizRegNum(parser.select(Properties.get(QIXINBAO_GET_BIZ_REG_NUM_MATCHER)).toString());
@@ -138,6 +138,10 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         setRegCapital(parser, po);
         setBizPeriod(parser, po);
         return po;
+    }
+
+    private String solvePhone(String phone) {
+        return phone.replaceAll("[^\\x00-\\xff]", "");
     }
 
     private void setBizPeriod(HTTPParser parser, EnterprisePO po) {
