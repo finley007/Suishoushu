@@ -47,32 +47,32 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         //从内部获取
         List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ENTERPRISE_MATCH_RESULT_LENGTH, 20));
         if (internalList.size() == 0) {
-            LogUtil.info(this.getClass(), "No match enterprise with key: " + key + " in DB");
+            LogUtil.info(this.getClass(), "No match enterprise for key: " + key + " in DB");
         }
-        List<Map> externalList = new ArrayList<Map>();
         //从外部获取企业信息开关
+        List<Map> externalList = new ArrayList<Map>();
         if (ConfigManager.getBooleanParameter(ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
-            String apiImpls = ConfigManager.getParameter(ENTERPRISE_EXTERNAL_SERVICE_IMPL);
-            LogUtil.debug(this.getClass(), "Enterprise api impls: " + apiImpls);
-            if (StringUtils.isNotBlank(apiImpls)) {
-                String[] impls = apiImpls.split("\\|");
-                for (int i = 0; i < impls.length; i++) {
-                    LogUtil.info(this.getClass(), "Search key: " + key +  " by using external API: " + impls[i]);
-                    try {
-                        ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl(impls[i]);
-                        externalList = enterpriseAPIService.matchEnterprise(key);
-                        if (externalList.size() > 0) {
-                            break;
-                        }
-                    } catch (Exception e) {
-                        LogUtil.error(this.getClass(), "Error when search key by using external API", e);
-                    }
-                }
-            }
-            LogUtil.info(this.getClass(),"No match enterprise with key: " + key + " by using external API");
+            externalList = matchEnterpriseByExternalAPI(key);
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList));
+    }
+
+    public List<Map> matchEnterpriseByExternalAPI(String key) throws Exception {
+        List<Map> externalList = new ArrayList<Map>();
+        ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl();
+        try {
+            LogUtil.info(this.getClass(), "Search key: " + key + " by using external API: " + enterpriseAPIService.getAPIKey());
+            externalList = enterpriseAPIService.matchEnterprise(key);
+        } catch (Exception e) {
+            LogUtil.error(this.getClass(), "Error with external API: " + enterpriseAPIService.getAPIKey() + " and will disable it", e);
+            EnternalEnterpriseAPIManager.disableAPI(enterpriseAPIService.getAPIKey());
+            return matchEnterpriseByExternalAPI(key);
+        }
+        if (externalList.size() == 0) {
+            LogUtil.info(this.getClass(),"No match enterprise with key: " + key + " by using external API");
+        }
+        return externalList;
     }
 
     private List combineResult(List<Map> internal, List<Map> external) {

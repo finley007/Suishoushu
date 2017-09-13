@@ -54,6 +54,10 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         return FIELD_SOURCE;
     }
 
+    public String getAPIKey() {
+        return this.getSourceKey();
+    }
+
     public class StringResultHandler implements HTTPParser.ResultHandler<String> {
         public String handleResult(Elements elems) {
             if (elems != null && elems.size() > 0) {

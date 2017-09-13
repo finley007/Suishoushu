@@ -1632,6 +1632,146 @@ public class EnterprisePOExample {
             addCriterion("INDUSTRY not between", value1, value2, "industry");
             return (Criteria) this;
         }
+
+        public Criteria andAreaIsNull() {
+            addCriterion("AREA is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIsNotNull() {
+            addCriterion("AREA is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaEqualTo(String value) {
+            addCriterion("AREA =", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaNotEqualTo(String value) {
+            addCriterion("AREA <>", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaGreaterThan(String value) {
+            addCriterion("AREA >", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaGreaterThanOrEqualTo(String value) {
+            addCriterion("AREA >=", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLessThan(String value) {
+            addCriterion("AREA <", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLessThanOrEqualTo(String value) {
+            addCriterion("AREA <=", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLike(String value) {
+            addCriterion("AREA like", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaNotLike(String value) {
+            addCriterion("AREA not like", value, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIn(List<String> values) {
+            addCriterion("AREA in", values, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaNotIn(List<String> values) {
+            addCriterion("AREA not in", values, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaBetween(String value1, String value2) {
+            addCriterion("AREA between", value1, value2, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaNotBetween(String value1, String value2) {
+            addCriterion("AREA not between", value1, value2, "area");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlIsNull() {
+            addCriterion("SOURCE_URL is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlIsNotNull() {
+            addCriterion("SOURCE_URL is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlEqualTo(String value) {
+            addCriterion("SOURCE_URL =", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlNotEqualTo(String value) {
+            addCriterion("SOURCE_URL <>", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlGreaterThan(String value) {
+            addCriterion("SOURCE_URL >", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("SOURCE_URL >=", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlLessThan(String value) {
+            addCriterion("SOURCE_URL <", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlLessThanOrEqualTo(String value) {
+            addCriterion("SOURCE_URL <=", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlLike(String value) {
+            addCriterion("SOURCE_URL like", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlNotLike(String value) {
+            addCriterion("SOURCE_URL not like", value, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlIn(List<String> values) {
+            addCriterion("SOURCE_URL in", values, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlNotIn(List<String> values) {
+            addCriterion("SOURCE_URL not in", values, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlBetween(String value1, String value2) {
+            addCriterion("SOURCE_URL between", value1, value2, "sourceUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceUrlNotBetween(String value1, String value2) {
+            addCriterion("SOURCE_URL not between", value1, value2, "sourceUrl");
+            return (Criteria) this;
+        }
     }
 
     /**

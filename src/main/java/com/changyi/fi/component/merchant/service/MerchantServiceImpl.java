@@ -73,7 +73,7 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantInvoicePO po = new MerchantInvoicePO();
         po.setCreateTime(new Date());
         po.setInvoiceId(Integer.valueOf(req.getInvoiceId()));
-        po.setMerchantId(Integer.valueOf(req.getMerchantId()));
+        po.setMerchantId(req.getMerchantId());
         this.merchantDao.insertMerchantInvoice(po);
     }
 

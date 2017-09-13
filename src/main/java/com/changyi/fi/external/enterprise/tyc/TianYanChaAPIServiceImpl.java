@@ -29,7 +29,7 @@ import java.util.*;
 @Service("tianYanChaAPIService")
 public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
-    private static final String SOURCE_TYC = "tyx";
+    private static final String SOURCE_TYC = "tyc";
 
     private static final String TIANYANCHA_DOMAIN = ".tianyancha.com";
 

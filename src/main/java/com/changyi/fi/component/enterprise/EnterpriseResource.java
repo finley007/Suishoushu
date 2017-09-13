@@ -9,6 +9,7 @@ import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.token.Token;
+import com.changyi.fi.exception.GetEnterpriseFailException;
 import com.changyi.fi.exception.NullRequestException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -65,7 +66,7 @@ public class EnterpriseResource {
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run getEnterprise endpoint error: ", t);
-            String res = ExceptionHandler.handle(t);
+            String res = ExceptionHandler.handle(new GetEnterpriseFailException("Get enterprise information failed"));
             return Response.status(Response.Status.OK).entity(res).build();
         }
     }

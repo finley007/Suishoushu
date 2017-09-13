@@ -27,6 +27,8 @@
     <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
     <result column="TAXPAYER_CODE" jdbcType="VARCHAR" property="taxpayerCode" />
     <result column="INDUSTRY" jdbcType="VARCHAR" property="industry" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="SOURCE_URL" jdbcType="VARCHAR" property="sourceUrl" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.changyi.fi.model.EnterprisePO">
     <!--
@@ -108,7 +110,7 @@
     -->
     CREDIT_CODE, NAME, TYPE, LEGAL_PERSON, REG_CAPITAL, ESTABLISH_DATE, BIZ_PERIOD_START, 
     BIZ_PERIOD_END, REG_AUTHORITY, ADDRESS, PHONE, BANK, BANK_ACCT, CREATE_TIME, CREATE_BY, 
-    MODIFY_TIME, MODIFY_BY, BIZ_REG_NUM, ORG_CODE, TAXPAYER_CODE, INDUSTRY
+    MODIFY_TIME, MODIFY_BY, BIZ_REG_NUM, ORG_CODE, TAXPAYER_CODE, INDUSTRY, AREA, SOURCE_URL
   </sql>
   <sql id="Blob_Column_List">
     <!--
@@ -167,7 +169,8 @@
       BANK_ACCT, CREATE_TIME, CREATE_BY, 
       MODIFY_TIME, MODIFY_BY, BIZ_REG_NUM, 
       ORG_CODE, TAXPAYER_CODE, INDUSTRY, 
-      MAIN_BIZ)
+      AREA, SOURCE_URL, MAIN_BIZ
+      )
     values (#{creditCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{regCapital,jdbcType=DECIMAL}, #{establishDate,jdbcType=DATE}, 
       #{bizPeriodStart,jdbcType=DATE}, #{bizPeriodEnd,jdbcType=DATE}, #{regAuthority,jdbcType=VARCHAR}, 
@@ -175,7 +178,8 @@
       #{bankAcct,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{bizRegNum,jdbcType=VARCHAR}, 
       #{orgCode,jdbcType=VARCHAR}, #{taxpayerCode,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, 
-      #{mainBiz,jdbcType=LONGVARBINARY})
+      #{area,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR}, #{mainBiz,jdbcType=LONGVARBINARY}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.changyi.fi.model.EnterprisePO">
     <!--
@@ -247,6 +251,12 @@
       <if test="industry != null">
         INDUSTRY,
       </if>
+      <if test="area != null">
+        AREA,
+      </if>
+      <if test="sourceUrl != null">
+        SOURCE_URL,
+      </if>
       <if test="mainBiz != null">
         MAIN_BIZ,
       </if>
@@ -314,6 +324,12 @@
       </if>
       <if test="industry != null">
         #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUrl != null">
+        #{sourceUrl,jdbcType=VARCHAR},
       </if>
       <if test="mainBiz != null">
         #{mainBiz,jdbcType=LONGVARBINARY},
@@ -390,6 +406,12 @@
       <if test="record.industry != null">
         INDUSTRY = #{record.industry,jdbcType=VARCHAR},
       </if>
+      <if test="record.area != null">
+        AREA = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceUrl != null">
+        SOURCE_URL = #{record.sourceUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.mainBiz != null">
         MAIN_BIZ = #{record.mainBiz,jdbcType=LONGVARBINARY},
       </if>
@@ -425,6 +447,8 @@
       ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
       TAXPAYER_CODE = #{record.taxpayerCode,jdbcType=VARCHAR},
       INDUSTRY = #{record.industry,jdbcType=VARCHAR},
+      AREA = #{record.area,jdbcType=VARCHAR},
+      SOURCE_URL = #{record.sourceUrl,jdbcType=VARCHAR},
       MAIN_BIZ = #{record.mainBiz,jdbcType=LONGVARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -456,7 +480,9 @@
       BIZ_REG_NUM = #{record.bizRegNum,jdbcType=VARCHAR},
       ORG_CODE = #{record.orgCode,jdbcType=VARCHAR},
       TAXPAYER_CODE = #{record.taxpayerCode,jdbcType=VARCHAR},
-      INDUSTRY = #{record.industry,jdbcType=VARCHAR}
+      INDUSTRY = #{record.industry,jdbcType=VARCHAR},
+      AREA = #{record.area,jdbcType=VARCHAR},
+      SOURCE_URL = #{record.sourceUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

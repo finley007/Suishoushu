@@ -266,52 +266,62 @@ public class MerchantInvoicePOExample {
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdEqualTo(Integer value) {
+        public Criteria andMerchantIdEqualTo(String value) {
             addCriterion("MERCHANT_ID =", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotEqualTo(Integer value) {
+        public Criteria andMerchantIdNotEqualTo(String value) {
             addCriterion("MERCHANT_ID <>", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThan(Integer value) {
+        public Criteria andMerchantIdGreaterThan(String value) {
             addCriterion("MERCHANT_ID >", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andMerchantIdGreaterThanOrEqualTo(String value) {
             addCriterion("MERCHANT_ID >=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThan(Integer value) {
+        public Criteria andMerchantIdLessThan(String value) {
             addCriterion("MERCHANT_ID <", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdLessThanOrEqualTo(Integer value) {
+        public Criteria andMerchantIdLessThanOrEqualTo(String value) {
             addCriterion("MERCHANT_ID <=", value, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdIn(List<Integer> values) {
+        public Criteria andMerchantIdLike(String value) {
+            addCriterion("MERCHANT_ID like", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdNotLike(String value) {
+            addCriterion("MERCHANT_ID not like", value, "merchantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantIdIn(List<String> values) {
             addCriterion("MERCHANT_ID in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotIn(List<Integer> values) {
+        public Criteria andMerchantIdNotIn(List<String> values) {
             addCriterion("MERCHANT_ID not in", values, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdBetween(Integer value1, Integer value2) {
+        public Criteria andMerchantIdBetween(String value1, String value2) {
             addCriterion("MERCHANT_ID between", value1, value2, "merchantId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchantIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andMerchantIdNotBetween(String value1, String value2) {
             addCriterion("MERCHANT_ID not between", value1, value2, "merchantId");
             return (Criteria) this;
         }

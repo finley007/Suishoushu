@@ -99,5 +99,9 @@
                enableUpdateByExample="false">
         </table>
 
+        <table schema="${dev_schema}" tableName="SYS_SERV_IMPL" domainObjectName="SysServImplPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
     </context>
 </generatorConfiguration>

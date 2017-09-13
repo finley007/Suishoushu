@@ -1,6 +1,8 @@
 package com.changyi.fi.core;
 
 import com.changyi.fi.core.dao.ConfigDao;
+import com.changyi.fi.core.dao.SysDao;
+import com.changyi.fi.core.model.SysServImplPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,15 @@ public class ConfigService {
 
     private ConfigDao configDao;
 
+    private SysDao sysDao;
+
     @Autowired(required = true)
     public void setConfigDao(ConfigDao configDao) {
         this.configDao = configDao;
     }
+
+    @Autowired(required = true)
+    public void setSysDao(SysDao sysDao) {this.sysDao = sysDao; }
 
     public List<Map> getExceptionCode() {
         return configDao.getExceptionCode();
@@ -27,5 +34,7 @@ public class ConfigService {
     public List<Map> getSysParameter() {
         return configDao.getSysParameter();
     }
+
+    public List<SysServImplPO> getSysServImplsByType(String type) { return sysDao.getSysServImplsByType(type); }
 
 }
