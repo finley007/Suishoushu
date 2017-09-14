@@ -55,6 +55,10 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_GET_CAPITAL_MATCHER = "qixinbao.get.capital.matcher";
     private static final String QIXINBAO_GET_REG_AUTHORITY_MATCHER = "qixinbao.get.reg.authority.matcher";
 
+    public String getAPIKey() {
+        return SOURCE_QXB;
+    }
+
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling QiXinBao API, key: " + key);
         String encodedKey = CommonUtil.urlEncode(key, FIConstants.DEFAULT_CHARSET);
@@ -115,10 +119,10 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "QiXinBao API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(this.createCookieStore()).doGet();
         HTTPParser parser = new HTTPParser(html);
-        return createEnterprisePO(parser);
+        return createEnterprisePO(parser, url);
     }
 
-    private EnterprisePO createEnterprisePO(HTTPParser parser) {
+    private EnterprisePO createEnterprisePO(HTTPParser parser, String url) {
         EnterprisePO po = new EnterprisePO();
         parser.setHandler(new StringResultHandler());
         po.setName(parser.select(Properties.get(QIXINBAO_GET_NAME_MATCHER)).toString());
@@ -137,6 +141,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         po.setModifyTime(new Date());
         setRegCapital(parser, po);
         setBizPeriod(parser, po);
+        po.setSourceUrl(url);
         return po;
     }
 

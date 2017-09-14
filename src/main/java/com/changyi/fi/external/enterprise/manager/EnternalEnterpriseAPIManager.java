@@ -8,6 +8,7 @@ import com.changyi.fi.external.enterprise.qxb.QiXinBaoAPIServiceImpl;
 import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
 import com.changyi.fi.core.model.SysServImplPO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,29 @@ public class EnternalEnterpriseAPIManager {
 
     private static final String SERV_IMPL_TYPE_ENTERPRISE = "enterprise";
 
+    private static final int API_DISABLED = -1;
+
     private static List<SysServImplPO> impls;
+
+    private static ConfigService configService;
+
+    private static ConfigService getConfigService() {
+        if (configService == null) {
+            configService = CtxProvider.getContext().getBean(ConfigService.class);
+        }
+        return configService;
+    }
 
     private static Selector getSelector() {
         if (impls == null) {
             refresh();
         }
         return new Selector(impls);
+    }
+
+    public synchronized static void updateAPIWeight(String id, int weight) {
+        getConfigService().updateSysServImplWeight(id, weight);
+        refresh();
     }
 
     public static ExternalEnterpriseAPIService getAPIImpl(String key) throws Exception {
@@ -39,19 +56,19 @@ public class EnternalEnterpriseAPIManager {
     }
 
     public static void refresh() {
-        ConfigService configService = CtxProvider.getContext().getBean(ConfigService.class);
-        impls = configService.getSysServImplsByType(SERV_IMPL_TYPE_ENTERPRISE);
+        impls = getConfigService().getSysServImplsByType(SERV_IMPL_TYPE_ENTERPRISE);
     }
 
-    public static void disableAPI(String key) {
-        if (impls == null) {
-            refresh();
-        }
+    public synchronized static void disableAPI(String apiId) {
+        getConfigService().updateSysServImplWeight(apiId, API_DISABLED);
+        refresh();
+        List<SysServImplPO> result = new ArrayList<SysServImplPO>();
         for (SysServImplPO po : impls) {
-            if (po.getId().equals(key)) {
-                impls.remove(po);
+            if (!po.getId().equals(apiId)) {
+                result.add(po);
             }
         }
+        impls = result;
     }
 
     public static ExternalEnterpriseAPIService getAPIImpl() throws Exception {

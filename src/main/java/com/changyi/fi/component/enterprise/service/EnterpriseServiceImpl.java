@@ -55,7 +55,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             //从外部获取
             externalList = matchEnterpriseByExternalAPI(key);
         }
-        return new MatchEnterpriseResponse(combineResult(internalList, externalList));
+        return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }
 
     public List<Map> matchEnterpriseByExternalAPI(String key) throws Exception {
@@ -75,7 +75,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return externalList;
     }
 
-    private List combineResult(List<Map> internal, List<Map> external) {
+    private List combineResult(List<Map> internal, List<Map> external, String key) {
         int count = ConfigManager.getIntegerParameter(ENTERPRISE_MATCH_RESULT_LENGTH, 20);
         List<Map> result = new ArrayList<Map>();
         if (internal.size() > 0) {
@@ -93,7 +93,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             }
             count -= result.size();
             for (Map map : external) {
-                if (!set.contains(map.get(FIELD_NAME).toString()) && count > 0) {
+                if (map.get(FIELD_NAME) != null && !set.contains(map.get(FIELD_NAME).toString())
+                        && map.get(FIELD_NAME).toString().contains(key) //有的接口不在名称中查询关键字，因此加这个过滤
+                            && count > 0 ) {
                     result.add(map);
                     count --;
                 }

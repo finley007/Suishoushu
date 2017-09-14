@@ -66,6 +66,10 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return SECONDS_FOR_ONE_WEEK;
     }
 
+    public String getAPIKey() {
+        return SOURCE_TYC;
+    }
+
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
@@ -106,10 +110,10 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         HTTPParser parser = new HTTPParser(html);
-        return createEnterprisePO(parser);
+        return createEnterprisePO(parser, url);
     }
 
-    private EnterprisePO createEnterprisePO(HTTPParser parser) {
+    private EnterprisePO createEnterprisePO(HTTPParser parser, String url) {
         Boolean isListed = this.checkIsListed(parser);
         Elements ccodeElems = parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_CREDIT_CODE_MATCHER)));
         String creditCode = "";
@@ -138,6 +142,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         po.setModifyTime(new Date());
         setRegCapital(parser, po, isListed);
         setBizPeriod(parser, po, isListed);
+        po.setSourceUrl(url);
         return po;
     }
 

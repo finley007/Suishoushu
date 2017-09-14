@@ -37,4 +37,11 @@ public class ConfigService {
 
     public List<SysServImplPO> getSysServImplsByType(String type) { return sysDao.getSysServImplsByType(type); }
 
+    public int updateSysServImplWeight(String id, int weight) {
+        SysServImplPO po = new SysServImplPO();
+        po.setId(id);
+        po.setWeight(weight);
+        return sysDao.updateSysServImpl(po);
+    }
+
 }
