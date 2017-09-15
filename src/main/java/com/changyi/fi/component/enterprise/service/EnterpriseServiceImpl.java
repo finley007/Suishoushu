@@ -6,10 +6,14 @@ import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.maintain.MaintainManager;
+import com.changyi.fi.core.notification.EmailNotifier;
+import com.changyi.fi.core.notification.INotifier;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
 import com.changyi.fi.model.EnterprisePO;
+import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +71,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         } catch (Exception e) {
             LogUtil.error(this.getClass(), "Error with external API: " + enterpriseAPIService.getAPIKey() + " and will disable it", e);
             EnternalEnterpriseAPIManager.disableAPI(enterpriseAPIService.getAPIKey());
+            MaintainManager.criticalErrorNotify(FIConstants.NotifyMethod.Email, e);
             return matchEnterpriseByExternalAPI(key);
         }
         if (externalList.size() == 0) {

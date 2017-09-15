@@ -69,4 +69,8 @@ public class FIConstants {
 
         public String getValue() { return value; }
     }
+
+    public enum NotifyMethod {
+        Email, SMS
+    }
 }
