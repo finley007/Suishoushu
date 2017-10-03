@@ -51,7 +51,7 @@ public interface CustomerDao {
      */
     int insertCustomerLogin(CustomerLoginPO record);
 
-    @Select("select count(*) from CUSTOMER t where t.OPEN_ID = #{openId}")
+    @Select("select count(*) from inc_customer t where t.open_id = #{openId}")
     @Result(javaType = Long.class)
     public Long countCustomerById(@Param("openId") String openId);
 }

@@ -15,16 +15,16 @@ public interface InvoiceDao {
 
     VInvoicePO getInvoiceById(@Param(("id")) String id);
 
-    @Select("SELECT COUNT(*) FROM ENTERPRISE T WHERE T.CREDIT_CODE = #{creditCode}")
+    @Select("SELECT COUNT(*) FROM inc_enterprise T WHERE T.credit_code = #{creditCode}")
     @Result(javaType = Long.class)
     public Long countEnterpriseById(@Param("creditCode") String creditCode);
 
     public EnterprisePO getEnterpriseById(@Param("creditCode") String creditCode);
 
-    @Delete("DELETE FROM INVOICE WHERE ID = #{id}")
+    @Delete("DELETE FROM inc_invoice WHERE id = #{id}")
     public void deleteInvoice(@Param(("id")) String id);
 
-    @Update("UPDATE INVOICE T SET T.IS_DEFAULT = #{value} where T.OPEN_ID = #{openId} and T.ID <> #{id}")
+    @Update("UPDATE inc_invoice T SET T.is_default = #{value} where T.open_id = #{openId} and T.id <> #{id}")
     public void updateNotDefault(@Param(("openId")) String openId, @Param(("id")) String id, @Param(("value")) String value);
 
     int insert(InvoicePO record);
@@ -47,7 +47,7 @@ public interface InvoiceDao {
 
     int insertEnterpriseHistorySelective(EnterpriseHistoryPO record);
 
-    @Select("SELECT CREDIT_CODE AS CREDITCODE, NAME AS NAME FROM ENTERPRISE T WHERE T.NAME LIKE CONCAT('%',#{key},'%') LIMIT 0, #{count}")
+    @Select("SELECT credit_code AS CREDITCODE, name AS NAME FROM inc_enterprise T WHERE T.name LIKE CONCAT('%',#{key},'%') LIMIT 0, #{count}")
     @Result(javaType = Map.class)
     List<Map> matchEnterpriseList(@Param("key") String key, @Param("count") int count);
 }
