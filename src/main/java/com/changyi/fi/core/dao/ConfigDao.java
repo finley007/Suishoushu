@@ -12,12 +12,12 @@ import java.util.Map;
  */
 public interface ConfigDao {
 
-    @Select("SELECT * from SYS_EXCEPTION")
+    @Select("SELECT * from sys_exception")
     @Result(javaType = Map.class)
     @Options(useCache = true)
     public List<Map> getExceptionCode();
 
-    @Select("SELECT * FROM SYS_PARAMETER")
+    @Select("SELECT * FROM sys_parameter")
     @Result(javaType = Map.class)
     @Options(useCache = true)
     public List<Map> getSysParameter();
