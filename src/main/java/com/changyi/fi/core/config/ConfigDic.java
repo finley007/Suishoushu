@@ -16,8 +16,8 @@ public class ConfigDic implements Dictionary<String> {
 
     public static final String NAME = "config";
 
-    private static final String FIELD_CODE = "CODE";
-    private static final String FIELD_VALUE = "VALUE";
+    private static final String FIELD_CODE = "code";
+    private static final String FIELD_VALUE = "value";
 
     public ConfigDic() {
         refresh();
