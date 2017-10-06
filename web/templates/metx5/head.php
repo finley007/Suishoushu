@@ -6,44 +6,6 @@ echo <<<EOT
 {$methtml_head}
 <body>
     <header data-waypointsok="{$lang_waypointsok}">
-		<section>
-			<div class="tem_inner tem_top">
-				<h2>{$met_seo}</h2>
-				<div class="tem_top_nav">
-<!--
-EOT;
-if(count($met_langok)>1&&$met_lang_mark){//当语言数量大于1
-echo <<<EOT
--->
-					<dl>
-						<dt><a href="{$met_langok[$lang][met_weburl]}" title="{$met_langok[$lang][name]}">{$met_langok[$lang][name]}<i class="fa fa-caret-down"></i></a></dt>
-						<dd>
-<!--
-EOT;
-foreach($met_langok as $val){
-if($val[useok]){
-echo <<<EOT
--->
-	<a href="{$val[met_weburl]}" title="{$val[name]}">{$val[name]}</a>
-<!--
-EOT;
-}
-}
-echo <<<EOT
--->
-						</dd>
-					</dl>
-					
-					
-<!--
-EOT;
-}
-echo <<<EOT
--->
-					{$topnav}
-				</div>
-			</div>
-		</section>
 		<div class="tem_inner tem_head">
 <!--
 EOT;
