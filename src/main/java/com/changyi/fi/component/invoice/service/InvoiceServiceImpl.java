@@ -165,20 +165,25 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private List<EnterpriseHistoryPO> checkModification(EnterprisePO curEpo, PutInvoiceRequest request, String openId) {
         List<EnterpriseHistoryPO> result = new ArrayList<EnterpriseHistoryPO>();
+        String creditCode = request.getCreditCode();
         if ((curEpo.getAddress() == null && StringUtils.isNotBlank(request.getAddress())) ||
                 (curEpo.getAddress() != null && !curEpo.getAddress().equals(request.getAddress()))) {
-            result.add(createChangeItem(request.getCreditCode(), openId, FIConstants.EnterpriseField.Address.getName(), curEpo.getAddress(), request.getAddress()));
-        } else if ((curEpo.getPhone() == null && StringUtils.isNotBlank(request.getPhone())) ||
+            result.add(createChangeItem(creditCode, openId, FIConstants.EnterpriseField.Address.getName(), curEpo.getAddress(), request.getAddress()));
+        }
+        if ((curEpo.getPhone() == null && StringUtils.isNotBlank(request.getPhone())) ||
                 (curEpo.getPhone() != null && !curEpo.getPhone().equals(request.getPhone()))) {
-            result.add(createChangeItem(request.getCreditCode(), openId, FIConstants.EnterpriseField.Phone.getName(), curEpo.getPhone(), request.getPhone()));
-        } else if ((curEpo.getBank() == null && StringUtils.isNotBlank(request.getBank())) ||
+            result.add(createChangeItem(creditCode, openId, FIConstants.EnterpriseField.Phone.getName(), curEpo.getPhone(), request.getPhone()));
+        }
+        if ((curEpo.getBank() == null && StringUtils.isNotBlank(request.getBank())) ||
                 (curEpo.getBank() != null && !curEpo.getBank().equals(request.getBank()))) {
-            result.add(createChangeItem(request.getCreditCode(), openId, FIConstants.EnterpriseField.Bank.getName(), curEpo.getBank(), request.getBank()));
-        } else if ((curEpo.getBankAcct() == null && StringUtils.isNotBlank(request.getBankAcct())) ||
+            result.add(createChangeItem(creditCode, openId, FIConstants.EnterpriseField.Bank.getName(), curEpo.getBank(), request.getBank()));
+        }
+        if ((curEpo.getBankAcct() == null && StringUtils.isNotBlank(request.getBankAcct())) ||
                 (curEpo.getBankAcct() != null && !curEpo.getBankAcct().equals(request.getBankAcct()))) {
-            result.add(createChangeItem(request.getCreditCode(), openId, FIConstants.EnterpriseField.BankAcct.getName(), curEpo.getBankAcct(), request.getBankAcct()));
-        } else if (!curEpo.getName().equals(request.getName())) {
-            result.add(createChangeItem(request.getCreditCode(), openId, FIConstants.EnterpriseField.Name.getName(), curEpo.getName(), request.getName()));
+            result.add(createChangeItem(creditCode, openId, FIConstants.EnterpriseField.BankAcct.getName(), curEpo.getBankAcct(), request.getBankAcct()));
+        }
+        if (!curEpo.getName().equals(request.getName())) {
+            result.add(createChangeItem(creditCode, openId, FIConstants.EnterpriseField.Name.getName(), curEpo.getName(), request.getName()));
         }
         return result;
     }
