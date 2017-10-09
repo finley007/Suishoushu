@@ -486,10 +486,10 @@
       <if test="industry != null">
         industry = #{industry,jdbcType=VARCHAR},
       </if>
-      <if test="record.area != null">
+      <if test="area != null">
         area = #{area,jdbcType=VARCHAR},
       </if>
-      <if test="record.sourceUrl != null">
+      <if test="sourceUrl != null">
         source_url = #{sourceUrl,jdbcType=VARCHAR},
       </if>
       <if test="mainBiz != null">
