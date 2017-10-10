@@ -109,7 +109,16 @@ $member_name = get_met_cookie('metinfo_member_name');
 if($member_name){
 echo <<<EOT
 -->
-			<li>{$member_name}</li>
+			<li>{$member_name} 
+			    <dl data-postinok="1" style="display: none; width: auto; white-space: nowrap; min-width: 100px;"> 
+			      	<dd style="width: auto; min-width: 100px;"> 
+			     		<a href="/member/basic.php?lang=cn" title="个人信息">个人信息</a> 
+			     		<a href="/member/basic.php?lang=cn&amp;a=dosafety" title="账号安全">账号安全</a> 
+			     		<div class="met_clear"></div> 
+			     		<i class="fa fa-caret-up" style="left: 37px;"></i> 
+			    	</dd> 
+			    </dl>
+			</li>
 			<li><a href="/member/login.php?lang=cn&amp;a=dologout" title="{$_M['word']['memberIndex10']}">{$_M['word']['memberIndex10']}</a></li>
 <!--
 EOT;
