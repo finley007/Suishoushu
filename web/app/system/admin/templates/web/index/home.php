@@ -273,6 +273,11 @@ echo <<<EOT
 <!--
 EOT;
 }
+if(strstr($_M[config][met_weburl],'https')){
+	   $httpurl='https';
+}else{
+	   $httpurl='http';
+}
 if ($_M['config']['met_agents_type'] < 2 && !$_M['config']['met_agents_app_news']) {
 echo <<<EOT
 -->

@@ -105,6 +105,22 @@ echo <<<EOT
 <!--
 EOT;
 }
+$member_name = get_met_cookie('metinfo_member_name');
+if($member_name){
+echo <<<EOT
+-->
+			<li>{$member_name}</li>
+			<li><a href="/member/login.php?lang=cn&amp;a=dologout" title="{$_M['word']['memberIndex10']}">{$_M['word']['memberIndex10']}</a></li>
+<!--
+EOT;
+}else{
+echo <<<EOT
+-->
+			<li><a href="/member/login.php" title="{$_M['word']['memberGo']}">{$_M['word']['memberGo']}</a></li>
+			<li><a href="/member/register_include.php?lang=cn" title="{$_M['word']['register']}">{$_M['word']['register']}</a></li>
+<!--
+EOT;
+}
 echo <<<EOT
 -->
 </ul>

@@ -39,7 +39,8 @@ class login extends userweb {
 		{	
 			// 是否从本站过来
 			$referer = parse_url($_SERVER['HTTP_REFERER']);
-			if($referer['host']==$_SERVER['HTTP_HOST'])
+			$host = explode(':',$_SERVER['HTTP_HOST']);
+			if($referer['host']==$host[0])
 			{
 				// 来源页面保存到cookie
 				setcookie("referer",$_SERVER['HTTP_REFERER']);
