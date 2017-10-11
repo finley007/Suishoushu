@@ -109,7 +109,7 @@ $member_name = get_met_cookie('metinfo_member_name');
 if($member_name){
 echo <<<EOT
 -->
-			<li>{$member_name} 
+			<li><a class="login">{$member_name}</a>
 			    <dl data-postinok="1" style="display: none; width: auto; white-space: nowrap; min-width: 100px;"> 
 			      	<dd style="width: auto; min-width: 100px;"> 
 			     		<a href="/member/basic.php?lang=cn" title="个人信息">个人信息</a> 
@@ -119,14 +119,14 @@ echo <<<EOT
 			    	</dd> 
 			    </dl>
 			</li>
-			<li><a href="/member/login.php?lang=cn&amp;a=dologout" title="{$_M['word']['memberIndex10']}">{$_M['word']['memberIndex10']}</a></li>
+			<li><a href="/member/login.php?lang=cn&amp;a=dologout" title="{$_M['word']['memberIndex10']}" class="register">{$_M['word']['memberIndex10']}</a></li>
 <!--
 EOT;
 }else{
 echo <<<EOT
 -->
-			<li><a href="/member/login.php" title="{$_M['word']['memberGo']}">{$_M['word']['memberGo']}</a></li>
-			<li><a href="/member/register_include.php?lang=cn" title="{$_M['word']['register']}">{$_M['word']['register']}</a></li>
+			<li><a href="/member/login.php" title="{$_M['word']['memberGo']}" class="login">{$_M['word']['memberGo']}</a></li>
+			<li><a href="/member/register_include.php?lang=cn" title="{$_M['word']['register']}" class="register">{$_M['word']['register']}</a></li>
 <!--
 EOT;
 }

@@ -31,6 +31,9 @@ header h1{display:inline;}
 .tem_head nav ul{margin:0;padding:0;list-style:none;}
 .tem_head nav ul li{position:relative;float:left;margin-left:8px;}
 .tem_head nav a{display:block;padding:0 15px;}
+.tem_head nav a.login{display:block;padding:0 0 0 15px;}
+.tem_head nav a.register{display:block;padding:0 15px 0 0;}
+.tem_head nav a.register:before{content:"|";padding-right: 8px;}
 .tem_head nav a:hover{color:#e9280c;}
 .tem_head nav a.navdown{border-radius:2px;background:#e9280c;color:#fff;}
 .tem_head nav a.navdown:hover{color:#fff;}
