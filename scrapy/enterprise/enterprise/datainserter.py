@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-这个类是用来将数据文件导入数据库
+这个类是用来将数据文件导入数据库，
+python datainserter.py -p ./output/ -f example
 '''
 import requests
 import json
@@ -18,11 +19,11 @@ logging.basicConfig(level=logging.INFO,
                 filemode='w')
 
 def main(argv):
-	src_url = ""
+	path = ""
 	file = ""
 	dbclient = DBClient("fi_dev")
 	try:
-	  opts, args = getopt.getopt(argv,"hu:f:")
+	  opts, args = getopt.getopt(argv,"hp:f:")
 	except getopt.GetoptError:
 	  print 'datainserter.py -p <url> -f <file>'
 	  sys.exit(2)
@@ -31,7 +32,7 @@ def main(argv):
 	     print 'datainserter.py -p <url> -f <file>'
 	     sys.exit()
 	  elif opt in ("-p"):
-	     src_url = arg
+	     path = arg
 	  elif opt in ("-f"):
 	     file = arg
 
@@ -40,17 +41,17 @@ def main(argv):
 		solveFile(file, dbclient)
 	else:
 		logging.info("************Start to insert data and path: " + path)
-		for parent,dirnames,filenames in os.walk(src_url):
+		for parent,dirnames,filenames in os.walk(path):
 			for filename in filenames:
-				solveFile(path, dbclient)
+				solveFile(filename, dbclient)
 
 def solveFile(file, dbclient):
 	logging.info("************Solve file: " + file)
 	for line in open(file):
 		logging.info(line)
 		data = line.split("|")
-		if len(data) <= 1:
-			logging.info("************Error record:" + line)
+		if len(data) <= 1 or data[3] == '未公开':
+			logging.info("************Invalid record:" + line)
 			continue
 		regCapital = getDigital(data[6])
 		bizPeriodStart = ""
@@ -85,30 +86,30 @@ def findAll(regex, text):
 	return pattern.findall(text)
 
 def createInsertSql(data, bizPeriodStart, bizPeriodEnd, regCapital, establishDate):
-	insert = "insert into ENTERPRISE (CREDIT_CODE,NAME,LEGAL_PERSON,REG_CAPITAL,REG_AUTHORITY,ADDRESS,PHONE,BIZ_REG_NUM,ORG_CODE,TAXPAYER_CODE,INDUSTRY,AREA, CREATE_BY"
+	insert = "insert into inc_enterprise (credit_code,name,legal_person,reg_capital,reg_authority,address,phone,biz_reg_num,org_code,taxpayer_code,industry,area, create_by"
 	values = " values ('" + data[3] + "','" + data[4] + "','" + data[5] + "','" + str(regCapital) + "','" + data[9] + "','" + data[10] + "','" + data[11] + "','" + data[12] + "','" + data[13] + "','" + data[14] + "','" + data[15].replace("\n", "") + "','" + data[0] + "','system'"
 	if bizPeriodStart != '':
-		insert = insert + ",BIZ_PERIOD_START"
+		insert = insert + ",biz_period_start"
 		values = values + ",'" + bizPeriodStart + "'"
 	if bizPeriodEnd != '':
-		insert = insert + ",BIZ_PERIOD_END"
+		insert = insert + ",biz_period_end"
 		values = values + ",'" + bizPeriodEnd + "'"
 	if establishDate != '':
-		insert = insert + ",ESTABLISH_DATE"
+		insert = insert + ",establish_date"
 		values = values + ",'" + establishDate + "'"
 	insert = insert + ")"
 	values = values + ")"
 	return insert + values
 
 def createUpdateSql(data, bizPeriodStart, bizPeriodEnd, regCapital, establishDate):
-	update = "update ENTERPRISE t set t.LEGAL_PERSON = '" + data[5] + "', t.REG_CAPITAL = '" + str(regCapital) + "', t.REG_AUTHORITY = '" + data[9] + "', t.ADDRESS = '" + data[10] + "', t.PHONE = '" + data[11] + "', t.BIZ_REG_NUM = '" + data[12] + "', t.ORG_CODE = '" + data[13] + "', t.TAXPAYER_CODE = '" + data[14] + "', t.INDUSTRY = '" + data[15] + "', t.AREA = '" + data[0]
+	update = "update inc_enterprise t set t.legal_person = '" + data[5] + "', t.reg_capital = '" + str(regCapital) + "', t.reg_authority = '" + data[9] + "', t.address = '" + data[10] + "', t.phone = '" + data[11] + "', t.biz_reg_num = '" + data[12] + "', t.org_code = '" + data[13] + "', t.taxpayer_code = '" + data[14] + "', t.industry = '" + data[15] + "', t.area = '" + data[0]
 	if bizPeriodStart != '':
-		update = update + "', t.BIZ_PERIOD_START = '" + bizPeriodStart
+		update = update + "', t.biz_period_start = '" + bizPeriodStart
 	if bizPeriodEnd != '':
-		update = update + "', t.BIZ_PERIOD_END = '" + bizPeriodEnd
+		update = update + "', t.biz_period_end = '" + bizPeriodEnd
 	if establishDate != '':
-		update = update + "', t.ESTABLISH_DATE = '" + establishDate
-	update = update + "' where t.CREDIT_CODE = '" + data[3] + "'"
+		update = update + "', t.establish_date = '" + establishDate
+	update = update + "' where t.credit_code = '" + data[3] + "'"
 	return update
 
 if __name__ == "__main__":
