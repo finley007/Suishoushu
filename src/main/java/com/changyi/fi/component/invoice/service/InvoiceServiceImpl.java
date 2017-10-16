@@ -43,7 +43,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public String updateInvoice(PutInvoiceRequest request, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute updateInvoice service for: " + openId);
         String id = "";
-        if (!checkExists(request.getId())) {
+        if (!checkExists(openId, request)) {
             LogUtil.info(this.getClass(), "Create a new invoice");
             id = createNewInvoice(request, openId);
         } else {
@@ -58,13 +58,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         return id;
     }
 
-    private Boolean checkExists(String id) {
+    private Boolean checkExists(String openId, PutInvoiceRequest request) {
         Boolean result = false;
-        if (!StringUtils.isEmpty(id)) {
-            VInvoicePO po = invoiceDao.getInvoiceById(id);
+        if (!StringUtils.isEmpty(request.getId())) {
+            VInvoicePO po = invoiceDao.getInvoiceById(request.getId());
             if (po != null) {
                 result = true;
-                LogUtil.info(this.getClass(), "Invoice: " + id + " is existed");
+                LogUtil.info(this.getClass(), "Invoice: " + request.getId() + " is existed");
+            }
+        } else if (!FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
+            if (invoiceDao.countEnterpriseInvoiceById(openId, request.getCreditCode()) > 0) {
+                result = true;
+                LogUtil.info(this.getClass(), "Enterprise: " + request.getCreditCode() + " has already been added for current user");
             }
         }
         return result;
