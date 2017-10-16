@@ -127,6 +127,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             EnterprisePO po = service.getEnterpriseByCode(req.getCreditCode());
             if (po != null) {
                 this.invoiceDao.insertEnterprise(po);
+            } else {
+                this.invoiceDao.updateEnterpriseSelective(po);
             }
             return new GetEnterpriseResponse(po);
         }

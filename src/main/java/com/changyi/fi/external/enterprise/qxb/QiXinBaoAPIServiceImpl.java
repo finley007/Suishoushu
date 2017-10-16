@@ -154,10 +154,10 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 FIConstants.DATE_PATTERN1);
         if (bizPeriod != null && bizPeriod.size() > 0) {
             try {
-                po.setBizPeriodStart(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
-                po.setEstablishDate(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
+                po.setBizPeriodStart(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
+                po.setEstablishDate(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
                 if (bizPeriod.size() > 1) {
-                    po.setBizPeriodEnd(FIConstants.sdf.parse(bizPeriod.get(1).replaceAll("(\\d{4})年(\\d{2})月(\\d{2})日", "$1-$2-$3")));
+                    po.setBizPeriodEnd(FIConstants.sdf.parse(bizPeriod.get(1).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
                 }
             } catch (Exception e) {
                 LogUtil.error(this.getClass(), "Parse bizPeriod field for EnterprisePO error: ", e);
