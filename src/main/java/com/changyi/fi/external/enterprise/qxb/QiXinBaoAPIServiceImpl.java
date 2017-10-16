@@ -55,7 +55,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_GET_CAPITAL_MATCHER = "qixinbao.get.capital.matcher";
     private static final String QIXINBAO_GET_REG_AUTHORITY_MATCHER = "qixinbao.get.reg.authority.matcher";
 
-    private static final String DATE_FORMAT_REGEX = "(\\\\d{4})年(\\\\d{1,2})月(\\\\d{1,2})日";
+    private static final String DATE_FORMAT_REGEX = "(\\d{4})年(\\d{1,2})月(\\d{1,2})日";
     private static final String DATE_FORMAT_REPLACEMENT = "$1-$2-$3";
 
     public String getAPIKey() {
