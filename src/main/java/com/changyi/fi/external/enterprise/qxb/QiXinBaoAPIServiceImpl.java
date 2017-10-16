@@ -55,6 +55,9 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     private static final String QIXINBAO_GET_CAPITAL_MATCHER = "qixinbao.get.capital.matcher";
     private static final String QIXINBAO_GET_REG_AUTHORITY_MATCHER = "qixinbao.get.reg.authority.matcher";
 
+    private static final String DATE_FORMAT_REGEX = "(\\\\d{4})年(\\\\d{1,2})月(\\\\d{1,2})日";
+    private static final String DATE_FORMAT_REPLACEMENT = "$1-$2-$3";
+
     public String getAPIKey() {
         return SOURCE_QXB;
     }
@@ -154,10 +157,11 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 FIConstants.DATE_PATTERN1);
         if (bizPeriod != null && bizPeriod.size() > 0) {
             try {
-                po.setBizPeriodStart(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
-                po.setEstablishDate(FIConstants.sdf.parse(bizPeriod.get(0).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
+                String strBizPeriod = bizPeriod.get(0);
+                po.setBizPeriodStart(FIConstants.sdf.parse(strBizPeriod.replaceAll(DATE_FORMAT_REGEX, DATE_FORMAT_REPLACEMENT)));
+                po.setEstablishDate(FIConstants.sdf.parse(strBizPeriod.replaceAll(DATE_FORMAT_REGEX, DATE_FORMAT_REPLACEMENT)));
                 if (bizPeriod.size() > 1) {
-                    po.setBizPeriodEnd(FIConstants.sdf.parse(bizPeriod.get(1).replaceAll(FIConstants.DATE_PATTERN1, "$1-$2-$3")));
+                    po.setBizPeriodEnd(FIConstants.sdf.parse(bizPeriod.get(1).replaceAll(DATE_FORMAT_REGEX, DATE_FORMAT_REPLACEMENT)));
                 }
             } catch (Exception e) {
                 LogUtil.error(this.getClass(), "Parse bizPeriod field for EnterprisePO error: ", e);
