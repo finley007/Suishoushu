@@ -7,6 +7,7 @@ import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.qxb.QiXinBaoAPIServiceImpl;
 import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
 import com.changyi.fi.core.model.SysServImplPO;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,9 @@ public class EnternalEnterpriseAPIManager {
     }
 
     public static ExternalEnterpriseAPIService getAPIImpl(String key) throws Exception {
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
         if (API_TIANYANCHA.equals(key)) {
             return new TianYanChaAPIServiceImpl();
         } if (API_QIXINBAO.equals(key)) {
@@ -103,7 +107,8 @@ public class EnternalEnterpriseAPIManager {
         }
 
         public String select() {
-            if (arr != null && map != null) {
+            if (arr != null && this.arr.length > 0
+                    && map != null && !this.map.isEmpty()) {
                 Double rand = Math.random();
                 for (int i = 0; i < this.arr.length; i++) {
                     if (rand <= this.arr[i]) {

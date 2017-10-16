@@ -65,6 +65,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public List<Map> matchEnterpriseByExternalAPI(String key) throws Exception {
         List<Map> externalList = new ArrayList<Map>();
         ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl();
+        if (enterpriseAPIService == null) {
+            LogUtil.info(this.getClass(), "No external API available");
+            return externalList;
+        }
         try {
             LogUtil.info(this.getClass(), "Search key: " + key + " by using external API: " + enterpriseAPIService.getAPIKey());
             externalList = enterpriseAPIService.matchEnterprise(key);
