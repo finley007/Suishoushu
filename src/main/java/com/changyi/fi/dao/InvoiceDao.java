@@ -19,9 +19,9 @@ public interface InvoiceDao {
     @Result(javaType = Long.class)
     public Long countEnterpriseById(@Param("creditCode") String creditCode);
 
-    @Select("SELECT COUNT(*) FROM inc_invoice t WHERE t.open_id = #{openId} and t.credit_code = #{creditCode}")
-    @Result(javaType = Long.class)
-    public Long countEnterpriseInvoiceById(@Param("openId") String openId, @Param("creditCode") String creditCode);
+    @Select("SELECT id FROM inc_invoice t WHERE t.open_id = #{openId} and t.credit_code = #{creditCode}")
+    @Result(javaType = String.class)
+    public String getInvoiceByEnterpriceId(@Param("openId") String openId, @Param("creditCode") String creditCode);
 
     public EnterprisePO getEnterpriseById(@Param("creditCode") String creditCode);
 

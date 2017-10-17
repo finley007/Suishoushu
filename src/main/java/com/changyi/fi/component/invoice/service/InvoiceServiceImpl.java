@@ -42,11 +42,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Validate(validator = "com.changyi.fi.component.invoice.validate.PutInvoiceValidator")
     public String updateInvoice(PutInvoiceRequest request, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute updateInvoice service for: " + openId);
-        String id = "";
-        if (!checkExists(openId, request)) {
+        String id = getRelatedInvoiceId(openId, request);
+        if (StringUtils.isBlank(id)) {
             LogUtil.info(this.getClass(), "Create a new invoice");
             id = createNewInvoice(request, openId);
         } else {
+            request.setId(id);
             LogUtil.info(this.getClass(), "Update exited invoice for id: " + request.getId());
             updateExistedInvoice(request, openId);
             id = request.getId();
@@ -58,21 +59,24 @@ public class InvoiceServiceImpl implements InvoiceService {
         return id;
     }
 
-    private Boolean checkExists(String openId, PutInvoiceRequest request) {
-        Boolean result = false;
+    private String getRelatedInvoiceId(String openId, PutInvoiceRequest request) {
+        String invoiceId = "";
         if (!StringUtils.isEmpty(request.getId())) {
             VInvoicePO po = invoiceDao.getInvoiceById(request.getId());
             if (po != null) {
-                result = true;
+                invoiceId = request.getId();
                 LogUtil.info(this.getClass(), "Invoice: " + request.getId() + " is existed");
             }
-        } else if (!FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
-            if (invoiceDao.countEnterpriseInvoiceById(openId, request.getCreditCode()) > 0) {
-                result = true;
-                LogUtil.info(this.getClass(), "Enterprise: " + request.getCreditCode() + " has already been added for current user");
+        } else {
+            boolean isEnterprise = !FIConstants.InvoiceType.Person.getValue().equals(request.getType());
+            if (isEnterprise) {
+                invoiceId = invoiceDao.getInvoiceByEnterpriceId(openId, request.getCreditCode());
+                if (StringUtils.isNotBlank(invoiceId)) {
+                    LogUtil.info(this.getClass(), "Enterprise: " + request.getCreditCode() + " has already been added for current user and invoice id: " + invoiceId);
+                }
             }
         }
-        return result;
+        return invoiceId;
     }
 
     private String createNewInvoice(PutInvoiceRequest request, String openId) throws Exception {
