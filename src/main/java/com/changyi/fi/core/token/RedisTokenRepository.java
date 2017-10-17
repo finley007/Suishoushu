@@ -41,4 +41,8 @@ public class RedisTokenRepository implements ITokenRepository {
         RedisClient.del(key);
     }
 
+    public void saveToken() {}
+
+    public void init() {}
+
 }

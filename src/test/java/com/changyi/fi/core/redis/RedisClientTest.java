@@ -1,8 +1,11 @@
 package com.changyi.fi.core.redis;
 
+import com.changyi.fi.vo.Session;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+
+import java.util.List;
 
 /**
  * RedisClient Tester.
@@ -38,6 +41,29 @@ public class RedisClientTest {
 //TODO: Test goes here...
 //        RedisClient.set("test", "test");
         System.out.println(RedisClient.get("aa"));
+    }
+
+    @Test
+    public void testListOperation() throws Exception {
+        Session session = new Session();
+        session.setOpenId("openId1");
+        session.setSessionKey("sessionKey1");
+        RedisClient.rpush("sessionList", session.toJson());
+        session.setOpenId("openId2");
+        session.setSessionKey("sessionKey2");
+        RedisClient.rpush("sessionList", session.toJson());
+        session.setOpenId("openId3");
+        session.setSessionKey("sessionKey3");
+        RedisClient.rpush("sessionList", session.toJson());
+        List<String> result = RedisClient.lrange("sessionList", 0, -1);
+        for (String str : result) {
+            System.out.println(str);
+        }
+        RedisClient.del("sessionList");
+        result = RedisClient.lrange("sessionList", 0, -1);
+        for (String str : result) {
+            System.out.println(str);
+        }
     }
 
 

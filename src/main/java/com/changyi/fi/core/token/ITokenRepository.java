@@ -1,11 +1,11 @@
 package com.changyi.fi.core.token;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by finley on 7/6/17.
  */
 public interface ITokenRepository {
+
+    public void init();
 
     public void addToken(Token token);
 
@@ -14,5 +14,7 @@ public interface ITokenRepository {
     public void updateToken(Token token);
 
     public void removeToken(String key);
+
+    public void saveToken();
 
 }

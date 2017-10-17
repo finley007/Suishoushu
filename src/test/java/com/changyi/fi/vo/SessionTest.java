@@ -75,13 +75,13 @@ public class SessionTest {
         Session session = new Session();
         session.setOpenId("openId");
         session.setSessionKey("sessionKey");
-        Customer customer = new Customer();
-        customer.setCity("city");
-        customer.setCountry("country");
-        customer.setGendar("1");
-        customer.setNickName("nickName");
-        customer.setProvince("province");
-        session.setCustomer(customer);
+//        Customer customer = new Customer();
+//        customer.setCity("city");
+//        customer.setCountry("country");
+//        customer.setGendar("1");
+//        customer.setNickName("nickName");
+//        customer.setProvince("province");
+//        session.setCustomer(customer);
         System.out.println(session.toJson());
     }
 

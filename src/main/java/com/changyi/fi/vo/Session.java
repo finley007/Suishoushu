@@ -4,6 +4,15 @@ import com.changyi.fi.core.BaseVO;
 
 public class Session extends BaseVO {
 
+    public Session() {
+
+    }
+
+    public Session(String openId, String sessionKey) {
+        this.openId = openId;
+        this.sessionKey = sessionKey;
+    }
+
     public Customer getCustomer() {
         return customer;
     }

@@ -21,7 +21,7 @@ public class Token {
 
     private static ITokenRepository repository;
 
-    static {
+    public static void init() {
         String implClz = "com.changyi.fi.core.token.TokenRepository";
         if (!StringUtils.isEmpty(ConfigManager.getParameter(TOKEN_REPOSITORY_IMPL_CLZ))) {
             implClz = ConfigManager.getParameter(TOKEN_REPOSITORY_IMPL_CLZ);
@@ -32,6 +32,7 @@ public class Token {
             LogUtil.error(Token.class, "Init token repository error: ", e);
             repository = new TokenRepository();
         }
+        repository.init();
     }
 
     private String key;
@@ -51,6 +52,13 @@ public class Token {
     public Token(Session session) {
         this.session = session;
         setKey(createKey(session));
+        setLastTouched(new Date());
+        repository.addToken(this);
+    }
+
+    public Token(String key, Session session) {
+        this.session = session;
+        this.key = key;
         setLastTouched(new Date());
         repository.addToken(this);
     }
@@ -110,6 +118,10 @@ public class Token {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public static void save() {
+        repository.saveToken();
     }
 
 }

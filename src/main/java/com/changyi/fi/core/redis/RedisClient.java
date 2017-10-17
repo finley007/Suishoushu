@@ -90,4 +90,8 @@ public class RedisClient {
     public static Long del(String key) {
         return getJedis().del(key);
     }
+
+    public static Long rpush(String key, String string) { return getJedis().rpush(key, string); }
+
+    public static List<String> lrange(String key, int start, int end) { return getJedis().lrange(key, start, end); }
 }
