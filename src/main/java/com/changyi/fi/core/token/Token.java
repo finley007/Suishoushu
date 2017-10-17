@@ -19,7 +19,7 @@ public class Token {
     private static final String TOKEN_REPOSITORY_IMPL_CLZ = "TOKEN_REPOSITORY_IMPL_CLZ";
     public static final String KEY = "auth-token";
 
-    private static ITokenRepository repository = new RedisTokenRepository();
+    private static ITokenRepository repository;
 
     static {
         String implClz = "com.changyi.fi.core.token.TokenRepository";
