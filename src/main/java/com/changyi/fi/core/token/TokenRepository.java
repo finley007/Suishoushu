@@ -1,7 +1,5 @@
 package com.changyi.fi.core.token;
 
-import com.changyi.fi.core.LogUtil;
-
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,8 +59,5 @@ public class TokenRepository implements ITokenRepository{
 
     }
 
-    protected void finalize(){
-        LogUtil.warn(this.getClass(), "Token repository finalize");
-    }
 
 }
