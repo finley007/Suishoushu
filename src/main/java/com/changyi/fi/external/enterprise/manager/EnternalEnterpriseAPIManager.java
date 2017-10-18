@@ -95,6 +95,8 @@ public class EnternalEnterpriseAPIManager {
                     if (list.get(i).getWeight() > 0) {
                         total += list.get(i).getWeight();
                         arr[i] = Double.valueOf(total);
+                    } else {
+                        arr[i] = 0.0;
                     }
                 }
                 for (int i = 0; i < list.size(); i++) {
