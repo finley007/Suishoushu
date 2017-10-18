@@ -129,7 +129,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             LogUtil.info(this.getClass(), "Get enterprise info from api: " + req.getSource());
             ExternalEnterpriseAPIService service = EnternalEnterpriseAPIManager.getAPIImpl(req.getSource());
             EnterprisePO po = service.getEnterpriseByCode(req.getCreditCode());
-            if (po == null) {
+            EnterprisePO existedPo = invoiceDao.getEnterpriseById(req.getCreditCode());
+            if (existedPo == null) {
                 this.invoiceDao.insertEnterprise(po);
             } else {
                 this.invoiceDao.updateEnterpriseSelective(po);
