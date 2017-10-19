@@ -82,7 +82,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
             for (Map<String, String> m : response.getData()) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put(getCreditCodeKey(), m.get(TYCMatchResponse.FIELD_ID));
-                map.put(getNameKey(), m.get(TYCMatchResponse.FIELD_NAME));
+                map.put(getNameKey(), handleName(m.get(TYCMatchResponse.FIELD_NAME)));
                 map.put(getSourceKey(), SOURCE_TYC);
                 result.add(map);
             }
@@ -144,6 +144,10 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         setBizPeriod(parser, po, isListed);
         po.setSourceUrl(url);
         return po;
+    }
+
+    private String handleName(String name) {
+        return name.replaceAll("<em>([\\u4e00-\\u9fa5]{1,})</em>", "$1");
     }
 
     private void setBizPeriod(HTTPParser parser, EnterprisePO po, Boolean isListed) {
