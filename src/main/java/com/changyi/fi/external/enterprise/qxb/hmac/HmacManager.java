@@ -16,7 +16,7 @@ public class HmacManager {
         int blockSize = this.hasher.getBlockSize();
         int size = blockSize * 4;
         if (hmacData.getSigBytes() > size) {
-            this.hasher.finalize(hmacData);
+            hmacData = this.hasher.finalize(hmacData);
         }
         hmacData.clamp();
         this.iKey = (HmacData)hmacData.clone();
@@ -28,8 +28,10 @@ public class HmacManager {
             this.oKey.words = Arrays.copyOf(this.oKey.words, blockSize);
         }
         for (int i = 0; i < blockSize; i++) {
-            this.oKey.words[i] ^= 1549556828;
-            this.iKey.words[i] ^= 909522486;
+            int oKey = (int)(this.oKey.words[i] ^ 1549556828);
+            this.oKey.words[i] = oKey;
+            int iKey = (int)(this.iKey.words[i] ^ 909522486);
+            this.iKey.words[i] = iKey;
         }
         this.iKey.setSigBytes(size);
         this.oKey.setSigBytes(size);
