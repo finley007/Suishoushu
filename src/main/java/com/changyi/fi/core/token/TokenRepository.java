@@ -27,9 +27,9 @@ public class TokenRepository implements ITokenRepository{
     private ScheduledExecutorService tokenRemoverPool = Executors.newSingleThreadScheduledExecutor();
 
     public void addToken(Token token) {
+        removeUnusedTokens(token.getOpenId());
         tokens.put(token.getKey(), token);
         tokenRemoverPool.schedule(new TokenRemover(token.getKey()), token.getDelay(), TimeUnit.MILLISECONDS);
-        removeUnusedTokens(token.getOpenId());
     }
 
     public Token touchToken(String key) {
