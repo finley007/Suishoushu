@@ -26,7 +26,7 @@ public class QRCodeUtils {
         charset = Properties.get(PROP_QRCODE_CHARSET);
         path = Properties.get(PROP_QRCODE_PATH);
         type = getType(Properties.get(PROP_QRCODE_FILETYPE));
-        userGroup = getType(Properties.get(PROP_QRCODE_USER_GROUP));
+        userGroup = Properties.get(PROP_QRCODE_USER_GROUP);
     }
 
     private static ImageType getType(String type) {
