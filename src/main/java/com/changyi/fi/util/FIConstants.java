@@ -79,4 +79,14 @@ public class FIConstants {
     public enum NotifyMethod {
         Email, SMS
     }
+
+    public enum EncryptorAlgorithm {
+        MD5("MD5"), SHA1("SHA");
+
+        private String value;
+
+        private EncryptorAlgorithm(String value) { this.value = value; }
+
+        public String getValue() { return value; }
+    }
 }

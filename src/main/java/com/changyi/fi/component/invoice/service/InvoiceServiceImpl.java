@@ -5,6 +5,8 @@ import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
+import com.changyi.fi.core.encrypt.EncryptManager;
+import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.exception.AuthenticationFailedException;
@@ -29,6 +31,9 @@ import java.util.List;
  */
 @Service("invoiceService")
 public class InvoiceServiceImpl implements InvoiceService {
+
+    private static final String SEPARATOR = "\r";
+    private static final String QRCODE_INVOICE_URL = "qrcode.invoice.url";
 
     private InvoiceDao invoiceDao;
 
@@ -255,12 +260,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         File file = this.getQRCodeImg(invoice);
         modifyPermission(file);
-        return file.getAbsolutePath();
+        return HTTPCaller.createUrl(QRCODE_INVOICE_URL, new Object[]{file.getName()});
     }
 
     private File getQRCodeImg(VInvoicePO invoice) throws Exception {
-        String fileName = this.createQRCodeImgName(invoice);
-        return QRCodeUtils.createQRCode(createCRCodeContent(invoice), fileName);
+        String content = createCRCodeContent(invoice);
+        String fileName = this.createQRCodeImgName(content);
+        LogUtil.debug(this.getClass(), "Obtain QRCode image: " + fileName);
+        File file = QRCodeUtils.getQRCode(fileName);
+        if ( file != null && file.exists()) {
+            LogUtil.debug(this.getClass(), "Return exist file: " + fileName);
+            return file;
+        } else {
+            LogUtil.debug(this.getClass(), "Create new file: " + fileName);
+            return QRCodeUtils.createQRCode(content, fileName);
+        }
     }
 
     private void modifyPermission(File file) throws Exception {
@@ -271,26 +285,28 @@ public class InvoiceServiceImpl implements InvoiceService {
         Runtime.getRuntime().exec(chgMod);
     }
 
-    private String createQRCodeImgName(VInvoicePO invoice) {
-        return "test";
+    private String createQRCodeImgName(String content) throws Exception {
+        return EncryptManager.getEncryptor(FIConstants.EncryptorAlgorithm.MD5).sign(content);
     }
 
     private String createCRCodeContent(VInvoicePO invoice) {
         StringBuffer result = new StringBuffer();
         if (FIConstants.InvoiceType.Person.getShortValue() == invoice.getType()) {
-            result.append(invoice.getUserName());
-        } else if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()){
-            result.append(invoice.getCorpName());
-            result.append("\r");
-            result.append(invoice.getCreditCode());
-        } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
-            result.append(invoice.getCorpName());
-            result.append("\r");
-            result.append(invoice.getCreditCode());
-            result.append("\r");
-            result.append(invoice.getAddress());
-            result.append("\r");
-            result.append(invoice.getBankAcct());
+            result.append(invoice.getUserName().trim());
+        } else {
+            if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()){
+                result.append(invoice.getCorpName().trim());
+                result.append(SEPARATOR);
+                result.append(invoice.getCreditCode().trim());
+            } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
+                result.append(invoice.getCorpName().trim());
+                result.append(SEPARATOR);
+                result.append(invoice.getCreditCode().trim());
+                result.append(SEPARATOR);
+                result.append(invoice.getAddress().trim());
+                result.append(SEPARATOR);
+                result.append(invoice.getBankAcct().trim());
+            }
         }
         return result.toString();
     }

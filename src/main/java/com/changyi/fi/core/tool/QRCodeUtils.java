@@ -48,6 +48,10 @@ public class QRCodeUtils {
         return file;
     }
 
+    public static File getQRCode(String fileName) throws Exception {
+        return new File(path + "/" + fileName + "." + type.toString().toLowerCase());
+    }
+
     public static String getUserGroup() { return userGroup; }
 
 }
