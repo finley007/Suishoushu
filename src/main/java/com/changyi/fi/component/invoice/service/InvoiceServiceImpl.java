@@ -254,12 +254,21 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new PermissionDeniedException("The invoice does not belong to current user");
         }
         File file = this.getQRCodeImg(invoice);
+        modifyPermission(file);
         return file.getAbsolutePath();
     }
 
     private File getQRCodeImg(VInvoicePO invoice) throws Exception {
         String fileName = this.createQRCodeImgName(invoice);
         return QRCodeUtils.createQRCode(createCRCodeContent(invoice), fileName);
+    }
+
+    private void modifyPermission(File file) throws Exception {
+        String chgOwn = "chown " + QRCodeUtils.getUserGroup() + " " + file.getAbsolutePath();
+        String chgMod = "chmod 777 " + file.getAbsolutePath();
+        LogUtil.debug(this.getClass(), "Change qrcode image permission: " + chgOwn + " and " + chgMod);
+        Runtime.getRuntime().exec(chgOwn);
+        Runtime.getRuntime().exec(chgMod);
     }
 
     private String createQRCodeImgName(VInvoicePO invoice) {

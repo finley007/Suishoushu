@@ -6,13 +6,13 @@ import net.glxn.qrgen.image.ImageType;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 
 public class QRCodeUtils {
 
     private static final String PROP_QRCODE_CHARSET = "qrcode.invoice.charset";
     private static final String PROP_QRCODE_PATH = "qrcode.invoice.path";
     private static final String PROP_QRCODE_FILETYPE = "qrcode.invoice.filetype";
+    private static final String PROP_QRCODE_USER_GROUP = "qrcode.invoice.user.group";
 
     private static String charset;
 
@@ -20,10 +20,13 @@ public class QRCodeUtils {
 
     private static ImageType type;
 
+    private static String userGroup;
+
     static {
         charset = Properties.get(PROP_QRCODE_CHARSET);
         path = Properties.get(PROP_QRCODE_PATH);
         type = getType(Properties.get(PROP_QRCODE_FILETYPE));
+        userGroup = getType(Properties.get(PROP_QRCODE_USER_GROUP));
     }
 
     private static ImageType getType(String type) {
@@ -44,4 +47,7 @@ public class QRCodeUtils {
         QRCode.from(content).withCharset(charset).to(type).writeTo(new FileOutputStream(file));
         return file;
     }
+
+    public static String getUserGroup() { return userGroup; }
+
 }
