@@ -5,8 +5,11 @@ import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
+import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.exception.AuthenticationFailedException;
+import com.changyi.fi.exception.InvoiceNotFoundException;
+import com.changyi.fi.exception.PermissionDeniedException;
 import com.changyi.fi.model.EnterpriseHistoryPO;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.model.InvoicePO;
@@ -16,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -240,5 +244,46 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
+    public String createCRCode(String openId, String invoiceId) throws Exception {
+        LogUtil.info(this.getClass(), "Execute createCRCode service for: " + openId);
+        VInvoicePO invoice = this.invoiceDao.getInvoiceById(invoiceId);
+        if (invoice == null) {
+            throw new InvoiceNotFoundException("The invoice: " + invoiceId + " does not existed");
+        }
+        if (!openId.equals(invoice.getOpenId())) {
+            throw new PermissionDeniedException("The invoice does not belong to current user");
+        }
+        File file = this.getQRCodeImg(invoice);
+        return file.getAbsolutePath();
+    }
+
+    private File getQRCodeImg(VInvoicePO invoice) throws Exception {
+        String fileName = this.createQRCodeImgName(invoice);
+        return QRCodeUtils.createQRCode(createCRCodeContent(invoice), fileName);
+    }
+
+    private String createQRCodeImgName(VInvoicePO invoice) {
+        return "test";
+    }
+
+    private String createCRCodeContent(VInvoicePO invoice) {
+        StringBuffer result = new StringBuffer();
+        if (FIConstants.InvoiceType.Person.getShortValue() == invoice.getType()) {
+            result.append(invoice.getUserName());
+        } else if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()){
+            result.append(invoice.getCorpName());
+            result.append("\r");
+            result.append(invoice.getCreditCode());
+        } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
+            result.append(invoice.getCorpName());
+            result.append("\r");
+            result.append(invoice.getCreditCode());
+            result.append("\r");
+            result.append(invoice.getAddress());
+            result.append("\r");
+            result.append(invoice.getBankAcct());
+        }
+        return result.toString();
+    }
 
 }

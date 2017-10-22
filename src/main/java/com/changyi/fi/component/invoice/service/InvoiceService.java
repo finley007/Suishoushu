@@ -17,5 +17,7 @@ public interface InvoiceService {
 
     public GetInvoiceResponse getInvoice(String openId, String id) throws Exception;
 
+    public String createCRCode(String openId, String invoiceId) throws Exception;
+
 }
 

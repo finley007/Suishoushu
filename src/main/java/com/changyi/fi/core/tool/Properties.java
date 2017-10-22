@@ -19,11 +19,15 @@ public class Properties {
 
     static {
         try {
-            propertiesConfiguration = new PropertiesConfiguration(CONFIGURATION_PROP);
-            propertiesConfiguration.setReloadingStrategy(new FileChangedReloadingStrategy());
+            setPropertiesConfiguration(new PropertiesConfiguration(CONFIGURATION_PROP));
         } catch (ConfigurationException e) {
             LogUtil.error(Properties.class, "Init properties: ", e);
         }
+    }
+
+    public static void setPropertiesConfiguration(PropertiesConfiguration config) {
+        propertiesConfiguration = config;
+        propertiesConfiguration.setReloadingStrategy(new FileChangedReloadingStrategy());
     }
 
     public static String get(String propertyName){

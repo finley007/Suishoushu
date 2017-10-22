@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 
 public class FIConstants {
 
+    public static final String IMAGE_TYPE_GIF = "gif";
+    public static final String IMAGE_TYPE_PNG = "png";
+    public static final String IMAGE_TYPE_JPG = "jpg";
+
     public static final String DEFAULT_CHARSET = "utf-8";
 
     public static final String SYSTEM = "system";
@@ -28,6 +32,8 @@ public class FIConstants {
         public String getValue() {
             return value;
         }
+
+        public Short getShortValue() {return Short.valueOf(value); }
     }
 
     public enum InvoiceStatus {

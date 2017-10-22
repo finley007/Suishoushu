@@ -1,6 +1,7 @@
 package com.changyi.fi.component.invoice;
 
 import com.changyi.fi.component.invoice.request.PutInvoiceRequest;
+import com.changyi.fi.component.invoice.response.CreateQRCodeResponse;
 import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import com.changyi.fi.component.invoice.response.UpdateInvoiceResponse;
@@ -63,10 +64,10 @@ public class InvoiceResource {
             }
             PutInvoiceRequest req = new Payload(request).as(PutInvoiceRequest.class);
             String id = invoiceService.updateInvoice(req, Token.touch(token).getOpenId());
-            LogUtil.info(this.getClass(), "Complete addInvoice service call");
+            LogUtil.info(this.getClass(), "Complete updateInvoice service call");
             return Response.status(Response.Status.OK).entity(new UpdateInvoiceResponse(id).build()).build();
         } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Run addInvoice endpoint error: ", t);
+            LogUtil.error(this.getClass(), "Run updateInvoice endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
@@ -93,6 +94,26 @@ public class InvoiceResource {
     }
 
     @GET
+    @Path("/qrcode/{id}")
+    @Produces("application/json")
+    @Secured
+    public Response createQRCode(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
+        try {
+            LogUtil.info(this.getClass(), "Enter createQRCode endpoint for invoice id: " + id);
+            if (StringUtils.isEmpty(id)) {
+                throw new NullRequestException("Invoice id is required");
+            }
+            String qrCodeUrl = invoiceService.createCRCode(Token.touch(token).getOpenId(), id);
+            LogUtil.info(this.getClass(), "Complete createQRCode service call");
+            return Response.status(Response.Status.OK).entity(new CreateQRCodeResponse(qrCodeUrl).build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run createQRCode endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @GET
     @Path("/{id}")
     @Produces("application/json")
     @Secured
@@ -112,6 +133,5 @@ public class InvoiceResource {
             return Response.status(Response.Status.OK).entity(res).build();
         }
     }
-
 
 }

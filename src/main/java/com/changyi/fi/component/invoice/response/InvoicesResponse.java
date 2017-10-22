@@ -38,13 +38,13 @@ public class InvoicesResponse extends NormalResponse {
 
     private List<VInvoicePO> invoiceList;
 
-    public String build() {
-        String content = new Payload(this).setExclusion(new ExclusionStrategy() {
+    protected String createContent() {
+        return new Payload(this).setExclusion(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
                 return f.getName().contains("createTime")
                         || f.getName().contains("openId")
-                            || f.getName().contains("modifyTime");
+                        || f.getName().contains("modifyTime");
             }
 
             @Override
@@ -52,11 +52,6 @@ public class InvoicesResponse extends NormalResponse {
                 return false;
             }
         }).from(this.getClass());
-        if (!"{}".equals(content)) {
-            return "{ \"returnCode\" : \"0\", \"content\" : " + content + " }";
-        } else {
-            return "{ \"returnCode\" : \"0\", \"content\" : \"success\" }";
-        }
     }
 
 }

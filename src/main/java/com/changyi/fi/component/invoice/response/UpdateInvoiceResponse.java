@@ -22,12 +22,4 @@ public class UpdateInvoiceResponse extends NormalResponse {
 
     private String id;
 
-    public String build() {
-        String content = new Payload(this).from(this.getClass());
-        if (!"{}".equals(content)) {
-            return "{ \"returnCode\" : \"0\", \"content\" : " + content + " }";
-        } else {
-            return "{ \"returnCode\" : \"0\", \"content\" : \"success\" }";
-        }
-    }
 }

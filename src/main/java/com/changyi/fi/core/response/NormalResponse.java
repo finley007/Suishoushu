@@ -7,8 +7,12 @@ import com.changyi.fi.core.Payload;
  */
 public class NormalResponse implements Response {
 
+    protected String createContent() {
+        return new Payload(this).from(this.getClass());
+    }
+
     public String build() {
-        String content = new Payload(this).from(this.getClass());
+        String content = this.createContent();
         if (!"{}".equals(content)) {
             return "{ \"returnCode\" : \"0\", \"content\" : " + content + " }";
         } else {
