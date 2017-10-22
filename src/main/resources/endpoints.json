@@ -152,6 +152,20 @@
       }
     },
     {
+      "name": "发票二维码生成接口",
+      "url": "https://www.suishoushu.com/suishoushu/invoice/qrcode/{id}",
+      "head" : "auth-token",
+      "method": "GET",
+      "request": "id:发票id",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "url": "二维码链接"
+        },
+        "message": "错误信息"
+      }
+    },
+    {
       "name": "用户信息更新接口",
       "url": "https://www.suishoushu.com/suishoushu/customer/",
       "head" : "auth-token",
