@@ -259,7 +259,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new PermissionDeniedException("The invoice does not belong to current user");
         }
         File file = this.getQRCodeImg(invoice);
-        modifyPermission(file);
         return HTTPCaller.createUrl(QRCODE_INVOICE_URL, new Object[]{file.getName()});
     }
 
@@ -274,7 +273,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             return file;
         } else {
             LogUtil.debug(this.getClass(), "Create new file: " + fileName);
-            return QRCodeUtils.createQRCode(content, fileName);
+            file = QRCodeUtils.createQRCode(content, fileName);
+            modifyPermission(file);
+            return file;
         }
     }
 
