@@ -32,7 +32,7 @@ import java.util.List;
 @Service("invoiceService")
 public class InvoiceServiceImpl implements InvoiceService {
 
-    private static final String SEPARATOR = "\n\r";
+    private static final String SEPARATOR = "\r\n";
     private static final String QRCODE_INVOICE_URL = "qrcode.invoice.url";
 
     private InvoiceDao invoiceDao;
@@ -267,6 +267,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         String content = createCRCodeContent(invoice);
         String fileName = this.createQRCodeImgName(content);
         LogUtil.debug(this.getClass(), "Obtain QRCode image: " + fileName);
+        LogUtil.debug(this.getClass(), "QRcode content: " + content);
         File file = QRCodeUtils.getQRCode(fileName);
         if ( file != null && file.exists()) {
             LogUtil.debug(this.getClass(), "Return exist file: " + fileName);
