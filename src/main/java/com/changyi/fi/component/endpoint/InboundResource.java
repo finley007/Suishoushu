@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -24,7 +25,7 @@ public class InboundResource {
 
     @GET
     @Path("/detail")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response inboundDetail(@Context HttpServletRequest req) {
         try {
             LogUtil.info(this.getClass(), "Enter inboundDetail endpoint");

@@ -21,7 +21,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.FileInputStream;
 
 /**
  * Created by rongb on 2016/12/26.
@@ -36,8 +35,8 @@ public class InvoiceResource {
 
     @GET
     @Path("/invoices")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response listInvoices(@HeaderParam(Token.KEY) String token) {
         try {
@@ -54,8 +53,8 @@ public class InvoiceResource {
     }
 
     @PUT
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response updateInvoice(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
@@ -77,7 +76,7 @@ public class InvoiceResource {
 
     @DELETE
     @Path("/{id}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         try {
@@ -119,7 +118,7 @@ public class InvoiceResource {
 
     @GET
     @Path("/{id}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response getInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         try {

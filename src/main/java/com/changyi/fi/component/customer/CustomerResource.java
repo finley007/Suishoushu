@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Component
@@ -25,8 +26,8 @@ public class CustomerResource {
     private CustomerService customerService;
 
     @PUT
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response updateCustomer(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {

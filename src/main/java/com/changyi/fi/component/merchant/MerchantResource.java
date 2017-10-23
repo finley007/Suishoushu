@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Component
@@ -28,8 +29,8 @@ public class MerchantResource {
 
     @POST
     @Path("/validate")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response validate(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
@@ -50,8 +51,8 @@ public class MerchantResource {
 
     @POST
     @Path("/doRecord")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response doRecord(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {

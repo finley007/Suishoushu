@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -30,7 +31,7 @@ public class EnterpriseResource {
     private EnterpriseService enterpriseService;
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response matchEnterprise(@HeaderParam(Token.KEY) String token, @QueryParam("key") String key) {
         try {
@@ -50,8 +51,8 @@ public class EnterpriseResource {
     }
 
     @POST
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Response getEnterprise(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {

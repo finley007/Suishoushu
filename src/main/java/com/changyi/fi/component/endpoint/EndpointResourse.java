@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 public class EndpointResourse {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listEndpoints() {
         LogUtil.info(this.getClass(), "Enter listEndpoints endpoint");
         try {
