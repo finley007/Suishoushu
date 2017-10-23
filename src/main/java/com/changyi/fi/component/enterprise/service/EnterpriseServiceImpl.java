@@ -104,7 +104,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             for (Map map : external) {
                 if (map.get(FIELD_NAME) != null && !set.contains(map.get(FIELD_NAME).toString())
                         && map.get(FIELD_NAME).toString().contains(key) //有的接口不在名称中查询关键字，因此加这个过滤
-                            && count > 0 ) {
+                            && !"-".equals(map.get(FIELD_CREDITCODE).toString()) //启信宝有的统一社会编码不公开
+                                && count > 0 ) {
                     result.add(map);
                     count --;
                 }
