@@ -32,7 +32,7 @@ import java.util.List;
 @Service("invoiceService")
 public class InvoiceServiceImpl implements InvoiceService {
 
-    private static final String SEPARATOR = "\r";
+    private static final String SEPARATOR = "\n\r";
     private static final String QRCODE_INVOICE_URL = "qrcode.invoice.url";
 
     private InvoiceDao invoiceDao;
