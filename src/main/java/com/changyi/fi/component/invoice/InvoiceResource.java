@@ -1,7 +1,6 @@
 package com.changyi.fi.component.invoice;
 
 import com.changyi.fi.component.invoice.request.PutInvoiceRequest;
-import com.changyi.fi.component.invoice.response.CreateQRCodeResponse;
 import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import com.changyi.fi.component.invoice.response.UpdateInvoiceResponse;
@@ -19,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * Created by rongb on 2016/12/26.
@@ -95,21 +97,22 @@ public class InvoiceResource {
 
     @GET
     @Path("/qrcode/{id}")
-    @Produces("application/json")
-    @Secured
-    public Response createQRCode(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public byte[] createQRCode(@PathParam("id") String id) {
         try {
             LogUtil.info(this.getClass(), "Enter createQRCode endpoint for invoice id: " + id);
             if (StringUtils.isEmpty(id)) {
                 throw new NullRequestException("Invoice id is required");
             }
-            String qrCodeUrl = invoiceService.createCRCode(Token.touch(token).getOpenId(), id);
+            File file = invoiceService.createCRCode(id);
             LogUtil.info(this.getClass(), "Complete createQRCode service call");
-            return Response.status(Response.Status.OK).entity(new CreateQRCodeResponse(qrCodeUrl).build()).build();
+            FileInputStream inputStream = new FileInputStream(file);
+            byte [] buffer = new byte[inputStream.available()];
+            inputStream.read(buffer);
+            return buffer;
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run createQRCode endpoint error: ", t);
-            String res = ExceptionHandler.handle(t);
-            return Response.status(Response.Status.OK).entity(res).build();
+            return new byte[0];
         }
     }
 

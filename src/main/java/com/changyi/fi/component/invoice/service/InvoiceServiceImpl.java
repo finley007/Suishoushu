@@ -249,17 +249,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
-    public String createCRCode(String openId, String invoiceId) throws Exception {
-        LogUtil.info(this.getClass(), "Execute createCRCode service for: " + openId);
+    public File createCRCode(String invoiceId) throws Exception {
+        LogUtil.info(this.getClass(), "Execute createCRCode service for: " + invoiceId);
         VInvoicePO invoice = this.invoiceDao.getInvoiceById(invoiceId);
         if (invoice == null) {
             throw new InvoiceNotFoundException("The invoice: " + invoiceId + " does not existed");
         }
-        if (!openId.equals(invoice.getOpenId())) {
-            throw new PermissionDeniedException("The invoice does not belong to current user");
-        }
-        File file = this.getQRCodeImg(invoice);
-        return HTTPCaller.createUrl(QRCODE_INVOICE_URL, new Object[]{file.getName()});
+        return this.getQRCodeImg(invoice);
     }
 
     private File getQRCodeImg(VInvoicePO invoice) throws Exception {
