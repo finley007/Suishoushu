@@ -98,7 +98,7 @@ public class InvoiceResource {
     @GET
     @Path("/qrcode/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public byte[] createQRCode(@PathParam("id") String id) {
+    public Response createQRCode(@PathParam("id") String id) {
         try {
             LogUtil.info(this.getClass(), "Enter createQRCode endpoint for invoice id: " + id);
             if (StringUtils.isEmpty(id)) {
@@ -106,13 +106,14 @@ public class InvoiceResource {
             }
             File file = invoiceService.createCRCode(id);
             LogUtil.info(this.getClass(), "Complete createQRCode service call");
-            FileInputStream inputStream = new FileInputStream(file);
-            byte [] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer);
-            return buffer;
+            return Response
+                    .ok(file)
+                    .header("Content-disposition","attachment;filename=" + file.getName())
+                    .header("Cache-Control", "no-cache").build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run createQRCode endpoint error: ", t);
-            return new byte[0];
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
         }
     }
 
