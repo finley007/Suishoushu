@@ -296,29 +296,13 @@ public class InvoiceServiceImpl implements InvoiceService {
             if (StringUtils.isNotBlank(invoice.getPhone())) {
                 result.append(invoice.getPhone());
             }
-        } else {
-            if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()){
-                result.append(invoice.getCorpName().trim());
-                result.append(SEPARATOR);
-                result.append(invoice.getCreditCode().trim());
-                result.append(SEPARATOR);
-                if (StringUtils.isNotBlank(invoice.getAddress())) {
-                    result.append(invoice.getAddress() + " ");
-                }
-                if (StringUtils.isNotBlank(invoice.getPhone())) {
-                    result.append(invoice.getPhone());
-                }
-                result.append(SEPARATOR);
-                if (StringUtils.isNotBlank(invoice.getBank())) {
-                    result.append(invoice.getBank() + " ");
-                }
-                if (StringUtils.isNotBlank(invoice.getBankAcct())) {
-                    result.append(invoice.getBankAcct());
-                }
-            } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()) {
-                result.append(invoice.getCorpName().trim());
-                result.append(SEPARATOR);
-                result.append(invoice.getCreditCode().trim());
+        } else if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()
+                || FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
+            result.append(invoice.getCorpName().trim());
+            result.append(SEPARATOR);
+            result.append(invoice.getCreditCode().trim());
+            if (StringUtils.isNotBlank(invoice.getBank())
+                    && StringUtils.isNotBlank(invoice.getBankAcct())) {
                 result.append(SEPARATOR);
                 if (StringUtils.isNotBlank(invoice.getAddress())) {
                     result.append(invoice.getAddress() + " ");
@@ -327,12 +311,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                     result.append(invoice.getPhone());
                 }
                 result.append(SEPARATOR);
-                if (StringUtils.isNotBlank(invoice.getBank())) {
-                    result.append(invoice.getBank() + " ");
-                }
-                if (StringUtils.isNotBlank(invoice.getBankAcct())) {
-                    result.append(invoice.getBankAcct());
-                }
+                result.append(invoice.getBank() + " ");
+                result.append(invoice.getBankAcct());
             }
         }
         return result.toString();
