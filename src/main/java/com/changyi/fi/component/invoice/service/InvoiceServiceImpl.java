@@ -308,6 +308,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                 if (StringUtils.isNotBlank(invoice.getPhone())) {
                     result.append(invoice.getPhone());
                 }
+                result.append(SEPARATOR);
+                if (StringUtils.isNotBlank(invoice.getBank())) {
+                    result.append(invoice.getBank() + " ");
+                }
+                if (StringUtils.isNotBlank(invoice.getBankAcct())) {
+                    result.append(invoice.getBankAcct());
+                }
             } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()) {
                 result.append(invoice.getCorpName().trim());
                 result.append(SEPARATOR);
