@@ -13,6 +13,7 @@ public class QRCodeUtils {
     private static final String PROP_QRCODE_PATH = "qrcode.invoice.path";
     private static final String PROP_QRCODE_FILETYPE = "qrcode.invoice.filetype";
     private static final String PROP_QRCODE_USER_GROUP = "qrcode.invoice.user.group";
+    private static final String PROP_QRCODE_SIZE = "qrcode.invoice.size";
 
     private static String charset;
 
@@ -22,11 +23,14 @@ public class QRCodeUtils {
 
     private static String userGroup;
 
+    private static int size = 316;
+
     static {
         charset = Properties.get(PROP_QRCODE_CHARSET);
         path = Properties.get(PROP_QRCODE_PATH);
         type = getType(Properties.get(PROP_QRCODE_FILETYPE));
         userGroup = Properties.get(PROP_QRCODE_USER_GROUP);
+        size = Integer.valueOf(Properties.get(PROP_QRCODE_SIZE));
     }
 
     private static ImageType getType(String type) {
@@ -44,7 +48,7 @@ public class QRCodeUtils {
 
     public static File createQRCode(String content, String fileName) throws Exception {
         File file = new File(path + "/" + fileName + "." + type.toString().toLowerCase());
-        QRCode.from(content).withCharset(charset).to(type).writeTo(new FileOutputStream(file));
+        QRCode.from(content).withSize(size, size).withCharset(charset).to(type).writeTo(new FileOutputStream(file));
         return file;
     }
 

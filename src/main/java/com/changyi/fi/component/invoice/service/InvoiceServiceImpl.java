@@ -291,19 +291,41 @@ public class InvoiceServiceImpl implements InvoiceService {
         StringBuffer result = new StringBuffer();
         if (FIConstants.InvoiceType.Person.getShortValue() == invoice.getType()) {
             result.append(invoice.getUserName().trim());
+            result.append(SEPARATOR);
+            result.append(SEPARATOR);
+            if (StringUtils.isNotBlank(invoice.getPhone())) {
+                result.append(invoice.getPhone());
+            }
         } else {
             if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()){
                 result.append(invoice.getCorpName().trim());
                 result.append(SEPARATOR);
                 result.append(invoice.getCreditCode().trim());
-            } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
+                result.append(SEPARATOR);
+                if (StringUtils.isNotBlank(invoice.getAddress())) {
+                    result.append(invoice.getAddress() + " ");
+                }
+                if (StringUtils.isNotBlank(invoice.getPhone())) {
+                    result.append(invoice.getPhone());
+                }
+            } else if (FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()) {
                 result.append(invoice.getCorpName().trim());
                 result.append(SEPARATOR);
                 result.append(invoice.getCreditCode().trim());
                 result.append(SEPARATOR);
-                result.append(invoice.getAddress().trim());
+                if (StringUtils.isNotBlank(invoice.getAddress())) {
+                    result.append(invoice.getAddress() + " ");
+                }
+                if (StringUtils.isNotBlank(invoice.getPhone())) {
+                    result.append(invoice.getPhone());
+                }
                 result.append(SEPARATOR);
-                result.append(invoice.getBankAcct().trim());
+                if (StringUtils.isNotBlank(invoice.getBank())) {
+                    result.append(invoice.getBank() + " ");
+                }
+                if (StringUtils.isNotBlank(invoice.getBankAcct())) {
+                    result.append(invoice.getBankAcct());
+                }
             }
         }
         return result.toString();
