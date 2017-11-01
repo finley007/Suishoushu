@@ -1,12 +1,11 @@
 package com.changyi.fi.external.enterprise.qxb;
 
-import com.changyi.fi.core.CommonUtil;
-import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.Payload;
-import com.changyi.fi.core.RegexMatches;
+import com.changyi.fi.core.*;
+import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.qxb.hmac.HmacManager;
@@ -77,7 +76,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 Map<String, String> map = new HashMap<String, String>();
                 map.put(getCreditCodeKey(), m.get(QXBMatchResponse.FIELD_ID));
                 map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
-                map.put(getSourceKey(), SOURCE_QXB);
+                map.put(getSourceKey(), getAPIKey());
                 result.add(map);
             }
         }

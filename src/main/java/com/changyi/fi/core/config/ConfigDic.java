@@ -11,9 +11,6 @@ import java.util.Map;
 
 public class ConfigDic implements Dictionary<String> {
 
-    public static final String MERCHANT_VALID_DISTANCE = "MERCHANT_VALID_DISTANCE";
-    public static final String MERCHANT_VALIDATION_TOGGLE = "MERCHANT_VALIDATION_TOGGLE";
-
     public static final String NAME = "config";
 
     private static final String FIELD_CODE = "code";

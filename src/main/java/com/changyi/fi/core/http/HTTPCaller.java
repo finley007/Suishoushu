@@ -36,7 +36,6 @@ public class HTTPCaller {
 
     private static final String PROXY_IP = "proxy.ip";
     private static final String PROXY_PORT = "proxy.port";
-    private static final String HTTP_TIMEOUT = "HTTP_TIMEOUT";
 
     private static int RESPONSE_CODE_200 = 200;
     private static int RESPONSE_CODE_300 = 300;
@@ -248,7 +247,7 @@ public class HTTPCaller {
     }
 
     private void initTimeout(HttpRequestBase requestBase) {
-        this.timeout = ConfigManager.getIntegerParameter(HTTP_TIMEOUT, timeout);
+        this.timeout = ConfigManager.getIntegerParameter(ConfigManager.HTTP_TIMEOUT, timeout);
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(this.timeout).setConnectionRequestTimeout(this.timeout)
                 .setSocketTimeout(this.timeout).build();
@@ -257,7 +256,7 @@ public class HTTPCaller {
 
     private HttpClient getHttpClient() {
         HttpClientBuilder builder = HttpClients.custom();
-        if (this.getProxy() != null) {
+        if (this.getProxy() != null && ConfigManager.getBooleanParameter(ConfigManager.HTTP_PROXY_TOGGLE, true)) {
             builder.setProxy(this.getProxy());
         }
         if (this.getCookieStore() != null) {

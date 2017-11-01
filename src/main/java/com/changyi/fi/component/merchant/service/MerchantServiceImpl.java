@@ -51,9 +51,9 @@ public class MerchantServiceImpl implements MerchantService {
 
 
     private Boolean isValidate(MerchantPO merchantPO, Position position) throws Exception {
-        if (ConfigManager.getBooleanParameter(ConfigDic.MERCHANT_VALIDATION_TOGGLE, true)) {
+        if (ConfigManager.getBooleanParameter(ConfigManager.MERCHANT_VALIDATION_TOGGLE, true)) {
             LogUtil.info(this.getClass(), "Merchant validation is on");
-            Double validDistance = ConfigManager.getDoubleParameter(ConfigDic.MERCHANT_VALID_DISTANCE, 50d);
+            Double validDistance = ConfigManager.getDoubleParameter(ConfigManager.MERCHANT_VALID_DISTANCE, 50d);
             Position merchantPosition = new Position(merchantPO.getLongitude().doubleValue(), merchantPO.getLetitude().doubleValue());
             LogUtil.debug(this.getClass(), "Merchant position: " + merchantPosition.toJson());
             LogUtil.debug(this.getClass(), "Current position: " + position.toJson());

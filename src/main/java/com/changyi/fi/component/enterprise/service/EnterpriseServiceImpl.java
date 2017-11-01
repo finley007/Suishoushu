@@ -7,14 +7,11 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.maintain.MaintainManager;
-import com.changyi.fi.core.notification.EmailNotifier;
-import com.changyi.fi.core.notification.INotifier;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +22,6 @@ import java.util.*;
  */
 @Service("enterpriseService")
 public class EnterpriseServiceImpl implements EnterpriseService {
-
-    private static final String ENTERPRISE_EXTERNAL_SERVICE_TOGGLE = "ENTERPRISE_EXTERNAL_SERVICE_TOGGLE";
-    private static final String ENTERPRISE_MATCH_RESULT_LENGTH = "ENTERPRISE_MATCH_RESULT_LENGTH";
-    private static final String ENTERPRISE_EXTERNAL_SERVICE_IMPL = "ENTERPRISE_EXTERNAL_SERVICE_IMPL";
 
     private static final String DB_FIELD_CREDITCODE = "CREDITCODE";
     private static final String DB_FIELD_NAME = "NAME";
@@ -49,20 +42,25 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public MatchEnterpriseResponse matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute matchEnterprise service for key: " + key);
         //从内部获取
-        List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ENTERPRISE_MATCH_RESULT_LENGTH, 20));
-        if (internalList.size() == 0) {
-            LogUtil.info(this.getClass(), "No match enterprise for key: " + key + " in DB");
-        }
+        List<Map> internalList = queryEnterpriseInDB(key);
         //从外部获取企业信息开关
         List<Map> externalList = new ArrayList<Map>();
-        if (ConfigManager.getBooleanParameter(ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
+        if (ConfigManager.getBooleanParameter(ConfigManager.ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
-            externalList = matchEnterpriseByExternalAPI(key);
+            externalList = queryEnterpriseByExternalAPI(key);
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }
 
-    public List<Map> matchEnterpriseByExternalAPI(String key) throws Exception {
+    public List<Map> queryEnterpriseInDB(String key) {
+        List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ConfigManager.ENTERPRISE_MATCH_RESULT_LENGTH, 20));
+        if (internalList.size() == 0) {
+            LogUtil.info(this.getClass(), "No match enterprise for key: " + key + " in DB");
+        }
+        return internalList;
+    }
+
+    public List<Map> queryEnterpriseByExternalAPI(String key) throws Exception {
         List<Map> externalList = new ArrayList<Map>();
         ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl();
         if (enterpriseAPIService == null) {
@@ -76,7 +74,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             LogUtil.error(this.getClass(), "Error with external API: " + enterpriseAPIService.getAPIKey() + " and will disable it", e);
             EnternalEnterpriseAPIManager.disableAPI(enterpriseAPIService.getAPIKey());
             MaintainManager.criticalErrorNotify(FIConstants.NotifyMethod.Email, e);
-            return matchEnterpriseByExternalAPI(key);
+            return queryEnterpriseByExternalAPI(key);
         }
         if (externalList.size() == 0) {
             LogUtil.info(this.getClass(),"No match enterprise with key: " + key + " by using external API");
@@ -85,7 +83,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     private List combineResult(List<Map> internal, List<Map> external, String key) {
-        int count = ConfigManager.getIntegerParameter(ENTERPRISE_MATCH_RESULT_LENGTH, 20);
+        int count = ConfigManager.getIntegerParameter(ConfigManager.ENTERPRISE_MATCH_RESULT_LENGTH, 20);
         List<Map> result = new ArrayList<Map>();
         if (internal.size() > 0) {
             Set<String> set = new HashSet<String>();
