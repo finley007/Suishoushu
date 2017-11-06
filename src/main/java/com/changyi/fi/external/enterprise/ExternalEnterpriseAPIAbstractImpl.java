@@ -1,16 +1,14 @@
 package com.changyi.fi.external.enterprise;
 
-import com.changyi.fi.core.CtxProvider;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.http.HTTPParser;
-import com.changyi.fi.core.job.Job;
 import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.dao.InvoiceDao;
+import com.changyi.fi.job.EnterpriseSyncJob;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.ThreadContext;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +29,6 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     private static final String FIELD_NAME = "name";
     private static final String FIELD_SOURCE = "source";
-    private static final String FIELD_CREDIT_CODE = "creditCode";
 
     private static final String INVALID_CREDITCODE = "-";
 
@@ -64,7 +61,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
     }
 
     protected String getCreditCodeKey() {
-        return FIELD_CREDIT_CODE;
+        return FIConstants.FIELD_CREDIT_CODE;
     }
 
     protected String getNameKey() {
@@ -76,23 +73,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
     }
 
     protected void syncEnterpriseInfo(final List<Map> enterpriseList, final String bean) {
-        JobManager.addJob(new Job(FIConstants.JobType.EnterpriseSync) {
-            public void run() {
-                //初始化后台日志
-                ThreadContext.put(LogUtil.LOG_ROUTE_KEY, LogUtil.DAEMON_THREAD);
-                LogUtil.info(this.getClass(), "Sync enterprise info");
-                ExternalEnterpriseAPIService service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(bean);
-                for (Map map : enterpriseList) {
-                    String creditCode = map.get(FIELD_CREDIT_CODE).toString();
-                    try {
-                        service.getEnterpriseByCode(creditCode);
-                    } catch (Exception e) {
-                        LogUtil.error(this.getClass(), "Sync enterprise: " + creditCode + " error", e);
-                    }
-                }
-                ThreadContext.remove(LogUtil.LOG_ROUTE_KEY);
-            }
-        });
+        JobManager.addJob(new EnterpriseSyncJob(FIConstants.JobType.EnterpriseSync, enterpriseList, bean));
     }
 
     protected void saveEnterpriseInfo(EnterprisePO po) {

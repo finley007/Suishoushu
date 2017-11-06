@@ -20,6 +20,8 @@ public class FIConstants {
     public static final String DATE_PATTERN1 = "\\d{4}年\\d{1,2}月\\d{1,2}日";
     public static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
 
+    public static final String FIELD_CREDIT_CODE = "creditCode";
+
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
 
