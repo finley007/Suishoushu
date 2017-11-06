@@ -78,10 +78,13 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         if (response != null && response.getData() != null && response.getData().size() > 0) {
             for (Map<String, String> m : response.getData()) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put(getCreditCodeKey(), m.get(QXBMatchResponse.FIELD_ID));
-                map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
-                map.put(getSourceKey(), getAPIKey());
-                result.add(map);
+                    String creditCode = m.get(QXBMatchResponse.FIELD_ID);
+                if (isValidCreditCode(creditCode)) {
+                    map.put(getCreditCodeKey(), creditCode);
+                    map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
+                    map.put(getSourceKey(), getAPIKey());
+                    result.add(map);
+                }
             }
         }
         if (result.size() > 0 && ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
