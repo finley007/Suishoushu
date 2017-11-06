@@ -7,7 +7,7 @@
         <Routing name="Routing">
             <Routes pattern="$${ctx:ROUTINGKEY}">
                 <Route key="daemon">
-                    <RollingFile name="Daemon" fileName="/home/suishoushu/log/daemon.log"
+                    <RollingFile name="daemon" fileName="/home/suishoushu/log/daemon.log"
                                  filePattern="/home/suishoushu/log/daemon_%d{yyyy-MM-dd}.log" append="true">
                         <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
                         <Policies>
@@ -24,7 +24,7 @@
                     </RollingFile>
                 </Route>
                 <Route key="$${ctx:ROUTINGKEY}">
-                    <RollingFile fileName="/home/suishoushu/log/suishoushu.log"
+                    <RollingFile name="suishoushu" fileName="/home/suishoushu/log/suishoushu.log"
                                  filePattern="/home/suishoushu/log/suishoushu_%d{yyyy-MM-dd}.log" append="true">
                         <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
                         <Policies>

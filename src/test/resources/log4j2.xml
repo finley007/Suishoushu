@@ -17,7 +17,7 @@
         </Routing>
     </Appenders>
     <Loggers>
-        <Root level="debug" additivity="false">
+        <Root level="debug">
             <AppenderRef ref="Routing"/>
         </Root>
     </Loggers>
