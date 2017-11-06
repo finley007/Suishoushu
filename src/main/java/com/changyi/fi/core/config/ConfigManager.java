@@ -14,6 +14,7 @@ public class ConfigManager {
     public static final String HTTP_TIMEOUT = "HTTP_TIMEOUT";
     public static final String MERCHANT_VALID_DISTANCE = "MERCHANT_VALID_DISTANCE";
     public static final String MERCHANT_VALIDATION_TOGGLE = "MERCHANT_VALIDATION_TOGGLE";
+    public static final String JOB_THREAD_POOL_SIZE = "JOB_THREAD_POOL_SIZE";
 
     public static String getParameter(String name) {
         if (DictionaryManager.dic(ConfigDic.NAME) == null) {

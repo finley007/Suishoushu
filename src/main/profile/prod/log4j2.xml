@@ -4,7 +4,22 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %msg%n"/>
         </Console>
-        <RollingFile name="RollingFile" fileName="/home/suishoushu/log/suishoushu.log"
+        <RollingFile name="Application" fileName="/home/suishoushu/log/suishoushu.log"
+                     filePattern="/home/suishoushu/log/suishoushu_%d{yyyy-MM-dd}.log" append="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <!-- 基于时间的触发策略。该策略主要是完成周期性的log文件封存工作。有两个参数：
+                    interval，integer型，指定两次封存动作之间的时间间隔。单位:以日志的命名精度来确定单位，
+                        比如yyyy-MM-dd-HH 单位为小时，yyyy-MM-dd-HH-mm 单位为分钟
+                    modulate，boolean型，说明是否对封存时间进行调制。若modulate=true，
+                        则封存时间将以0点为边界进行偏移计算。比如，modulate=true，interval=4hours，
+                        那么假设上次封存日志的时间为03:00，则下次封存日志的时间为04:00，
+                        之后的封存时间依次为08:00，12:00，16:00
+                 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="Daemon" fileName="/home/suishoushu/log/daemon.log"
                      filePattern="/home/suishoushu/log/suishoushu_%d{yyyy-MM-dd}.log" append="true">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
             <Policies>
@@ -23,7 +38,10 @@
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Application"/>
         </Root>
+        <Daemon level="debug">
+            <AppenderRef ref="Daemon" />
+        </Daemon>
     </Loggers>
 </Configuration>

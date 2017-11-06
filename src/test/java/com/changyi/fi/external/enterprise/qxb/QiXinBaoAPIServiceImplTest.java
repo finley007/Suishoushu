@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.regex.Pattern;
 
 /**
  * QiXinBaoAPIServiceImpl Tester.
@@ -83,6 +84,18 @@ public class QiXinBaoAPIServiceImplTest {
             //"jGFBjtzGv8zjtGPPztEBclPjzzzGGjGFBjtzGv8zjtGPPztEBclPjzzzGG"
             System.out.println(method.invoke(api, "/api/user/login"));
             System.out.println(method.invoke(api, "/api/search/suggestion?key=%E4%B8%87%E8%BE%BE"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIsValidCreditCode() throws Exception {
+        try {
+            Pattern pattern = Pattern.compile("-");
+            if (pattern.matcher("1231234-12312").matches()) {
+                System.out.println("yes");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,10 +1,21 @@
 package com.changyi.fi.external.enterprise;
 
+import com.changyi.fi.core.CtxProvider;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.http.HTTPParser;
+import com.changyi.fi.core.job.Job;
+import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.redis.RedisClient;
+import com.changyi.fi.dao.InvoiceDao;
+import com.changyi.fi.model.EnterprisePO;
+import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
@@ -17,9 +28,18 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         RedisClient.del(REDIS_QXB_SESSION_TOKEN);
     }
 
-    private static final String FIELD_CREDIT_CODE = "creditCode";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_SOURCE = "source";
+    private static final String FIELD_CREDIT_CODE = "creditCode";
+
+    private static final String INVALID_CREDITCODE = "-";
+
+    protected InvoiceDao invoiceDao;
+
+    @Autowired(required = true)
+    public void setInvoiceDao(InvoiceDao invoiceDao) {
+        this.invoiceDao = invoiceDao;
+    }
 
     abstract protected String login() throws Exception;
 
@@ -54,7 +74,44 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         return FIELD_SOURCE;
     }
 
+    protected void syncEnterpriseInfo(final List<Map> enterpriseList, final String bean) {
+        JobManager.addJob(new Job(FIConstants.JobType.EnterpriseSync) {
+            public void run() {
+                //初始化后台日志
+                LogUtil.initLocalLogger();
+                LogUtil.info(this.getClass(), "Sync enterprise info");
+                ExternalEnterpriseAPIService service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(bean);
+                for (Map map : enterpriseList) {
+                    String creditCode = map.get(FIELD_CREDIT_CODE).toString();
+                    try {
+                        service.getEnterpriseByCode(creditCode);
+                    } catch (Exception e) {
+                        LogUtil.error(this.getClass(), "Sync enterprise: " + creditCode + " error", e);
+                    }
+                }
+            }
+        });
+    }
 
+    protected void saveEnterpriseInfo(EnterprisePO po) {
+        EnterprisePO existedPo = invoiceDao.getEnterpriseById(po.getCreditCode());
+        if (existedPo == null) {
+            this.invoiceDao.insertEnterprise(po);
+        } else {
+            this.invoiceDao.updateEnterpriseSelective(po);
+        }
+    }
+
+    protected boolean isValidCreditCode(String creditCode) {
+        if (StringUtils.isBlank(creditCode)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(INVALID_CREDITCODE);
+        if (pattern.matcher(creditCode).matches()) {
+            return false;
+        }
+        return true;
+    }
 
     public class StringResultHandler implements HTTPParser.ResultHandler<String> {
         public String handleResult(Elements elems) {

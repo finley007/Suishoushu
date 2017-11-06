@@ -1,6 +1,7 @@
 package com.changyi.fi.core.listener;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.token.Token;
 
 import javax.servlet.ServletContextEvent;
@@ -15,7 +16,7 @@ public class ServletListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0) {
         LogUtil.info(this.getClass(), "Tomcat stop...");
         saveSession();
-
+        JobManager.shutdown();
     }
 
     private void saveSession() {
@@ -30,6 +31,7 @@ public class ServletListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         LogUtil.info(this.getClass(), "Tomcat start...");
         initSession();
+        JobManager.init();
     }
 
     private void initSession() {

@@ -3,6 +3,7 @@ package com.changyi.fi.external.enterprise.tyc;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
+import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
@@ -87,6 +88,9 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
                 result.add(map);
             }
         }
+        if (result.size() > 0 && ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
+            syncEnterpriseInfo(result, "tianYanChaAPIService");
+        }
         return result;
     }
 
@@ -110,7 +114,9 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         LogUtil.info(this.getClass(), "TianYanCha API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         HTTPParser parser = new HTTPParser(html);
-        return createEnterprisePO(parser, url);
+        EnterprisePO po = createEnterprisePO(parser, url);
+        saveEnterpriseInfo(po);
+        return po;
     }
 
     private EnterprisePO createEnterprisePO(HTTPParser parser, String url) {

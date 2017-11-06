@@ -1,11 +1,13 @@
 package com.changyi.fi.external.enterprise.qxb;
 
-import com.changyi.fi.core.*;
+import com.changyi.fi.core.CommonUtil;
+import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.Payload;
+import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
-import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.qxb.hmac.HmacManager;
@@ -19,10 +21,12 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
 
+@Service("qiXinBaoAPIService")
 public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
     private static final String SOURCE_QXB = "qxb";
@@ -80,6 +84,9 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 result.add(map);
             }
         }
+        if (result.size() > 0 && ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
+            syncEnterpriseInfo(result, "qiXinBaoAPIService");
+        }
         return result;
     }
 
@@ -121,7 +128,9 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "QiXinBao API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(this.createCookieStore()).doGet();
         HTTPParser parser = new HTTPParser(html);
-        return createEnterprisePO(parser, url);
+        EnterprisePO po = createEnterprisePO(parser, url);
+        saveEnterpriseInfo(po);
+        return po;
     }
 
     private EnterprisePO createEnterprisePO(HTTPParser parser, String url) {
