@@ -90,6 +90,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
                         LogUtil.error(this.getClass(), "Sync enterprise: " + creditCode + " error", e);
                     }
                 }
+                ThreadContext.remove(LogUtil.LOG_ROUTE_KEY);
             }
         });
     }
