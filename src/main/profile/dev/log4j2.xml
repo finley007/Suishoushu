@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
+        <Routing name="Routing">
+            <Routers pattern="$${ctx:ROUTINGKEY}">
+                <Route key="daemon">
+                    <File fileName="/home/suishoushu-dev/log/daemon.log" append="false">
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+                    </File>
+                </Route>
+                <Route key="$${ctx:ROUTINGKEY}">
+                    <File fileName="/home/suishoushu-dev/log/suishoushu.log" append="false">
+                    <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+                    </File>
+                </Route>
+            </Routers>
+        </Routing>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %msg%n"/>
         </Console>
-        <File name="Application" fileName="/home/suishoushu-dev/log/suishoushu.log" append="false">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
-        </File>
-        <File name="Daemon" fileName="/home/suishoushu-dev/log/daemon.log" append="false">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
-        </File>
     </Appenders>
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="Application"/>
+            <AppenderRef ref="Routing"/>
         </Root>
-        <Daemaon level="debug">
-            <AppenderRef ref="Daemon"/>
-        </Daemaon>
     </Loggers>
 </Configuration>

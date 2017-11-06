@@ -10,6 +10,7 @@ import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.ThreadContext;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -78,7 +79,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         JobManager.addJob(new Job(FIConstants.JobType.EnterpriseSync) {
             public void run() {
                 //初始化后台日志
-                LogUtil.initLocalLogger();
+                ThreadContext.put(LogUtil.LOG_ROUTE_KEY, LogUtil.DAEMON_THREAD);
                 LogUtil.info(this.getClass(), "Sync enterprise info");
                 ExternalEnterpriseAPIService service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(bean);
                 for (Map map : enterpriseList) {
