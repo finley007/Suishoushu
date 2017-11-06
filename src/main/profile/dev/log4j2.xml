@@ -8,8 +8,8 @@
                         <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
                     </File>
                 </Route>
-                <Route name="suishoushu" key="$${ctx:ROUTINGKEY}">
-                    <File fileName="/home/suishoushu-dev/log/suishoushu.log">
+                <Route key="$${ctx:ROUTINGKEY}">
+                    <File name="suishoushu" fileName="/home/suishoushu-dev/log/suishoushu.log">
                     <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
                     </File>
                 </Route>
