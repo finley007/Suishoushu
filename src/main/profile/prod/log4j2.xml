@@ -5,7 +5,7 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %msg%n"/>
         </Console>
         <Routing name="Routing">
-            <Routers pattern="$${ctx:ROUTINGKEY}">
+            <Routes pattern="$${ctx:ROUTINGKEY}">
                 <Route key="daemon">
                     <RollingFile name="Daemon" fileName="/home/suishoushu/log/daemon.log"
                                  filePattern="/home/suishoushu/log/daemon_%d{yyyy-MM-dd}.log" append="true">
@@ -40,7 +40,7 @@
                         </Policies>
                     </RollingFile>
                 </Route>
-            </Routers>
+            </Routes>
         </Routing>
     </Appenders>
     <Loggers>
