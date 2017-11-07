@@ -32,7 +32,7 @@ public class TimerAspect {
         }
     }
 
-    @Around(value="execution(* com.changyi.fi.component..*.*(..)) && @annotation(timer)", argNames="timer")
+    @Around(value="execution(* com.changyi.fi.component..*Resource.*(..)) && @annotation(timer)", argNames="timer")
     public Object caculateTimeCostForResource(ProceedingJoinPoint aPoint, Timer timer) {
         Date start = new Date();
         try {

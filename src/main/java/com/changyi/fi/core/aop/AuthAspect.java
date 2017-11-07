@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 @Order(2)
 public class AuthAspect {
 
-    @Around(value="execution(* com.changyi.fi.component..*.*(..)) && @annotation(secured)", argNames="secured")
+    @Around(value="execution(* com.changyi.fi.component..*Resource.*(..)) && @annotation(secured)", argNames="secured")
     public Response authToken(ProceedingJoinPoint aPoint, Secured secured) {
         LogUtil.debug(this.getClass(), "Auth aspect handle for component: {} and service: {}",
                 new Object[]{aPoint.getTarget().getClass(), aPoint.getSignature()});

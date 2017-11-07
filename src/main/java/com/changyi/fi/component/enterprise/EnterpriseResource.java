@@ -34,6 +34,7 @@ public class EnterpriseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response matchEnterprise(@HeaderParam(Token.KEY) String token, @QueryParam("key") String key) {
         try {
             LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);

@@ -30,6 +30,7 @@ public class ServletListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
         LogUtil.info(this.getClass(), "Tomcat start...");
+        String env = System.getProperty("env");
         initSession();
         JobManager.init();
     }
