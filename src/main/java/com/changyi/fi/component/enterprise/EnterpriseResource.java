@@ -7,6 +7,7 @@ import com.changyi.fi.component.enterprise.service.EnterpriseService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.GetEnterpriseFailException;
@@ -54,6 +55,7 @@ public class EnterpriseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response getEnterprise(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
             LogUtil.info(this.getClass(), "Enter getEnterprise endpint for request: " + request);
@@ -71,7 +73,5 @@ public class EnterpriseResource {
             return Response.status(Response.Status.OK).entity(res).build();
         }
     }
-
-
 
 }

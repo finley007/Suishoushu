@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Component
 @Aspect
+@Order(2)
 public class ValidationAspect {
 
     @Before(value="execution(* com.changyi.fi..*Service.*(..)) && @annotation(validate)", argNames="validate")

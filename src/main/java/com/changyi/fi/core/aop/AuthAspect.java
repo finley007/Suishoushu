@@ -8,6 +8,7 @@ import com.changyi.fi.exception.UnauthorizedException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.Response;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
  */
 @Component
 @Aspect
+@Order(2)
 public class AuthAspect {
 
     @Around(value="execution(* com.changyi.fi.component..*.*(..)) && @annotation(secured)", argNames="secured")

@@ -4,6 +4,7 @@ import com.changyi.fi.component.enterprise.request.GetEnterpriseRequest;
 import com.changyi.fi.component.enterprise.response.GetEnterpriseResponse;
 import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.maintain.MaintainManager;
@@ -39,6 +40,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         this.invoiceDao = invoiceDao;
     }
 
+    @Timer
     public MatchEnterpriseResponse matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute matchEnterprise service for key: " + key);
         //从内部获取
@@ -52,7 +54,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }
 
-    public List<Map> queryEnterpriseInDB(String key) {
+    private List<Map> queryEnterpriseInDB(String key) {
         List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ConfigManager.ENTERPRISE_MATCH_RESULT_LENGTH, 20));
         if (internalList.size() == 0) {
             LogUtil.info(this.getClass(), "No match enterprise for key: " + key + " in DB");
@@ -60,7 +62,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         return internalList;
     }
 
-    public List<Map> queryEnterpriseByExternalAPI(String key) throws Exception {
+    private List<Map> queryEnterpriseByExternalAPI(String key) throws Exception {
         List<Map> externalList = new ArrayList<Map>();
         ExternalEnterpriseAPIService enterpriseAPIService = EnternalEnterpriseAPIManager.getAPIImpl();
         if (enterpriseAPIService == null) {
@@ -120,6 +122,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Validate
+    @Timer
     public GetEnterpriseResponse getEnterprise(GetEnterpriseRequest req) throws Exception {
         LogUtil.info(this.getClass(), "Execute getEnterprise service");
         if (SOURCE_INTERNAL.equals(req.getSource())) {
