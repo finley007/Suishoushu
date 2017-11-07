@@ -37,11 +37,11 @@ public class TimerAspect {
         Date start = new Date();
         try {
             Object retValue = aPoint.proceed();
-            LogUtil.info(aPoint.getTarget().getClass(), "Service {} cost time: " + (new Date().getTime() - start.getTime())
+            LogUtil.info(aPoint.getTarget().getClass(), "Endpoint {} cost time: " + (new Date().getTime() - start.getTime())
                     , new Object[]{aPoint.getSignature()});
             return retValue;
         } catch (Throwable throwable) {
-            LogUtil.error(this.getClass(), "Execute service error: ", throwable);
+            LogUtil.error(this.getClass(), "Execute endpoint error: ", throwable);
             String res = ExceptionHandler.handle(throwable);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(res).build();
         }

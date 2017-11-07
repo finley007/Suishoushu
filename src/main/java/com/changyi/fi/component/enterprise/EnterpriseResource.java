@@ -58,7 +58,7 @@ public class EnterpriseResource {
     @Timer
     public Response getEnterprise(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
-            LogUtil.info(this.getClass(), "Enter getEnterprise endpint for request: " + request);
+            LogUtil.info(this.getClass(), "Enter getEnterprise endpoint for request: " + request);
             if (StringUtils.isEmpty(request)) {
                 throw new NullRequestException("Request is required");
             }

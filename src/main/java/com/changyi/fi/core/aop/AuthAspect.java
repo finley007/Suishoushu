@@ -33,7 +33,7 @@ public class AuthAspect {
                 try {
                     return (Response) aPoint.proceed();
                 } catch (Throwable throwable) {
-                    LogUtil.error(this.getClass(), "Execute service error: ", throwable);
+                    LogUtil.error(this.getClass(), "Execute endpoint error: ", throwable);
                 }
             }
         }
