@@ -3,6 +3,7 @@ package com.changyi.fi.external.enterprise.tyc;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
@@ -71,6 +72,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return SOURCE_TYC;
     }
 
+    @Timer
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling TianYanCha API, key: " + key);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_URL_TEMPLATE, new Object[]{key});
@@ -84,15 +86,12 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
                 Map<String, String> map = new HashMap<String, String>();
                 String creditCode = m.get(TYCMatchResponse.FIELD_ID);
                 if (this.isValidCreditCode(creditCode)) {
-                    map.put(getCreditCodeKey(), creditCode);
-                    map.put(getNameKey(), handleName(m.get(TYCMatchResponse.FIELD_NAME)));
+                    map.put(FIConstants.FIELD_CREDIT_CODE, creditCode);
+                    map.put(FIConstants.FIELD_NAME, handleName(m.get(TYCMatchResponse.FIELD_NAME)));
                     map.put(getSourceKey(), getAPIKey());
                     result.add(map);
                 }
             }
-        }
-        if (result.size() > 0 && ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
-            syncEnterpriseInfo(result, "tianYanChaAPIService");
         }
         return result;
     }
@@ -111,6 +110,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return url.substring(url.lastIndexOf("/") + 1);
     }
 
+    @Timer
     public EnterprisePO getEnterpriseByCode(String code) throws Exception {
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling TianYanCha API, code: " + code);
         String url = HTTPCaller.createUrl(TIANYANCHA_SEARCH_GET_TEMPLATE, new Object[]{code});

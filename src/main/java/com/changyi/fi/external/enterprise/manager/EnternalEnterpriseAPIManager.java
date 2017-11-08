@@ -7,6 +7,7 @@ import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.qxb.QiXinBaoAPIServiceImpl;
 import com.changyi.fi.external.enterprise.tyc.TianYanChaAPIServiceImpl;
 import com.changyi.fi.core.model.SysServImplPO;
+import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -51,9 +52,9 @@ public class EnternalEnterpriseAPIManager {
             return null;
         }
         if (API_TIANYANCHA.equals(key)) {
-            return new TianYanChaAPIServiceImpl();
+            return (ExternalEnterpriseAPIService)CtxProvider.getContext().getBean(FIConstants.BEAN_TIANYANCHA_API_SERVICE);
         } if (API_QIXINBAO.equals(key)) {
-            return new QiXinBaoAPIServiceImpl();
+            return (ExternalEnterpriseAPIService)CtxProvider.getContext().getBean(FIConstants.BEAN_QIXINBAO_API_SERVICE);
         } else {
             throw new UnknowEnterpriseAPIImpl("The enterprise service implements: " + key + "is unknown");
         }

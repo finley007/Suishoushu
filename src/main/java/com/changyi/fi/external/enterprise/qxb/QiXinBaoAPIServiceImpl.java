@@ -4,6 +4,7 @@ import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
@@ -65,6 +66,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         return SOURCE_QXB;
     }
 
+    @Timer
     public List<Map> matchEnterprise(String key) throws Exception {
         LogUtil.info(this.getClass(), "Execute enterprise search service by calling QiXinBao API, key: " + key);
         String encodedKey = CommonUtil.urlEncode(key, FIConstants.DEFAULT_CHARSET);
@@ -80,15 +82,12 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
                 Map<String, String> map = new HashMap<String, String>();
                     String creditCode = m.get(QXBMatchResponse.FIELD_ID);
                 if (isValidCreditCode(creditCode)) {
-                    map.put(getCreditCodeKey(), creditCode);
-                    map.put(getNameKey(), m.get(QXBMatchResponse.FIELD_NAME));
+                    map.put(FIConstants.FIELD_CREDIT_CODE, creditCode);
+                    map.put(FIConstants.FIELD_NAME, m.get(QXBMatchResponse.FIELD_NAME));
                     map.put(getSourceKey(), getAPIKey());
                     result.add(map);
                 }
             }
-        }
-        if (result.size() > 0 && ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
-            syncEnterpriseInfo(result, "qiXinBaoAPIService");
         }
         return result;
     }
@@ -125,6 +124,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         }
     }
 
+    @Timer
     public EnterprisePO getEnterpriseByCode(String code) throws Exception {
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling QiXinBao API, code: " + code);
         String url = HTTPCaller.createUrl(QIXINBAO_DETAIL_TEMPLATE, new Object[]{code});

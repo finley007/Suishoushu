@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 
 public class FIConstants {
 
+    public static final String BEAN_TIANYANCHA_API_SERVICE = "tianYanChaAPIService";
+    public static final String BEAN_QIXINBAO_API_SERVICE = "qiXinBaoAPIService";
+
     public static final String IMAGE_TYPE_GIF = "gif";
     public static final String IMAGE_TYPE_PNG = "png";
     public static final String IMAGE_TYPE_JPG = "jpg";
@@ -21,6 +24,7 @@ public class FIConstants {
     public static final String NUMBER_PATTERN = "\\d+\\.?\\d+";
 
     public static final String FIELD_CREDIT_CODE = "creditCode";
+    public static final String FIELD_NAME = "name";
 
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");

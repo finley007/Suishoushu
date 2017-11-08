@@ -27,7 +27,6 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         RedisClient.del(REDIS_QXB_SESSION_TOKEN);
     }
 
-    private static final String FIELD_NAME = "name";
     private static final String FIELD_SOURCE = "source";
 
     private static final String INVALID_CREDITCODE = "-";
@@ -60,20 +59,8 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         return token;
     }
 
-    protected String getCreditCodeKey() {
-        return FIConstants.FIELD_CREDIT_CODE;
-    }
-
-    protected String getNameKey() {
-        return FIELD_NAME;
-    }
-
     protected String getSourceKey() {
         return FIELD_SOURCE;
-    }
-
-    protected void syncEnterpriseInfo(final List<Map> enterpriseList, final String bean) {
-        JobManager.addJob(new EnterpriseSyncJob(FIConstants.JobType.EnterpriseSync, enterpriseList, bean));
     }
 
     protected void saveEnterpriseInfo(EnterprisePO po) {

@@ -7,10 +7,12 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.maintain.MaintainManager;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
+import com.changyi.fi.job.EnterpriseSyncJob;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         if (ConfigManager.getBooleanParameter(ConfigManager.ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
             externalList = queryEnterpriseByExternalAPI(key);
+        }
+        //后台自动同步
+        if (ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
+            JobManager.addJob(new EnterpriseSyncJob(FIConstants.JobType.EnterpriseSync, key));
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }
