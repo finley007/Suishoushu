@@ -2,18 +2,13 @@ package com.changyi.fi.external.enterprise;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.http.HTTPParser;
-import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.dao.InvoiceDao;
-import com.changyi.fi.job.EnterpriseSyncJob;
 import com.changyi.fi.model.EnterprisePO;
-import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {

@@ -4,7 +4,6 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.annotation.Timer;
-import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;

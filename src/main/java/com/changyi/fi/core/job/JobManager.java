@@ -1,6 +1,7 @@
 package com.changyi.fi.core.job;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
 
 public class JobManager {
@@ -11,7 +12,7 @@ public class JobManager {
         LogUtil.info(JobManager.class, "Init job service by impl: ExecutorService");
         try {
             jobService = new ExecutorServiceImpl();
-            int threadNum = ConfigManager.getIntegerParameter(ConfigManager.JOB_THREAD_POOL_SIZE, 1);
+            int threadNum = ConfigManager.getIntegerParameter(ConfigDic.JOB_THREAD_POOL_SIZE, 1);
             jobService.init(new JobEnv(threadNum));
         } catch (Exception e) {
             LogUtil.error(JobManager.class, "Init job service error", e);

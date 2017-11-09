@@ -2,19 +2,12 @@ package com.changyi.fi.core.config;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.tool.DictionaryManager;
+import com.changyi.fi.vo.AccountPair;
 import org.apache.commons.lang3.StringUtils;
 
-public class ConfigManager {
+import java.util.List;
 
-    public static final String ENTERPRISE_EXTERNAL_SERVICE_TOGGLE = "ENTERPRISE_EXTERNAL_SERVICE_TOGGLE";
-    public static final String ENTERPRISE_MATCH_RESULT_LENGTH = "ENTERPRISE_MATCH_RESULT_LENGTH";
-    public static final String ENTERPRISE_EXTERNAL_SERVICE_IMPL = "ENTERPRISE_EXTERNAL_SERVICE_IMPL";
-    public static final String SYNC_ENTERPRISE_WHEN_MATCH = "SYNC_ENTERPRISE_WHEN_MATCH";
-    public static final String HTTP_PROXY_TOGGLE = "HTTP_PROXY_TOGGLE";
-    public static final String HTTP_TIMEOUT = "HTTP_TIMEOUT";
-    public static final String MERCHANT_VALID_DISTANCE = "MERCHANT_VALID_DISTANCE";
-    public static final String MERCHANT_VALIDATION_TOGGLE = "MERCHANT_VALIDATION_TOGGLE";
-    public static final String JOB_THREAD_POOL_SIZE = "JOB_THREAD_POOL_SIZE";
+public class ConfigManager {
 
     public static String getParameter(String name) {
         if (DictionaryManager.dic(ConfigDic.NAME) == null) {
@@ -55,6 +48,13 @@ public class ConfigManager {
         } else {
             return defaultValue;
         }
+    }
+
+    public static List<AccountPair> getQXBAccountList() {
+        if (DictionaryManager.dic(ConfigDic.NAME) == null) {
+            DictionaryManager.register(ConfigDic.NAME, new ConfigDic());
+        }
+        return ((ConfigDic) DictionaryManager.dic(ConfigDic.NAME)).getQXBAccountList();
     }
 
 

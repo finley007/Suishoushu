@@ -1,6 +1,7 @@
 package com.changyi.fi.core.http;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.util.FIConstants;
@@ -247,7 +248,7 @@ public class HTTPCaller {
     }
 
     private void initTimeout(HttpRequestBase requestBase) {
-        this.timeout = ConfigManager.getIntegerParameter(ConfigManager.HTTP_TIMEOUT, timeout);
+        this.timeout = ConfigManager.getIntegerParameter(ConfigDic.HTTP_TIMEOUT, timeout);
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(this.timeout).setConnectionRequestTimeout(this.timeout)
                 .setSocketTimeout(this.timeout).build();
@@ -256,7 +257,7 @@ public class HTTPCaller {
 
     private HttpClient getHttpClient() {
         HttpClientBuilder builder = HttpClients.custom();
-        if (this.getProxy() != null && ConfigManager.getBooleanParameter(ConfigManager.HTTP_PROXY_TOGGLE, true)) {
+        if (this.getProxy() != null && ConfigManager.getBooleanParameter(ConfigDic.HTTP_PROXY_TOGGLE, true)) {
             builder.setProxy(this.getProxy());
         }
         if (this.getCookieStore() != null) {

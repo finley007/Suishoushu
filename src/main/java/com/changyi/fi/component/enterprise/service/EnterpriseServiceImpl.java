@@ -6,6 +6,7 @@ import com.changyi.fi.component.enterprise.response.MatchEnterpriseResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.annotation.Validate;
+import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.maintain.MaintainManager;
@@ -49,19 +50,19 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         List<Map> internalList = queryEnterpriseInDB(key);
         //从外部获取企业信息开关
         List<Map> externalList = new ArrayList<Map>();
-        if (ConfigManager.getBooleanParameter(ConfigManager.ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
+        if (ConfigManager.getBooleanParameter(ConfigDic.ENTERPRISE_EXTERNAL_SERVICE_TOGGLE, false)) {
             //从外部获取
             externalList = queryEnterpriseByExternalAPI(key);
         }
         //后台自动同步
-        if (ConfigManager.getBooleanParameter(ConfigManager.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
+        if (ConfigManager.getBooleanParameter(ConfigDic.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
             JobManager.addJob(new EnterpriseSyncJob(FIConstants.JobType.EnterpriseSync, key));
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }
 
     private List<Map> queryEnterpriseInDB(String key) {
-        List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ConfigManager.ENTERPRISE_MATCH_RESULT_LENGTH, 20));
+        List<Map> internalList = this.invoiceDao.matchEnterpriseList(key, ConfigManager.getIntegerParameter(ConfigDic.ENTERPRISE_MATCH_RESULT_LENGTH, 20));
         if (internalList.size() == 0) {
             LogUtil.info(this.getClass(), "No match enterprise for key: " + key + " in DB");
         }
@@ -91,7 +92,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     private List combineResult(List<Map> internal, List<Map> external, String key) {
-        int count = ConfigManager.getIntegerParameter(ConfigManager.ENTERPRISE_MATCH_RESULT_LENGTH, 20);
+        int count = ConfigManager.getIntegerParameter(ConfigDic.ENTERPRISE_MATCH_RESULT_LENGTH, 20);
         List<Map> result = new ArrayList<Map>();
         if (internal.size() > 0) {
             Set<String> set = new HashSet<String>();

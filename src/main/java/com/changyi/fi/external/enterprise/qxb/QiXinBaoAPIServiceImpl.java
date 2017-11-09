@@ -5,9 +5,11 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.annotation.Timer;
+import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
+import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -17,6 +19,7 @@ import com.changyi.fi.external.enterprise.qxb.request.QXBLoginRequest;
 import com.changyi.fi.external.enterprise.qxb.response.QXBMatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
+import com.changyi.fi.vo.AccountPair;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
@@ -61,6 +64,8 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     private static final String DATE_FORMAT_REGEX = "(\\d{4})年(\\d{1,2})月(\\d{1,2})日";
     private static final String DATE_FORMAT_REPLACEMENT = "$1-$2-$3";
+
+    private static AccountPicker accountPicker = new AccountPicker();
 
     public String getAPIKey() {
         return SOURCE_QXB;
@@ -189,9 +194,15 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     }
 
     protected String login() throws Exception {
+        String username = Properties.get(QIXINBAO_USERNAME);
+        String password = Properties.get(QIXINBAO_PASSWORD);
+        return this.login(username, password);
+    }
+
+    private String login(String account, String password) throws Exception {
         String url = HTTPCaller.createUrl(QIXINBAO_LOGIN_TEMPLATE, new Object[]{});
         LogUtil.info(this.getClass(), "Login QiXinBao: " + url);
-        String request = createLoginRequest();
+        String request = createLoginRequest(account, password);
         LogUtil.debug(this.getClass(), "Login request: " + request);
         CookieStore cookie = new BasicCookieStore();
         String res = new HTTPCaller(url).setHeader(this.createLoginHeader()).setCookieStore(cookie).doPost(request);
@@ -219,9 +230,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         return header;
     }
 
-    private String createLoginRequest() {
-        String username = Properties.get(QIXINBAO_USERNAME);
-        String password = Properties.get(QIXINBAO_PASSWORD);
+    private String createLoginRequest(String username, String password) {
         QXBLoginRequest request = new QXBLoginRequest(username, password);
         return new Payload(request).from(QXBLoginRequest.class);
     }
@@ -245,6 +254,49 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         return result;
     }
 
+    protected String getToken(String tokenName) throws Exception {
+        String token = RedisClient.get(tokenName);
+        AccountPair accountPair = accountPicker.nextAccount(StringUtils.isBlank(token));
+        if (accountPair != null) {
+            LogUtil.debug(this.getClass(), "QiXinBao will login again");
+            token = this.login(accountPair.getAccount(), accountPair.getPassword());
+            LogUtil.debug(this.getClass(), "Obtain token: " + token);
+            if (getTokenExpiredTime() > 0) {
+                RedisClient.setex(tokenName, getTokenExpiredTime(), token);
+            } else {
+                RedisClient.set(tokenName, token);
+            }
+        } else {
+            LogUtil.debug(this.getClass(),"Use session token: " + tokenName + " and value: " + token);
+        }
+        return token;
+    }
 
+    private static class AccountPicker {
+
+        private int currentIndex = 0;
+
+        private int times = 0;
+
+        public synchronized AccountPair nextAccount(boolean required) {
+            int maxTimes = ConfigManager.getIntegerParameter(ConfigDic.QXB_ACCOUNT_USE_TIME, 10);
+            List<AccountPair> accountList = ConfigManager.getQXBAccountList();
+            if (required) {
+                this.times = 0;
+                return accountList.get(this.currentIndex);
+            }
+            this.times++;
+            if (this.times == maxTimes) {
+                currentIndex++;
+                if (currentIndex == accountList.size()) {
+                    currentIndex = 0;
+                }
+                this.times = 0;
+                return accountList.get(this.currentIndex);
+            } else {
+                return null;
+            }
+        }
+    }
 
 }
