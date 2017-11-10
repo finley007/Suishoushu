@@ -5,12 +5,12 @@
             <Routes pattern="$${ctx:ROUTINGKEY}">
                 <Route key="daemon">
                     <File name="daemon" fileName="/home/suishoushu-dev/log/daemon.log">
-                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %M - %msg%xEx%n"/>
                     </File>
                 </Route>
                 <Route key="$${ctx:ROUTINGKEY}">
                     <File name="suishoushu" fileName="/home/suishoushu-dev/log/suishoushu.log">
-                    <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+                    <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %M - %msg%xEx%n"/>
                     </File>
                 </Route>
             </Routes>

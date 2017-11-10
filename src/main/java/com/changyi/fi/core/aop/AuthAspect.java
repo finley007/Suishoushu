@@ -35,6 +35,8 @@ public class AuthAspect {
                 } catch (Throwable throwable) {
                     LogUtil.error(this.getClass(), "Execute endpoint error: ", throwable);
                 }
+            } else {
+                LogUtil.debug(this.getClass(), "Token key: " + tokenKey + " not found");
             }
         }
         String res = ExceptionHandler.handle(new UnauthorizedException("Unauthorized error"));
