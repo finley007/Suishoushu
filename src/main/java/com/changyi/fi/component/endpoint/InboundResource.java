@@ -1,6 +1,7 @@
 package com.changyi.fi.component.endpoint;
 
 import com.changyi.fi.component.endpoint.response.InboundDetailResponse;
+import com.changyi.fi.component.endpoint.service.InboundService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
@@ -11,6 +12,7 @@ import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -23,6 +25,9 @@ import javax.ws.rs.core.Response;
 @Component
 @Path("/inbound")
 public class InboundResource {
+
+    @Resource
+    private InboundService inboundService;
 
     @GET
     @Path("/detail")
@@ -83,6 +88,22 @@ public class InboundResource {
             return Response.status(Response.Status.OK).entity("success").build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run enterprise_api weight update error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("/parameter")
+    @Timer
+    public Response updateSysParameter(@FormParam("code") String code, @FormParam("value") String value) {
+        try {
+            LogUtil.info(this.getClass(), "Enter system parameter update endpoint");
+            inboundService.updateParameterByCode(code, value);
+            LogUtil.info(this.getClass(), "Complete system parameter update endpoint handle");
+            return Response.status(Response.Status.OK).entity("success").build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run system parameter update error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

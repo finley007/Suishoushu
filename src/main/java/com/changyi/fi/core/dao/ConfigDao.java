@@ -1,8 +1,6 @@
 package com.changyi.fi.core.dao;
 
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -21,5 +19,8 @@ public interface ConfigDao {
     @Result(javaType = Map.class)
     @Options(useCache = true)
     public List<Map> getSysParameter();
+
+    @Update("UPDATE sys_parameter T SET T.value = #{value} where T.code = #{code}")
+    public void updateParameterByCode(@Param(("code")) String code, @Param(("value")) String value);
 
 }
