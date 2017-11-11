@@ -34,6 +34,8 @@ public class TimerAspect {
 
     @Around(value="execution(* com.changyi.fi.component..*Resource.*(..)) && @annotation(timer)", argNames="timer")
     public Object caculateTimeCostForResource(ProceedingJoinPoint aPoint, Timer timer) {
+        //入口处初始化日志序列号
+        LogUtil.intSquence();
         Date start = new Date();
         try {
             Object retValue = aPoint.proceed();

@@ -1,6 +1,9 @@
 package com.changyi.fi.core;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.ThreadContext;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.junit.Test;
@@ -12,6 +15,7 @@ import sun.rmi.runtime.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collection;
 
 /**
  * LogUtil Tester.
@@ -40,10 +44,18 @@ public class LogUtilTest {
     public void testInfoForClzInfo() throws Exception {
 //TODO: Test goes here...
 //        ThreadContext.put(LogUtil.LOG_ROUTE_KEY, LogUtil.DAEMON_THREAD);
-        System.out.println(ThreadContext.get(LogUtil.LOG_ROUTE_KEY));
         Logger logger  =  LoggerFactory.getLogger(this.getClass());
-        logger.debug("test");
-        LogUtil.info(this.getClass(), "TEST");
+        logger.debug("debug");
+        logger.info("test");
+        Collection<org.apache.logging.log4j.core.Logger> notCurrentLoggerCollection = org.apache.logging.log4j.core.LoggerContext.getContext(false).getLoggers();
+        Collection<org.apache.logging.log4j.core.Logger> currentLoggerCollection = org.apache.logging.log4j.core.LoggerContext.getContext().getLoggers();
+        Collection<org.apache.logging.log4j.core.Logger> loggerCollection = notCurrentLoggerCollection;
+        loggerCollection.addAll(currentLoggerCollection);
+        for (org.apache.logging.log4j.core.Logger log :loggerCollection){
+            log.setLevel(org.apache.logging.log4j.Level.toLevel("debug"));
+        }
+        logger.debug("debug");
+        logger.info("test");
     }
 
     /**

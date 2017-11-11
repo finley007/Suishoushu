@@ -2,14 +2,14 @@
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%X{SEQUENCE}] %msg%xEx%n"/>
         </Console>
         <Routing name="Routing">
             <Routes pattern="$${ctx:ROUTINGKEY}">
                 <Route key="daemon">
                     <RollingFile name="daemon" fileName="/home/suishoushu/log/daemon.log"
                                  filePattern="/home/suishoushu/log/daemon_%d{yyyy-MM-dd}.log" append="true">
-                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %M - %msg%xEx%n"/>
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%X{SEQUENCE}] %msg%xEx%n"/>
                         <Policies>
                             <!-- 基于时间的触发策略。该策略主要是完成周期性的log文件封存工作。有两个参数：
                                 interval，integer型，指定两次封存动作之间的时间间隔。单位:以日志的命名精度来确定单位，
@@ -26,7 +26,7 @@
                 <Route key="$${ctx:ROUTINGKEY}">
                     <RollingFile name="suishoushu" fileName="/home/suishoushu/log/suishoushu.log"
                                  filePattern="/home/suishoushu/log/suishoushu_%d{yyyy-MM-dd}.log" append="true">
-                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %M - %msg%xEx%n"/>
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%X{SEQUENCE}] %msg%xEx%n"/>
                         <Policies>
                             <!-- 基于时间的触发策略。该策略主要是完成周期性的log文件封存工作。有两个参数：
                                 interval，integer型，指定两次封存动作之间的时间间隔。单位:以日志的命名精度来确定单位，
@@ -44,7 +44,7 @@
         </Routing>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="Routing"/>
         </Root>

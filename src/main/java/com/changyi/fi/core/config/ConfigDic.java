@@ -25,6 +25,8 @@ public class ConfigDic implements Dictionary<String> {
     public static final String JOB_THREAD_POOL_SIZE = "JOB_THREAD_POOL_SIZE";
     public static final String QXB_ACCOUNT_LIST = "QXB_ACCOUNT_LIST";
     public static final String QXB_ACCOUNT_USE_TIME = "QXB_ACCOUNT_USE_TIME";
+    public static final String LOG_LEVEL = "LOG_LEVEL";
+
 
     public static final String NAME = "config";
 

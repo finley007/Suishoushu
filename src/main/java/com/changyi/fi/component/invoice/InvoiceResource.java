@@ -8,6 +8,7 @@ import com.changyi.fi.component.invoice.service.InvoiceService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.core.token.Token;
@@ -38,6 +39,7 @@ public class InvoiceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response listInvoices(@HeaderParam(Token.KEY) String token) {
         try {
             LogUtil.info(this.getClass(), "Enter invoices endpoint");
@@ -56,6 +58,7 @@ public class InvoiceResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response updateInvoice(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
             LogUtil.info(this.getClass(), "Enter updateInvoice endpoint");
@@ -78,6 +81,7 @@ public class InvoiceResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response deleteInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         try {
             LogUtil.info(this.getClass(), "Enter deleteInvoice endpoint for id: " + id);
@@ -97,6 +101,7 @@ public class InvoiceResource {
     @GET
     @Path("/qrcode/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Timer
     public Response createQRCode(@PathParam("id") String id) {
         try {
             LogUtil.info(this.getClass(), "Enter createQRCode endpoint for invoice id: " + id);
@@ -120,6 +125,7 @@ public class InvoiceResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response getInvoice(@HeaderParam(Token.KEY) String token, @PathParam("id") String id) {
         try {
             LogUtil.info(this.getClass(), "Enter getInvoice endpoint for id: " + id);

@@ -1,6 +1,7 @@
 package com.changyi.fi.component.endpoint;
 
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.tool.FileReader;
 import org.springframework.stereotype.Component;
@@ -14,10 +15,11 @@ import javax.ws.rs.core.Response;
 
 @Component
 @Path("/endpoints")
-public class EndpointResourse {
+public class EndpointResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Timer
     public Response listEndpoints() {
         LogUtil.info(this.getClass(), "Enter listEndpoints endpoint");
         try {

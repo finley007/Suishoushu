@@ -7,6 +7,7 @@ import com.changyi.fi.component.merchant.service.MerchantService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.core.token.Token;
@@ -32,6 +33,7 @@ public class MerchantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response validate(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
             LogUtil.info(this.getClass(), "Enter validate endpoint");
@@ -54,6 +56,7 @@ public class MerchantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response doRecord(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
             LogUtil.info(this.getClass(), "Enter doRecord endpoint");
@@ -74,6 +77,7 @@ public class MerchantResource {
     @POST
     @Path("/qrCode/{merchantId}")
     @Produces
+    @Timer
     public Response createQRCode(@PathParam("merchantId") String merchantId) {
         try {
             LogUtil.info(this.getClass(), "Enter createQRCode endpoint");

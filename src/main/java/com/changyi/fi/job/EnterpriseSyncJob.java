@@ -33,6 +33,7 @@ public class EnterpriseSyncJob extends Job {
 
     public void run() {
         //初始化后台日志
+        LogUtil.intSquence();
         ThreadContext.put(LogUtil.LOG_ROUTE_KEY, LogUtil.DAEMON_THREAD);
         LogUtil.info(this.getClass(), "Sync enterprise info");
         try {

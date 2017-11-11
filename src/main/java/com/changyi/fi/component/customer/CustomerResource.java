@@ -4,6 +4,7 @@ import com.changyi.fi.component.customer.service.CustomerService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.annotation.Secured;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.core.token.Token;
@@ -29,6 +30,7 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
+    @Timer
     public Response updateCustomer(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
             LogUtil.info(this.getClass(), "Enter updateCustomer endpoint");

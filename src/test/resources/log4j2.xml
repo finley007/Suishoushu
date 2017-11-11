@@ -15,10 +15,14 @@
                 </Route>
             </Routes>
         </Routing>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%X{SEQUENCE}] %msg%xEx%n"/>
+        </Console>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="INFO">
             <AppenderRef ref="Routing"/>
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>

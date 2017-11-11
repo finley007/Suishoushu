@@ -2,6 +2,7 @@ package com.changyi.fi.component.endpoint;
 
 import com.changyi.fi.component.endpoint.response.InboundDetailResponse;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.tool.DictionaryManager;
 import com.changyi.fi.exception.InvalidRequestException;
@@ -26,6 +27,7 @@ public class InboundResource {
     @GET
     @Path("/detail")
     @Produces(MediaType.APPLICATION_JSON)
+    @Timer
     public Response inboundDetail(@Context HttpServletRequest req) {
         try {
             LogUtil.info(this.getClass(), "Enter inboundDetail endpoint");
@@ -42,11 +44,13 @@ public class InboundResource {
 
     @POST
     @Path("/refresh")
+    @Timer
     public Response refresh() {
         try {
             LogUtil.info(this.getClass(), "Enter refresh endpoint");
             DictionaryManager.refresh();
             EnternalEnterpriseAPIManager.refresh();
+            LogUtil.refreshLogLevel();
             LogUtil.info(this.getClass(), "Complete refresh endpoint handle");
             return Response.status(Response.Status.OK).entity("success").build();
         } catch (Throwable t) {
@@ -58,6 +62,7 @@ public class InboundResource {
 
     @POST
     @Path("/enterprise_api/{id}/{weight}")
+    @Timer
     public Response updateEnterpriseExternalAPIWeight(@PathParam("id") String id, @PathParam("weight") String weight) {
         try {
             LogUtil.info(this.getClass(), "Enter enterprise_api weight update endpoint");
