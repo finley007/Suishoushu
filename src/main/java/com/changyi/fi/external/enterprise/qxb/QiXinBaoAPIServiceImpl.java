@@ -205,7 +205,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         String request = createLoginRequest(account, password);
         LogUtil.debug(this.getClass(), "Login request: " + request);
         CookieStore cookie = new BasicCookieStore();
-        String res = new HTTPCaller(url).setHeader(this.createLoginHeader()).setCookieStore(cookie).doPost(request);
+        String res = new HTTPCaller(url).setHeader(this.createLoginHeader(account)).setCookieStore(cookie).doPost(request);
         LogUtil.debug(this.getClass(), "Login response: " + res);
         List<Cookie> cookies = cookie.getCookies();
         if (cookies != null && cookies.size() > 0) {
@@ -219,13 +219,13 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         return "";
     }
 
-    private Map<String, String> createLoginHeader() {
+    private Map<String, String> createLoginHeader(String username) {
         Map<String, String> header = new HashMap<String, String>();
         header.put("X-Requested-With", "XMLHttpRequest");
         header.put("Referer", Properties.get(QIXINBAO_LOGIN_REFERER_URL));
         header.put("Host", Properties.get(QIXINBAO_HOST));
         header.put("Origin", Properties.get(QIXINBAO_MAINPAGE_URL));
-        String sign = Properties.get(QIXINBAO_LOGIN_SIGN + "." + Properties.get(QIXINBAO_USERNAME));
+        String sign = Properties.get(QIXINBAO_LOGIN_SIGN + "." + username);
         header.put("76eac628969e70eab74f", sign);
         return header;
     }
