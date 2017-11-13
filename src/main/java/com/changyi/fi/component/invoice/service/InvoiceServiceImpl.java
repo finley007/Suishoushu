@@ -265,13 +265,30 @@ public class InvoiceServiceImpl implements InvoiceService {
         VInvoicePO invoice = this.invoiceDao.getInvoiceById(id);
         if (invoice != null) {
             if (!invoice.getOpenId().equals(openId)) {
-                throw new AuthenticationFailedException("The current customer is not the invoice owner!");
+                return new GetInvoiceResponse(this.syncInvoice(openId, invoice));
             }
             return new GetInvoiceResponse(invoice);
         } else {
             LogUtil.info(this.getClass(), "The invoice doesn't exist");
             return new GetInvoiceResponse(null);
         }
+    }
+
+    //小程序分享同步发票
+    private VInvoicePO syncInvoice(String openId, VInvoicePO invoice) {
+        InvoicePO newPo = new InvoicePO();
+        newPo.setOpenId(openId);
+        newPo.setType(invoice.getType());
+        newPo.setIsDefault(invoice.getIsDefault());
+        newPo.setCreditCode(invoice.getCreditCode());
+        newPo.setStatus(invoice.getStatus());
+        newPo.setEmail(invoice.getEmail());
+        newPo.setPhone(invoice.getPhone());
+        newPo.setUserName(invoice.getUserName());
+        newPo.setCreateTime(new Date());
+        newPo.setModifyTime(new Date());
+        invoiceDao.insert(newPo);
+        return this.invoiceDao.getInvoiceById(newPo.getId().toString());
     }
 
     public File createCRCode(String invoiceId) throws Exception {
