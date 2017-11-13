@@ -63,7 +63,7 @@ public interface InvoiceDao {
     @Result(javaType = Map.class)
     List<Map> matchEnterpriseList(@Param("key") String key, @Param("count") int count);
 
-    @Select("SELECT id FROM inc_invoice T WHERE t.open_id = #{openId} and t.status = 0")
+    @Select("SELECT id FROM inc_invoice T WHERE T.open_id = #{openId} and T.status = 0")
     @Result(javaType = Integer.class)
     List<Integer> getInvoiceIdByCustomer(@Param("openId") String openId);
 }
