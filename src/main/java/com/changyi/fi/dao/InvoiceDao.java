@@ -23,6 +23,10 @@ public interface InvoiceDao {
     @Result(javaType = Long.class)
     public Long countEnterpriseByName(@Param("name") String name);
 
+    @Select("SELECT COUNT(*) FROM inc_invoice t WHERE t.open_id = #{openId} and t.status = 0")
+    @Result(javaType = Long.class)
+    public Long countInvoiceByCustomer(@Param("openId") String openId);
+
     @Select("SELECT id FROM inc_invoice t WHERE t.open_id = #{openId} and t.credit_code = #{creditCode} and t.status = 0")
     @Result(javaType = String.class)
     public String getInvoiceByEnterpriceId(@Param("openId") String openId, @Param("creditCode") String creditCode);
@@ -58,4 +62,8 @@ public interface InvoiceDao {
     @Select("SELECT credit_code AS CREDITCODE, name AS NAME FROM inc_enterprise T WHERE T.name LIKE CONCAT('%',#{key},'%') LIMIT 0, #{count}")
     @Result(javaType = Map.class)
     List<Map> matchEnterpriseList(@Param("key") String key, @Param("count") int count);
+
+    @Select("SELECT id FROM inc_invoice T WHERE t.open_id = #{openId} and t.status = 0")
+    @Result(javaType = Integer.class)
+    List<Integer> getInvoiceIdByCustomer(@Param("openId") String openId);
 }

@@ -80,6 +80,8 @@ public class FIConstants {
         private IsDefault(String value) { this.value = value; }
 
         public String getValue() { return value; }
+
+        public Short getShortValue() { return Short.valueOf(this.value); }
     }
 
     public enum NotifyMethod {

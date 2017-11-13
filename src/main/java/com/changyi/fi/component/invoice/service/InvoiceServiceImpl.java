@@ -6,12 +6,10 @@ import com.changyi.fi.component.invoice.response.InvoicesResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.encrypt.EncryptManager;
-import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.exception.AuthenticationFailedException;
 import com.changyi.fi.exception.InvoiceNotFoundException;
-import com.changyi.fi.exception.PermissionDeniedException;
 import com.changyi.fi.model.EnterpriseHistoryPO;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.model.InvoicePO;
@@ -89,11 +87,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private String createNewInvoice(PutInvoiceRequest request, String openId) throws Exception {
+        long count = invoiceDao.countInvoiceByCustomer(openId);
         if (FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
             InvoicePO po = new InvoicePO();
             po.setOpenId(openId);
             po.setType(Short.valueOf(request.getType()));
-            po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            if (count == 0) {
+                po.setIsDefault(Short.valueOf(FIConstants.IsDefault.True.getValue()));
+            } else {
+                po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            }
             po.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
             po.setUserName(request.getName());
             po.setPhone(request.getPhone());
@@ -108,7 +111,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoicePO ipo = new InvoicePO();
             ipo.setOpenId(openId);
             ipo.setType(Short.valueOf(request.getType()));
-            ipo.setIsDefault(Short.valueOf(request.getIsDefault()));
+            if (count == 0) {
+                ipo.setIsDefault(Short.valueOf(FIConstants.IsDefault.True.getValue()));
+            } else {
+                ipo.setIsDefault(Short.valueOf(request.getIsDefault()));
+            }
             ipo.setCreditCode(request.getCreditCode());
             ipo.setStatus(FIConstants.InvoiceStatus.Normal.getValue());
             ipo.setCreateTime(new Date());
@@ -119,11 +126,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private void updateExistedInvoice(PutInvoiceRequest request, String openId) throws Exception {
+        long count = invoiceDao.countInvoiceByCustomer(openId);
         if (FIConstants.InvoiceType.Person.getValue().equals(request.getType())) {
             InvoicePO po = new InvoicePO();
             po.setId(Integer.valueOf(request.getId()));
             po.setType(Short.valueOf(request.getType()));
-            po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            if (count == 1) {
+                po.setIsDefault(Short.valueOf(FIConstants.IsDefault.True.getValue()));
+            } else {
+                po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            }
             po.setUserName(request.getName());
             po.setPhone(request.getPhone());
             po.setEmail(request.getEmail());
@@ -136,7 +148,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoicePO po = new InvoicePO();
             po.setId(Integer.valueOf(request.getId()));
             po.setType(Short.valueOf(request.getType()));
-            po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            if (count == 1) {
+                po.setIsDefault(Short.valueOf(FIConstants.IsDefault.True.getValue()));
+            } else {
+                po.setIsDefault(Short.valueOf(request.getIsDefault()));
+            }
             po.setCreditCode(request.getCreditCode());
             po.setOpenId(openId);
             po.setModifyTime(new Date());
@@ -230,6 +246,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoicePO.setStatus(FIConstants.InvoiceStatus.Invalid.getValue());
             invoicePO.setModifyTime(new Date());
             this.invoiceDao.updateSelective(invoicePO);
+            List<Integer> invoices = invoiceDao.getInvoiceIdByCustomer(openId);
+            //只剩下一个抬头，设为默认
+            if (invoices != null && invoices.size() == 1) {
+                invoicePO = new InvoicePO();
+                invoicePO.setId(invoices.get(0));
+                invoicePO.setIsDefault(FIConstants.IsDefault.True.getShortValue());
+                invoicePO.setModifyTime(new Date());
+                this.invoiceDao.updateSelective(invoicePO);
+            }
         } else {
             LogUtil.info(this.getClass(), "The invoice doesn't exist");
         }
