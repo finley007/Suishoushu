@@ -265,6 +265,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         VInvoicePO invoice = this.invoiceDao.getInvoiceById(id);
         if (invoice != null) {
             if (!invoice.getOpenId().equals(openId)) {
+                List<VInvoicePO> invoiceList = this.invoiceDao.listInvoices();
+                for (VInvoicePO invoicePO : invoiceList) {
+                    if (invoicePO.getType() == invoice.getType()
+                            && invoice.getType() > 0
+                                && invoicePO.getCreditCode().equals(invoice.getCreditCode())) {
+                        return new GetInvoiceResponse(invoicePO);
+                    } else if (invoicePO.getType() == invoice.getType()
+                            && invoice.getType() == FIConstants.InvoiceType.Person.getShortValue()
+                            && invoicePO.getUserName().equals(invoice.getUserName())) {
+                        return new GetInvoiceResponse(invoicePO);
+                    }
+                }
                 return new GetInvoiceResponse(this.syncInvoice(openId, invoice));
             }
             return new GetInvoiceResponse(invoice);
