@@ -293,6 +293,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     //小程序分享同步发票
     private VInvoicePO syncInvoice(String openId, VInvoicePO invoice, List<VInvoicePO> invoiceList, boolean hasDefault) {
+        LogUtil.info(this.getClass(), "Sync invoice info: " + invoiceList.size() + "|" + hasDefault + "|" + invoice.getIsDefault());
         InvoicePO newPo = new InvoicePO();
         newPo.setOpenId(openId);
         newPo.setType(invoice.getType());
