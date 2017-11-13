@@ -267,6 +267,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             if (!invoice.getOpenId().equals(openId)) {
                 List<VInvoicePO> invoiceList = this.invoiceDao.listInvoices(openId,
                         FIConstants.InvoiceStatus.Normal.getValue().toString());
+                boolean hasDefault = false;
                 for (VInvoicePO invoicePO : invoiceList) {
                     if (invoicePO.getType() == invoice.getType()
                             && invoice.getType() > 0
@@ -277,8 +278,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                             && invoicePO.getUserName().equals(invoice.getUserName())) {
                         return new GetInvoiceResponse(invoicePO);
                     }
+                    if (invoicePO.getIsDefault() == FIConstants.IsDefault.True.getShortValue()) {
+                        hasDefault = true;
+                    }
                 }
-                return new GetInvoiceResponse(this.syncInvoice(openId, invoice));
+                return new GetInvoiceResponse(this.syncInvoice(openId, invoice, invoiceList, hasDefault));
             }
             return new GetInvoiceResponse(invoice);
         } else {
@@ -288,11 +292,18 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     //小程序分享同步发票
-    private VInvoicePO syncInvoice(String openId, VInvoicePO invoice) {
+    private VInvoicePO syncInvoice(String openId, VInvoicePO invoice, List<VInvoicePO> invoiceList, boolean hasDefault) {
         InvoicePO newPo = new InvoicePO();
         newPo.setOpenId(openId);
         newPo.setType(invoice.getType());
-        newPo.setIsDefault(invoice.getIsDefault());
+        //如果当前用户还没有发票抬头，则自动设置为默认
+        if (invoiceList.size() == 0) {
+            newPo.setIsDefault(FIConstants.IsDefault.True.getShortValue());
+        } else if (hasDefault) { //如果当前用户已经有默认发票抬头，则不设置默认
+            newPo.setIsDefault(FIConstants.IsDefault.False.getShortValue());
+        } else {
+            newPo.setIsDefault(invoice.getIsDefault());
+        }
         newPo.setCreditCode(invoice.getCreditCode());
         newPo.setStatus(invoice.getStatus());
         newPo.setEmail(invoice.getEmail());
