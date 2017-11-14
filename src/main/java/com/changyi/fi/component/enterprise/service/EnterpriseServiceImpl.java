@@ -80,10 +80,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             LogUtil.info(this.getClass(), "Search key: " + key + " by using external API: " + enterpriseAPIService.getAPIKey());
             externalList = enterpriseAPIService.matchEnterprise(key);
         } catch (Exception e) {
-            LogUtil.error(this.getClass(), "Error with external API: " + enterpriseAPIService.getAPIKey() + " and will disable it", e);
-            EnternalEnterpriseAPIManager.disableAPI(enterpriseAPIService.getAPIKey());
+            LogUtil.error(this.getClass(), "Error with external API: " + enterpriseAPIService.getAPIKey(), e);
+//            EnternalEnterpriseAPIManager.disableAPI(enterpriseAPIService.getAPIKey());
             MaintainManager.criticalErrorNotify(FIConstants.NotifyMethod.Email, e);
-            return queryEnterpriseByExternalAPI(key);
         }
         if (externalList.size() == 0) {
             LogUtil.info(this.getClass(),"No match enterprise with key: " + key + " by using external API");
