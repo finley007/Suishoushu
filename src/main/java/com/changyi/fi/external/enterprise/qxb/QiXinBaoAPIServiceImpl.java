@@ -256,6 +256,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     protected String getToken(String tokenName) throws Exception {
         String token = RedisClient.get(tokenName);
+        LogUtil.debug(this.getClass(),"Use session token: " + tokenName + " and value: " + token);
         AccountPair accountPair = accountPicker.nextAccount(StringUtils.isBlank(token));
         if (accountPair != null) {
             LogUtil.debug(this.getClass(), "QiXinBao will login again");
