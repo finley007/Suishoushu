@@ -310,6 +310,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         newPo.setEmail(invoice.getEmail());
         newPo.setPhone(invoice.getPhone());
         newPo.setUserName(invoice.getUserName());
+        newPo.setCorpName(invoice.getCorpName());
+        newPo.setAddress(invoice.getAddress());
+        newPo.setBank(invoice.getBank());
+        newPo.setBankAcct(invoice.getBankAcct());
         return newPo;
     }
 
