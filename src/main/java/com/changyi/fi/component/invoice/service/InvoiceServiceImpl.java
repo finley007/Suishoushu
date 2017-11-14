@@ -294,7 +294,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     //小程序分享同步发票
     private VInvoicePO syncInvoice(String openId, VInvoicePO invoice, List<VInvoicePO> invoiceList, boolean hasDefault) {
         LogUtil.info(this.getClass(), "Sync invoice info: " + invoiceList.size() + "|" + hasDefault + "|" + invoice.getIsDefault());
-        InvoicePO newPo = new InvoicePO();
+        VInvoicePO newPo = new VInvoicePO();
         newPo.setOpenId(openId);
         newPo.setType(invoice.getType());
         //如果当前用户还没有发票抬头，则自动设置为默认
@@ -310,10 +310,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         newPo.setEmail(invoice.getEmail());
         newPo.setPhone(invoice.getPhone());
         newPo.setUserName(invoice.getUserName());
-        newPo.setCreateTime(new Date());
-        newPo.setModifyTime(new Date());
-        invoiceDao.insert(newPo);
-        return this.invoiceDao.getInvoiceById(newPo.getId().toString());
+        return newPo;
     }
 
     public File createCRCode(String invoiceId) throws Exception {
