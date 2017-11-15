@@ -218,7 +218,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         header.put("Host", Properties.get(QIXINBAO_HOST));
         header.put("Origin", Properties.get(QIXINBAO_MAINPAGE_URL));
         String sign = Properties.get(QIXINBAO_LOGIN_SIGN + "." + username);
-        header.put("76eac628969e70eab74f", sign);
+        header.put("1b4872273d2048da5e29", sign);
         return header;
     }
 
