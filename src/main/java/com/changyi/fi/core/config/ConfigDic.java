@@ -82,6 +82,8 @@ public class ConfigDic implements Dictionary<String> {
         for (Map map : list) {
             cfgDic_.put(map.get(FIELD_CODE).toString(), map.get(FIELD_VALUE).toString());
         }
+        this.qxbAccountList = null;
+        this.tycAccountList = null;
         getQXBAccountList();
         getTYCAccountList();
     }
