@@ -1,14 +1,12 @@
 package com.changyi.fi.external.enterprise.qxb;
 
-import com.changyi.fi.core.CommonUtil;
-import org.junit.Test;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
@@ -38,7 +36,7 @@ public class QiXinBaoAPIServiceImplTest {
     public void testMatchEnterprise() throws Exception {
 //TODO: Test goes here...
         QiXinBaoAPIServiceImpl apiService = new QiXinBaoAPIServiceImpl();
-        System.out.println(apiService.matchEnterprise("苏州畅移"));
+        System.out.println(apiService.matchEnterprise("万达"));
     }
 
     /**
@@ -76,7 +74,6 @@ public class QiXinBaoAPIServiceImplTest {
     @Test
     public void testGetKey() throws Exception {
 //TODO: Test goes here... 
-
         try {
             QiXinBaoAPIServiceImpl api = new QiXinBaoAPIServiceImpl();
             Method method = api.getClass().getDeclaredMethod("getKey", String.class);
@@ -84,6 +81,7 @@ public class QiXinBaoAPIServiceImplTest {
             //"jGFBjtzGv8zjtGPPztEBclPjzzzGGjGFBjtzGv8zjtGPPztEBclPjzzzGG"
             System.out.println(method.invoke(api, "/api/user/login"));
             System.out.println(method.invoke(api, "/api/search/suggestion?key=%E4%B8%87%E8%BE%BE"));
+            System.out.println(method.invoke(api, "/api/search/suggestion?key=%e5%a4%a7%e8%bf%9e%e4%b8%87%e8%be%be%e9%9b%86%e5%9b%a2%e8%82%a1%e4%bb%bd%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8"));
         } catch (Exception e) {
             e.printStackTrace();
         }

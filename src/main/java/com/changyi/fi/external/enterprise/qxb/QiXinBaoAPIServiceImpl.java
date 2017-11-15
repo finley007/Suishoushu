@@ -7,7 +7,6 @@ import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
-import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -19,7 +18,6 @@ import com.changyi.fi.external.enterprise.qxb.request.QXBLoginRequest;
 import com.changyi.fi.external.enterprise.qxb.response.QXBMatchResponse;
 import com.changyi.fi.model.EnterprisePO;
 import com.changyi.fi.util.FIConstants;
-import com.changyi.fi.vo.AccountPair;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
@@ -37,6 +35,8 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     private static final String COOKIE_NAME_SID = "sid";
 
+    private static final String QIXINBAO_KEY = "qixinbao.key";
+    private static final String QIXINBAO_LOGIN_KEY = "qixinbao.login.key";
     private static final String QIXINBAO_LOGIN_TEMPLATE = "qixinbao.login.template";
     private static final String QIXINBAO_SUGGESTION_TEMPLATE = "qixinbao.suggestion.template";
     private static final String QIXINBAO_USERNAME = "qixinbao.username";
@@ -218,7 +218,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         header.put("Host", Properties.get(QIXINBAO_HOST));
         header.put("Origin", Properties.get(QIXINBAO_MAINPAGE_URL));
         String sign = Properties.get(QIXINBAO_LOGIN_SIGN + "." + username);
-        header.put("1b4872273d2048da5e29", sign);
+        header.put(Properties.get(QIXINBAO_LOGIN_KEY), sign);
         return header;
     }
 
@@ -237,7 +237,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     public String getKey(String path) {
         String result = "";
-        String key = "z|z|q|P|z|B|8|j|s|0|l|c|F|K|v|t|E|G|A|8|";
+        String key = Properties.get(QIXINBAO_KEY);
         String[] keys = key.split("\\|");
         if (StringUtils.isNotBlank(path)) {
             path = path.toLowerCase();
