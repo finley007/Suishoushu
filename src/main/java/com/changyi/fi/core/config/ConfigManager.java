@@ -57,5 +57,12 @@ public class ConfigManager {
         return ((ConfigDic) DictionaryManager.dic(ConfigDic.NAME)).getQXBAccountList();
     }
 
+    public static List<AccountPair> getTYCAccountList() {
+        if (DictionaryManager.dic(ConfigDic.NAME) == null) {
+            DictionaryManager.register(ConfigDic.NAME, new ConfigDic());
+        }
+        return ((ConfigDic) DictionaryManager.dic(ConfigDic.NAME)).getTYCAccountList();
+    }
+
 
 }

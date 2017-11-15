@@ -24,7 +24,9 @@ public class ConfigDic implements Dictionary<String> {
     public static final String MERCHANT_VALIDATION_TOGGLE = "MERCHANT_VALIDATION_TOGGLE";
     public static final String JOB_THREAD_POOL_SIZE = "JOB_THREAD_POOL_SIZE";
     public static final String QXB_ACCOUNT_LIST = "QXB_ACCOUNT_LIST";
+    public static final String TYC_ACCOUNT_LIST = "TYC_ACCOUNT_LIST";
     public static final String QXB_ACCOUNT_USE_TIME = "QXB_ACCOUNT_USE_TIME";
+    public static final String TYC_ACCOUNT_USE_TIME = "TYC_ACCOUNT_USE_TIME";
     public static final String LOG_LEVEL = "LOG_LEVEL";
 
 
@@ -34,6 +36,8 @@ public class ConfigDic implements Dictionary<String> {
     private static final String FIELD_VALUE = "value";
 
     private List<AccountPair> qxbAccountList;
+
+    private List<AccountPair> tycAccountList;
 
     public ConfigDic() {
         refresh();
@@ -78,34 +82,43 @@ public class ConfigDic implements Dictionary<String> {
         for (Map map : list) {
             cfgDic_.put(map.get(FIELD_CODE).toString(), map.get(FIELD_VALUE).toString());
         }
-        initAccountList();
+        getQXBAccountList();
+        getTYCAccountList();
     }
 
     public List<AccountPair> getQXBAccountList() {
         if (this.qxbAccountList == null) {
-            initAccountList();
+            this.qxbAccountList = initAccountList(QXB_ACCOUNT_LIST);
         }
         return this.qxbAccountList;
     }
 
-    public void initAccountList() {
-        String accts = this.get(QXB_ACCOUNT_LIST);
-        LogUtil.info(this.getClass(), "Init QXB account list");
+    public List<AccountPair> getTYCAccountList() {
+        if (this.tycAccountList == null) {
+            this.tycAccountList = initAccountList(TYC_ACCOUNT_LIST);
+        }
+        return this.tycAccountList;
+    }
+
+    public List<AccountPair> initAccountList(String key) {
+        List<AccountPair> result = new ArrayList<AccountPair>();
+        String accts = this.get(key);
+        LogUtil.info(this.getClass(), "Init account list for: " + key);
         if (StringUtils.isNotBlank(accts)) {
             String[] acctPaires = accts.split("\\|");
-            this.qxbAccountList = new ArrayList<AccountPair>();
             for (int i = 0; i < acctPaires.length; i++) {
                 String[] pair = acctPaires[i].split("/");
                 if (pair.length > 1) {
-                    this.qxbAccountList.add(new AccountPair(pair[0], pair[1]));
+                    result.add(new AccountPair(pair[0], pair[1]));
                 } else {
-                    LogUtil.warn(this.getClass(), "Invalid QXB account format: " + acctPaires[i]);
+                    LogUtil.warn(this.getClass(), "Invalid account format: " + acctPaires[i]);
                 }
             }
-            LogUtil.info(this.getClass(), this.qxbAccountList.size() + " QXB accounts are available");
+            LogUtil.info(this.getClass(), result.size() + " accounts are available for: " + key);
         } else {
-            LogUtil.warn(this.getClass(), "No available QXB account");
+            LogUtil.warn(this.getClass(), "No available account for: " + key);
         }
+        return result;
     }
 
 }

@@ -10,6 +10,8 @@ import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
+import com.changyi.fi.external.enterprise.account.IAccountConfig;
+import com.changyi.fi.external.enterprise.account.TYCAccountConfig;
 import com.changyi.fi.external.enterprise.tyc.request.TYCLoginRequest;
 import com.changyi.fi.external.enterprise.tyc.response.TYCLoginResponse;
 import com.changyi.fi.external.enterprise.tyc.response.TYCMatchResponse;
@@ -158,6 +160,10 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return name.replaceAll("<em>([\\u4e00-\\u9fa5]{1,})</em>", "$1");
     }
 
+    protected IAccountConfig getAccountConfig() {
+        return new TYCAccountConfig();
+    }
+
     private void setBizPeriod(HTTPParser parser, EnterprisePO po, Boolean isListed) {
         List<String> bizPeriod = RegexMatches.match(parser.select(Properties.get(handleListed(isListed, TIANYANCHA_GET_BIZ_PERIOD_MATCHER))).toString(),
                 FIConstants.DATE_PATTERN);
@@ -200,10 +206,10 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         }
     }
 
-    public String login() throws Exception {
+    public String login(String username, String password) throws Exception {
         String url = HTTPCaller.createUrl(TIANYANCHA_LOGIN_TEMPLATE, new Object[]{});
         LogUtil.info(this.getClass(), "Login TianYanCha: " + url);
-        String request = createLoginRequest();
+        String request = createLoginRequest(username, password);
         LogUtil.debug(this.getClass(), "Login request: " + request);
         String res = new HTTPCaller(url).enableProxy().setTimeout(10000).doPost(request);
         TYCLoginResponse response = new Payload(res).as(TYCLoginResponse.class);
@@ -213,9 +219,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return response.getData().get(FIELD_TOKEN);
     }
 
-    private String createLoginRequest() {
-        String username = Properties.get(TINAYANCHA_USERNAME);
-        String password = Properties.get(TINAYANCHA_PASSWORD);
+    private String createLoginRequest(String username, String password) {
         TYCLoginRequest request = new TYCLoginRequest(username, password);
         return new Payload(request).from(TYCLoginRequest.class);
     }

@@ -49,6 +49,6 @@ public class TianYanChaAPIServiceImplTest {
     @Test
     public void testLogin() throws Exception {
         TianYanChaAPIServiceImpl apiService = new TianYanChaAPIServiceImpl();
-        System.out.println(apiService.login());
+        System.out.println(apiService.login("13609248782", "19830310007"));
     }
 } 

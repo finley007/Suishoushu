@@ -58,7 +58,7 @@ public class QiXinBaoAPIServiceImplTest {
     public void testLogin() throws Exception {
 //TODO: Test goes here...
         QiXinBaoAPIServiceImpl apiService = new QiXinBaoAPIServiceImpl();
-        System.out.println(apiService.login());
+        System.out.println(apiService.login("13609248782", "19830310007"));
     }
 
     /**

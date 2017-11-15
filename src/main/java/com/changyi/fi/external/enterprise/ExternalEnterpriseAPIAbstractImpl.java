@@ -4,7 +4,11 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.http.HTTPParser;
 import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.dao.InvoiceDao;
+import com.changyi.fi.external.enterprise.account.AccountPicker;
+import com.changyi.fi.external.enterprise.account.IAccountConfig;
+import com.changyi.fi.external.enterprise.account.QXBAccountConfig;
 import com.changyi.fi.model.EnterprisePO;
+import com.changyi.fi.vo.AccountPair;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     public static final String REDIS_TYC_SESSION_TOKEN = "tyc_session_token";
     public static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
+
+    protected AccountPicker accountPicker = new AccountPicker();
 
     static {
         LogUtil.debug(ExternalEnterpriseAPIAbstractImpl.class, "Clear enterprise external session token");
@@ -33,15 +39,19 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         this.invoiceDao = invoiceDao;
     }
 
-    abstract protected String login() throws Exception;
+    abstract protected String login(String username, String password) throws Exception;
 
     abstract protected int getTokenExpiredTime();
 
+    abstract protected IAccountConfig getAccountConfig();
+
     protected String getToken(String tokenName) throws Exception {
         String token = RedisClient.get(tokenName);
-        if (StringUtils.isBlank(token)) {
-            LogUtil.debug(this.getClass(), "Session token: " + tokenName + " does not exist and will login again");
-            token = this.login();
+        LogUtil.debug(this.getClass(),"Use session token: " + tokenName + " and value: " + token);
+        AccountPair accountPair = accountPicker.nextAccount(StringUtils.isBlank(token), getAccountConfig());
+        if (accountPair != null) {
+            LogUtil.debug(this.getClass(), "Will login again");
+            token = this.login(accountPair.getAccount(), accountPair.getPassword());
             LogUtil.debug(this.getClass(), "Obtain token: " + token);
             if (getTokenExpiredTime() > 0) {
                 RedisClient.setex(tokenName, getTokenExpiredTime(), token);
