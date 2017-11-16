@@ -282,6 +282,7 @@ public class HTTPCaller {
         private String path;
 
         public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
+            LogUtil.info(this.getClass(), "Download file to path: " + path);
             File qrcode = new File(path);
             if (!qrcode.getParentFile().exists()) {
                 qrcode.getParentFile().mkdir();
