@@ -1,5 +1,6 @@
 package com.changyi.fi.core.tool;
 
+import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.util.FIConstants;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
@@ -57,5 +58,13 @@ public class QRCodeUtils {
     }
 
     public static String getUserGroup() { return userGroup; }
+
+    public static synchronized void modifyPermission(File file) throws Exception {
+        String chgOwn = "chown " + QRCodeUtils.getUserGroup() + " " + file.getAbsolutePath();
+        String chgMod = "chmod 777 " + file.getAbsolutePath();
+        LogUtil.debug(QRCodeUtils.class, "Change qrcode image permission: " + chgOwn + " and " + chgMod);
+        Runtime.getRuntime().exec(chgOwn);
+        Runtime.getRuntime().exec(chgMod);
+    }
 
 }

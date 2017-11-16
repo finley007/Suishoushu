@@ -338,17 +338,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         } else {
             LogUtil.debug(this.getClass(), "Create new file: " + fileName);
             file = QRCodeUtils.createQRCode(content, fileName);
-            modifyPermission(file);
+            QRCodeUtils.modifyPermission(file);
             return file;
         }
-    }
-
-    private void modifyPermission(File file) throws Exception {
-        String chgOwn = "chown " + QRCodeUtils.getUserGroup() + " " + file.getAbsolutePath();
-        String chgMod = "chmod 777 " + file.getAbsolutePath();
-        LogUtil.debug(this.getClass(), "Change qrcode image permission: " + chgOwn + " and " + chgMod);
-        Runtime.getRuntime().exec(chgOwn);
-        Runtime.getRuntime().exec(chgMod);
     }
 
     private String createQRCodeImgName(String content) throws Exception {

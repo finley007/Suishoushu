@@ -8,6 +8,7 @@ import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
 import com.changyi.fi.exception.MerchantNotFoundException;
 import com.changyi.fi.exception.OutOfBoundsException;
@@ -93,6 +94,7 @@ public class MerchantServiceImpl implements MerchantService {
         if (!file.exists()) {
             weixinAPIService.createMerchantQRCode(merchantId, codeURI.getPath());
         }
+        QRCodeUtils.modifyPermission(file);
         return codeURI;
     }
 
