@@ -75,7 +75,7 @@ public class MerchantResource {
     }
 
     @POST
-    @Path("/qrCode/{merchantId}")
+    @Path("/qrcode/{merchantId}")
     @Produces
     @Timer
     public Response createQRCode(@PathParam("merchantId") String merchantId) {
