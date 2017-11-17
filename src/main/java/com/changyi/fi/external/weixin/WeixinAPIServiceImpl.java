@@ -87,7 +87,7 @@ public class WeixinAPIServiceImpl implements WeixinAPIService {
         String url = createMerchantQRCodeUrl();
         LogUtil.info(this.getClass(), "Call Weixin API, url: " + url);
         String sence = "id=" + merchantId;
-        String page = "pages/index/index";
+        String page = "";
         String req = new Payload(new MerchantQRCodeRequest(sence, page)).from(MerchantQRCodeRequest.class);
         LogUtil.debug(this.getClass(), "Request message: " + req);
         new HTTPCaller(url).downloadPost(req, downloadPath);
