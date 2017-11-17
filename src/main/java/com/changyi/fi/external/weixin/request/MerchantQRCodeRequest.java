@@ -5,8 +5,9 @@ package com.changyi.fi.external.weixin.request;
  */
 public class MerchantQRCodeRequest {
 
-    public MerchantQRCodeRequest(String scene) {
+    public MerchantQRCodeRequest(String scene, String page) {
         this.scene = scene;
+        this.page = page;
     }
 
     private String scene = "";
