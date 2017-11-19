@@ -46,27 +46,27 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table schema="${dev_schema}" tableName="INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="ENTERPRISE" domainObjectName="EnterprisePO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_ENTERPRISE" domainObjectName="EnterprisePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_ENTERPRISE_MODIFY_HISTORY" domainObjectName="EnterpriseHistoryPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="MERCHANT" domainObjectName="MerchantPO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_MERCHANT" domainObjectName="MerchantPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="MERCHANT_INVOICE" domainObjectName="MerchantInvoicePO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_MERCHANT_VISIT" domainObjectName="MerchantVisitPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
@@ -79,17 +79,17 @@
         </table>
         -->
 
-        <table schema="${dev_schema}" tableName="CUSTOMER" domainObjectName="CustomerPO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_CUSTOMER" domainObjectName="CustomerPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="true">
         </table>
 
-        <table schema="${dev_schema}" tableName="CUSTOMER_LOGIN" domainObjectName="CustomerLoginPO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_CUSTOMER_LOGIN" domainObjectName="CustomerLoginPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
 
-        <table schema="${dev_schema}" tableName="V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
+        <table schema="${dev_schema}" tableName="INC_V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
