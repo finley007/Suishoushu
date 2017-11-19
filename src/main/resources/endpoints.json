@@ -193,21 +193,6 @@
         "content": "success",
         "message": "错误信息"
       }
-    },
-    {
-      "name": "扫码动作记录接口",
-      "url": "https://www.suishoushu.com/suishoushu/merchant/doRecord",
-      "head" : "auth-token",
-      "method": "POST",
-      "request": {
-        "merchantId" : "当前商户id",
-        "invoiceId" : "当前操作发票id"
-      },
-      "response": {
-        "returnCode": "返回码：0-正常，xxxx-错误码",
-        "content": "success",
-        "message": "错误信息"
-      }
     }
   ]
 }

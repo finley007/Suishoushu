@@ -1,6 +1,5 @@
 package com.changyi.fi.component.merchant;
 
-import com.changyi.fi.component.merchant.request.DoRecordRequest;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.response.QRCodeResponse;
 import com.changyi.fi.component.merchant.service.MerchantService;
@@ -41,34 +40,13 @@ public class MerchantResource {
                 throw new NullRequestException("Request is required");
             }
             MerchantValidateRequest req = new Payload(request).as(MerchantValidateRequest.class);
-            merchantService.validate(req, Token.touch(token).getOpenId());
+            String openId = Token.touch(token).getOpenId();
+            merchantService.validate(req, openId);
+            merchantService.doRecord(req.getId(), openId);
             LogUtil.info(this.getClass(), "Complete validate endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run validate endpoint error: ", t);
-            String res = ExceptionHandler.handle(t);
-            return Response.status(Response.Status.OK).entity(res).build();
-        }
-    }
-
-    @POST
-    @Path("/doRecord")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    @Timer
-    public Response doRecord(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
-        try {
-            LogUtil.info(this.getClass(), "Enter doRecord endpoint");
-            if (StringUtils.isBlank(request)) {
-                throw new NullRequestException("Request is required");
-            }
-            DoRecordRequest req = new Payload(request).as(DoRecordRequest.class);
-            merchantService.doRecord(req, Token.touch(token).getOpenId());
-            LogUtil.info(this.getClass(), "Complete doRecord endpoint handle");
-            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
-        } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Run doRecord endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

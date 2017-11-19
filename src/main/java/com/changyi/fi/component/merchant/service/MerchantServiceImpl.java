@@ -1,6 +1,5 @@
 package com.changyi.fi.component.merchant.service;
 
-import com.changyi.fi.component.merchant.request.DoRecordRequest;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
@@ -13,8 +12,8 @@ import com.changyi.fi.dao.MerchantDao;
 import com.changyi.fi.exception.MerchantNotFoundException;
 import com.changyi.fi.exception.OutOfBoundsException;
 import com.changyi.fi.external.weixin.WeixinAPIService;
-import com.changyi.fi.model.MerchantInvoicePO;
 import com.changyi.fi.model.MerchantPO;
+import com.changyi.fi.model.MerchantVisitPO;
 import com.changyi.fi.vo.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,13 +68,13 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Validate
-    public void doRecord(DoRecordRequest req, String openId) throws Exception {
-        LogUtil.info(this.getClass(), "Execute doRecord service for: " + openId);
-        MerchantInvoicePO po = new MerchantInvoicePO();
+    public void doRecord(String merchantId, String openId) throws Exception {
+        LogUtil.info(this.getClass(), "Execute doRecord service for: " + openId + " and merchant: " + merchantId);
+        MerchantVisitPO po = new MerchantVisitPO();
         po.setCreateTime(new Date());
-        po.setInvoiceId(Integer.valueOf(req.getInvoiceId()));
-        po.setMerchantId(req.getMerchantId());
-        this.merchantDao.insertMerchantInvoice(po);
+        po.setOpenId(openId);
+        po.setMerchantId(merchantId);
+        this.merchantDao.insertMerchantVisit(po);
     }
 
     public String createQRCode(String merchantId) throws Exception {
