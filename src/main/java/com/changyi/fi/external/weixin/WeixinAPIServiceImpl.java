@@ -19,13 +19,16 @@ import java.util.Map;
 @Service("weixinAPIService")
 public class WeixinAPIServiceImpl implements WeixinAPIService {
 
-    private static String APP_ID = "app.id";
-    private static String APP_SECRET = "app.secret";
-    private static String APP_HOST= "app.host";
+    private static final String APP_ID = "app.id";
+    private static final String APP_SECRET = "app.secret";
+    private static final String APP_HOST= "app.host";
 
-    private static String APP_LOGIN_TEMPLATE = "app.login.template";
-    private static String APP_TOKEN_OBTAIN_TEMPLATE = "app.token.obtain.template";
-    private static String APP_QRCODE_CREATE_TEMPLATE = "app.qrcode.create.template";
+    private static final String APP_LOGIN_TEMPLATE = "app.login.template";
+    private static final String APP_TOKEN_OBTAIN_TEMPLATE = "app.token.obtain.template";
+    private static final String APP_QRCODE_CREATE_TEMPLATE = "app.qrcode.create.template";
+
+    private static final String PARAMETER_PAGE = "pages/index/index";
+    private static final String PARAMETER_WIDTH = "430";
 
     private String getAppId() {
         return Properties.get(APP_ID);
@@ -86,12 +89,16 @@ public class WeixinAPIServiceImpl implements WeixinAPIService {
         LogUtil.info(this.getClass(), "Create QR code by calling Weixin API");
         String url = createMerchantQRCodeUrl();
         LogUtil.info(this.getClass(), "Call Weixin API, url: " + url);
-        String sence = "id=" + merchantId;
-        String page = "";
-        String req = new Payload(new MerchantQRCodeRequest(sence, page)).from(MerchantQRCodeRequest.class);
+        String req = createQRCodeRequest(merchantId);
         LogUtil.debug(this.getClass(), "Request message: " + req);
         new HTTPCaller(url).downloadPost(req, downloadPath);
         LogUtil.info(this.getClass(),"Complete creating QR code and save to: " + downloadPath);
+    }
+
+    public String createQRCodeRequest(String merchantId) {
+        String sence = "id=" + merchantId;
+//        String req = new Payload(new MerchantQRCodeRequest(sence, page)).from(MerchantQRCodeRequest.class);
+        return "{\"scene\":\"" + sence + "\",\"page\":\"" + PARAMETER_PAGE + "\",\"width\":430}";
     }
 
     private String createMerchantQRCodeUrl() throws Exception {

@@ -92,9 +92,10 @@ public class MerchantServiceImpl implements MerchantService {
         QRCodeURI codeURI = createQRCodeDownloadPath(merchantId);
         File file = new File(codeURI.getPath());
         if (!file.exists()) {
-            weixinAPIService.createMerchantQRCode(merchantId, codeURI.getPath());
+            file.delete();
         }
-        QRCodeUtils.modifyPermission(file);
+        weixinAPIService.createMerchantQRCode(merchantId, codeURI.getPath());
+        QRCodeUtils.modifyPermission(file.getParentFile());
         return codeURI;
     }
 
