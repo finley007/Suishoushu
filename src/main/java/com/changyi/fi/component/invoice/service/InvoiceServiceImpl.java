@@ -356,6 +356,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             if (StringUtils.isNotBlank(invoice.getPhone())) {
                 result.append(invoice.getPhone());
             }
+            result.append(SEPARATOR);
         } else if (FIConstants.InvoiceType.EnterpriseNormal.getShortValue() == invoice.getType()
                 || FIConstants.InvoiceType.EnterpriseSpecial.getShortValue() == invoice.getType()){
             result.append(invoice.getCorpName().trim());
@@ -374,6 +375,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 result.append(invoice.getBank() + " ");
                 result.append(invoice.getBankAcct());
             }
+            result.append(SEPARATOR);
         }
         return result.toString();
     }
