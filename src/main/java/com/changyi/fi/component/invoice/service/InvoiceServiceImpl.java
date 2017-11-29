@@ -375,7 +375,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                 result.append(invoice.getBankAcct());
             }
         }
-        return result.toString();
+        return solveForInput(result.toString());
+    }
+
+    private String solveForInput(String src) {
+        return src.replaceAll("([a-zA-Z])","$1\n");
     }
 
 }
