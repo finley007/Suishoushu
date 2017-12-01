@@ -379,7 +379,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private String solveForInput(String src) {
-        return src.replaceAll("([a-zA-Z])","$1\n");
+        return src.replaceAll("([a-zA-Z])","$1\r");
     }
 
 }
