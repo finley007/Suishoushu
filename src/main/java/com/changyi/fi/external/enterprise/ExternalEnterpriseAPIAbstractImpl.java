@@ -45,7 +45,7 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
 
     abstract protected IAccountConfig getAccountConfig();
 
-    protected String getToken(String tokenName) throws Exception {
+    protected synchronized String getToken(String tokenName) throws Exception {
         String token = RedisClient.get(tokenName);
         LogUtil.debug(this.getClass(),"Use session token: " + tokenName + " and value: " + token);
         AccountPair accountPair = accountPicker.nextAccount(StringUtils.isBlank(token), getAccountConfig());
