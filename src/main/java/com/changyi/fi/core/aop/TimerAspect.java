@@ -18,35 +18,23 @@ import java.util.Date;
 public class TimerAspect {
 
     @Around(value="execution(* com.changyi.fi..*Service.*(..)) && @annotation(timer)", argNames="timer")
-    public Object caculateTimeCostForService(ProceedingJoinPoint aPoint, Timer timer) {
+    public Object caculateTimeCostForService(ProceedingJoinPoint aPoint, Timer timer) throws Throwable {
         Date start = new Date();
-        try {
-            Object retValue = aPoint.proceed();
-            LogUtil.info(aPoint.getTarget().getClass(), "Service {} cost time: " + (new Date().getTime() - start.getTime())
-                    , new Object[]{aPoint.getSignature()});
-            return retValue;
-        } catch (Throwable throwable) {
-            LogUtil.error(this.getClass(), "Execute service error: ", throwable);
-            String res = ExceptionHandler.handle(throwable);
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(res).build();
-        }
+        Object retValue = aPoint.proceed();
+        LogUtil.info(aPoint.getTarget().getClass(), "Service {} cost time: " + (new Date().getTime() - start.getTime())
+                , new Object[]{aPoint.getSignature()});
+        return retValue;
     }
 
     @Around(value="execution(* com.changyi.fi.component..*Resource.*(..)) && @annotation(timer)", argNames="timer")
-    public Object caculateTimeCostForResource(ProceedingJoinPoint aPoint, Timer timer) {
+    public Object caculateTimeCostForResource(ProceedingJoinPoint aPoint, Timer timer) throws Throwable {
         //入口处初始化日志序列号
         LogUtil.intSquence();
         Date start = new Date();
-        try {
-            Object retValue = aPoint.proceed();
-            LogUtil.info(aPoint.getTarget().getClass(), "Endpoint {} cost time: " + (new Date().getTime() - start.getTime())
-                    , new Object[]{aPoint.getSignature()});
-            return retValue;
-        } catch (Throwable throwable) {
-            LogUtil.error(this.getClass(), "Execute endpoint error: ", throwable);
-            String res = ExceptionHandler.handle(throwable);
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(res).build();
-        }
+        Object retValue = aPoint.proceed();
+        LogUtil.info(aPoint.getTarget().getClass(), "Endpoint {} cost time: " + (new Date().getTime() - start.getTime())
+                , new Object[]{aPoint.getSignature()});
+        return retValue;
     }
 
 }
