@@ -50,6 +50,15 @@ public class Token {
 
     private Session session;
 
+    public Token(Session session, Boolean addToRepo) {
+        this.session = session;
+        setKey(createKey(session));
+        setLastTouched(new Date());
+        if (addToRepo) {
+            repository.addToken(this);
+        }
+    }
+
     public Token(Session session) {
         this.session = session;
         setKey(createKey(session));
@@ -117,8 +126,9 @@ public class Token {
         this.lastTouched = lastTouched;
     }
 
-    public void setKey(String key) {
+    public Token setKey(String key) {
         this.key = key;
+        return this;
     }
 
     public static void save() {

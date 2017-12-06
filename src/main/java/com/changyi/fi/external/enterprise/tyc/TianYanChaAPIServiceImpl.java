@@ -7,6 +7,7 @@ import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.SystemException;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
+import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -98,7 +99,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
     }
 
     private CookieStore createCookieStore() throws Exception {
-        String token = this.getToken(REDIS_TYC_SESSION_TOKEN);
+        String token = this.getToken(RedisClient.REDIS_TYC_SESSION_TOKEN);
         CookieStore cookieStore = new BasicCookieStore();
         BasicClientCookie cookie = new BasicClientCookie(COOKIE_AUTH_TOKEN, token);
         cookie.setDomain(TIANYANCHA_DOMAIN);

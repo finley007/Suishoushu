@@ -7,6 +7,7 @@ import com.changyi.fi.core.RegexMatches;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.http.HTTPCaller;
 import com.changyi.fi.core.http.HTTPParser;
+import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIAbstractImpl;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -96,7 +97,7 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
     }
 
     private CookieStore createCookieStore() throws Exception {
-        String token = this.getToken(REDIS_QXB_SESSION_TOKEN);
+        String token = this.getToken(RedisClient.REDIS_QXB_SESSION_TOKEN);
         CookieStore cookieStore = new BasicCookieStore();
         BasicClientCookie cookie = new BasicClientCookie(COOKIE_NAME_SID, token);
         cookie.setDomain(Properties.get(QIXINBAO_MAINPAGE_URL));
