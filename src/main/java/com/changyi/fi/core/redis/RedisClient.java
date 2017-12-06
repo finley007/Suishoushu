@@ -24,7 +24,7 @@ public class RedisClient {
 
     public static Jedis getJedis() {
         if (jedis == null) {
-            jedis = new Jedis(Properties.get(REDIS_HOST), Integer.valueOf(Properties.get(REDIS_HOST)));
+            jedis = new Jedis(Properties.get(REDIS_HOST), Integer.valueOf(Properties.get(REDIS_PORT)));
         }
         return jedis;
     }
