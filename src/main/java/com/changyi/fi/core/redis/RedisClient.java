@@ -18,12 +18,13 @@ public class RedisClient {
     public static final String REDIS_SESSION_MAP = "session_map";
 
     private static final String REDIS_HOST = "redis.host";
+    private static final String REDIS_PORT = "redis.port";
 
     private static Jedis jedis;
 
     public static Jedis getJedis() {
         if (jedis == null) {
-            jedis = new Jedis(Properties.get(REDIS_HOST));
+            jedis = new Jedis(Properties.get(REDIS_HOST), Integer.valueOf(Properties.get(REDIS_HOST)));
         }
         return jedis;
     }
