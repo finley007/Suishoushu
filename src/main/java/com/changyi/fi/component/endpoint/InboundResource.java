@@ -1,14 +1,17 @@
 package com.changyi.fi.component.endpoint;
 
 import com.changyi.fi.component.endpoint.response.InboundDetailResponse;
+import com.changyi.fi.component.endpoint.response.ListTokensResponse;
 import com.changyi.fi.component.endpoint.service.InboundService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
+import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.tool.DictionaryManager;
 import com.changyi.fi.exception.InvalidRequestException;
 import com.changyi.fi.exception.NullRequestException;
 import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by finley on 7/14/17.
@@ -32,7 +36,6 @@ public class InboundResource {
     @GET
     @Path("/detail")
     @Produces(MediaType.APPLICATION_JSON)
-    @Timer
     public Response inboundDetail(@Context HttpServletRequest req) {
         try {
             LogUtil.info(this.getClass(), "Enter inboundDetail endpoint");
@@ -49,7 +52,6 @@ public class InboundResource {
 
     @POST
     @Path("/refresh")
-    @Timer
     public Response refresh() {
         try {
             LogUtil.info(this.getClass(), "Enter refresh endpoint");
@@ -67,7 +69,6 @@ public class InboundResource {
 
     @POST
     @Path("/enterprise_api/{id}/{weight}")
-    @Timer
     public Response updateEnterpriseExternalAPIWeight(@PathParam("id") String id, @PathParam("weight") String weight) {
         try {
             LogUtil.info(this.getClass(), "Enter enterprise_api weight update endpoint");
@@ -95,7 +96,6 @@ public class InboundResource {
 
     @POST
     @Path("/parameter")
-    @Timer
     public Response updateSysParameter(@FormParam("code") String code, @FormParam("value") String value) {
         try {
             LogUtil.info(this.getClass(), "Enter system parameter update endpoint");
@@ -108,6 +108,21 @@ public class InboundResource {
             return Response.status(Response.Status.OK).entity(res).build();
         }
 
+    }
+
+    @GET
+    @Path("/tokens")
+    public Response listTokens() {
+        try {
+            LogUtil.info(this.getClass(), "Enter list tokens endpoint");
+            ListTokensResponse response = new ListTokensResponse(Token.listTokens());
+            LogUtil.info(this.getClass(), "Complete list tokens endpoint handle");
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run list tokens endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
     }
 
 }

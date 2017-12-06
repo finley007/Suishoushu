@@ -119,7 +119,9 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         String html = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         HTTPParser parser = new HTTPParser(html);
         EnterprisePO po = createEnterprisePO(parser, url);
-        saveEnterpriseInfo(po);
+        if (po != null) {
+            saveEnterpriseInfo(po);
+        }
         return po;
     }
 

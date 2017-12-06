@@ -5,6 +5,8 @@ import com.changyi.fi.core.Payload;
 import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.vo.Session;
 
+import java.util.List;
+
 /**
  * Created by finley on 7/7/17.
  */
@@ -45,4 +47,7 @@ public class RedisTokenRepository implements ITokenRepository {
 
     public void init() {}
 
+    public List<Token> listTokens() {
+        return null;
+    }
 }

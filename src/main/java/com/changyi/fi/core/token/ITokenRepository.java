@@ -1,5 +1,7 @@
 package com.changyi.fi.core.token;
 
+import java.util.List;
+
 /**
  * Created by finley on 7/6/17.
  */
@@ -16,5 +18,7 @@ public interface ITokenRepository {
     public void removeToken(String key);
 
     public void saveToken();
+
+    public List<Token> listTokens();
 
 }

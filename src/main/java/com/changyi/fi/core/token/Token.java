@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by finley on 1/30/17.
@@ -123,5 +124,7 @@ public class Token {
     public static void save() {
         repository.saveToken();
     }
+
+    public static List<Token> listTokens() { return repository.listTokens(); }
 
 }

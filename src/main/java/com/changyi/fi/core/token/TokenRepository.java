@@ -145,5 +145,13 @@ public class TokenRepository implements ITokenRepository{
 
     }
 
-
+    public List<Token> listTokens() {
+        List<Token> result = new ArrayList<Token>();
+        if (tokens != null && tokens.size() > 0) {
+            for (Enumeration<String> itor = tokens.keys(); itor.hasMoreElements();) {
+                result.add(tokens.get(itor.nextElement()));
+            }
+        }
+        return result;
+    }
 }
