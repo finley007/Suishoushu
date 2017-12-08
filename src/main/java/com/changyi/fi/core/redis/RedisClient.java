@@ -2,6 +2,8 @@ package com.changyi.fi.core.redis;
 
 import com.changyi.fi.core.tool.Properties;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -14,94 +16,174 @@ public class RedisClient {
 
     public static final String REDIS_TYC_SESSION_TOKEN = "tyc_session_token";
     public static final String REDIS_QXB_SESSION_TOKEN = "qxb_session_token";
-    public static final String REDIS_SESSION_POOL = "session_pool";
+        public static final String REDIS_SESSION_POOL = "session_pool";
     public static final String REDIS_SESSION_MAP = "session_map";
 
     private static final String REDIS_HOST = "redis.host";
     private static final String REDIS_PORT = "redis.port";
 
-    private static Jedis jedis;
+    private static JedisPool pool = new JedisPool(new JedisPoolConfig(), Properties.get(REDIS_HOST),
+            Integer.valueOf(Properties.get(REDIS_PORT)));
 
     public static Jedis getJedis() {
-        if (jedis == null) {
-            jedis = new Jedis(Properties.get(REDIS_HOST), Integer.valueOf(Properties.get(REDIS_PORT)));
-        }
-        return jedis;
+        return pool.getResource();
+    }
+
+    public static void close() {
+        pool.close();
     }
 
     public static String set(String key, String value) {
-        return getJedis().set(key, value);
+        Jedis jedis = getJedis();
+        String ret = jedis.set(key, value);
+        jedis.close();
+        return ret;
     }
 
     public static String setex(String key, int seconds, String value) {
-        return getJedis().setex(key, seconds, value);
+        Jedis jedis = getJedis();
+        String ret = jedis.setex(key, seconds, value);
+        jedis.close();
+        return ret;
     }
 
     public static Long append(String key, String value) {
-        return getJedis().append(key, value);
+        Jedis jedis = getJedis();
+        Long ret = jedis.append(key, value);
+        jedis.close();
+        return ret;
     }
 
     public static String get(String key) {
-        return getJedis().get(key);
+        Jedis jedis = getJedis();
+        String ret = jedis.get(key);
+        jedis.close();
+        return ret;
     }
 
     public static Long hdel(String key, String... fields) {
-        return getJedis().hdel(key, fields);
+        Jedis jedis = getJedis();
+        Long ret = jedis.hdel(key, fields);
+        jedis.close();
+        return ret;
     }
 
     public static Boolean hexists(String key, String field) {
-        return getJedis().hexists(key, field);
+        Jedis jedis = getJedis();
+        Boolean ret = jedis.hexists(key, field);
+        jedis.close();
+        return ret;
     }
 
     public static String hget(String key, String field) {
-        return getJedis().hget(key, field);
+        Jedis jedis = getJedis();
+        String ret = jedis.hget(key, field);
+        jedis.close();
+        return ret;
     }
 
     public static Long hset(String key, String field, String value) {
-        return getJedis().hset(key, field, value);
+        Jedis jedis = getJedis();
+        Long ret = jedis.hset(key, field, value);
+        jedis.close();
+        return ret;
     }
 
     public static Map<String, String> hgetAll(String key) {
-        return getJedis().hgetAll(key);
+        Jedis jedis = getJedis();
+        Map<String, String> ret = jedis.hgetAll(key);
+        jedis.close();
+        return ret;
     }
 
     public static Set<String> hkeys(String key) {
-        return getJedis().hkeys(key);
+        Jedis jedis = getJedis();
+        Set<String> ret = jedis.hkeys(key);
+        jedis.close();
+        return ret;
     }
 
     public static Long hlen(String key) {
-        return getJedis().hlen(key);
+        Jedis jedis = getJedis();
+        Long ret = jedis.hlen(key);
+        jedis.close();
+        return ret;
     }
 
     public static List<String> hmget(String key, String... fields) {
-        return getJedis().hmget(key, fields);
+        Jedis jedis = getJedis();
+        List<String> ret = jedis.hmget(key, fields);
+        jedis.close();
+        return ret;
     }
 
     public static String hmset(String key, Map<String,String> hash) {
-        return getJedis().hmset(key, hash);
+        Jedis jedis = getJedis();
+        String ret = jedis.hmset(key, hash);
+        jedis.close();
+        return ret;
     }
 
-    public static Long expire(String key, int seconds) { return getJedis().expire(key, seconds); }
+    public static Long expire(String key, int seconds) {
+        Jedis jedis = getJedis();
+        Long ret = jedis.expire(key, seconds);
+        jedis.close();
+        return ret;
+    }
 
     public static Long expireAt(String key, long unixTime) {
-        return getJedis().expireAt(key, unixTime);
+        Jedis jedis = getJedis();
+        Long ret = jedis.expireAt(key, unixTime);
+        jedis.close();
+        return ret;
     }
 
     public static Long ttl(String key) {
-        return getJedis().ttl(key);
+        Jedis jedis = getJedis();
+        Long ret = jedis.ttl(key);
+        jedis.close();
+        return ret;
     }
 
     public static Long del(String key) {
-        return getJedis().del(key);
+        Jedis jedis = getJedis();
+        Long ret = jedis.del(key);
+        jedis.close();
+        return ret;
     }
 
-    public static Long rpush(String key, String string) { return getJedis().rpush(key, string); }
+    public static Long rpush(String key, String string) {
+        Jedis jedis = getJedis();
+        Long ret = jedis.rpush(key, string);
+        jedis.close();
+        return ret;
+    }
 
-    public static List<String> lrange(String key, int start, int end) { return getJedis().lrange(key, start, end); }
+    public static List<String> lrange(String key, int start, int end) {
+        Jedis jedis = getJedis();
+        List<String> ret = jedis.lrange(key, start, end);
+        jedis.close();
+        return ret;
+    }
 
-    public static Long sadd(String key, String... strings) { return getJedis().sadd(key, strings); }
+    public static Long sadd(String key, String... strings) {
+        Jedis jedis = getJedis();
+        Long ret = jedis.sadd(key, strings);
+        jedis.close();
+        return ret;
+    }
 
-    public static Set<String> smembers(String key) { return getJedis().smembers(key); }
+    public static Set<String> smembers(String key) {
+        Jedis jedis = getJedis();
+        Set<String> ret = jedis.smembers(key);
+        jedis.close();
+        return ret;
+    }
 
-    public static Long srem(String key, String... members) { return getJedis().srem(key, members); }
+    public static Long srem(String key, String... members) {
+        Jedis jedis = getJedis();
+        Long ret = jedis.srem(key, members);
+        jedis.close();
+        return ret;
+    }
 }

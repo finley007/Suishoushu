@@ -2,6 +2,7 @@ package com.changyi.fi.core.listener;
 
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.job.JobManager;
+import com.changyi.fi.core.redis.RedisClient;
 import com.changyi.fi.core.token.Token;
 
 import javax.servlet.ServletContextEvent;
@@ -17,6 +18,7 @@ public class ServletListener implements ServletContextListener {
         LogUtil.info(this.getClass(), "Tomcat stop...");
         saveSession();
         JobManager.shutdown();
+        RedisClient.close();
     }
 
     private void saveSession() {
