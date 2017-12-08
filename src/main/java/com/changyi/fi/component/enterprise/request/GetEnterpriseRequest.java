@@ -13,7 +13,7 @@ public class GetEnterpriseRequest implements Request {
 
     @NotNull(message = "source is required")
     @NotEmpty(message = "source is required")
-    @MatchPattern(pattern = "^internal|qxb|tyc$", message = "invalid type value, should be true or false")
+    @MatchPattern(pattern = "^internal|qxb|tyc|qcc$", message = "invalid type value, should be true or false")
     private String source;
 
     @NotNull(message = "creditCode is required")
