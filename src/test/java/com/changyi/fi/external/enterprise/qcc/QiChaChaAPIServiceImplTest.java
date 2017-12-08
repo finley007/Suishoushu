@@ -65,7 +65,9 @@ public class QiChaChaAPIServiceImplTest {
      */
     @Test
     public void testGetEnterpriseByCode() throws Exception {
-//TODO: Test goes here... 
+//TODO: Test goes here...
+        QiChaChaAPIServiceImpl apiService = new QiChaChaAPIServiceImpl();
+        System.out.println(apiService.getEnterpriseByCode("/firm_ab1368826c1506fcee1142e8393197f8.html"));
     }
 
     /**
