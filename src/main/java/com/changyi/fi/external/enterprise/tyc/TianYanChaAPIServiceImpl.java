@@ -33,8 +33,6 @@ import java.util.*;
 @Service("tianYanChaAPIService")
 public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
-    private static final String SOURCE_TYC = "tyc";
-
     private static final String TIANYANCHA_DOMAIN = ".tianyancha.com";
 
     private static final String COOKIE_AUTH_TOKEN = "auth_token";
@@ -68,10 +66,6 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
 
     protected int getTokenExpiredTime() {
         return SECONDS_FOR_ONE_WEEK;
-    }
-
-    public String getAPIKey() {
-        return SOURCE_TYC;
     }
 
     @Timer
@@ -227,5 +221,8 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         return new Payload(request).from(TYCLoginRequest.class);
     }
 
+    public String getAPIKey() {
+        return FIConstants.API_TIANYANCHA;
+    }
 
 }

@@ -6,6 +6,11 @@ public class FIConstants {
 
     public static final String BEAN_TIANYANCHA_API_SERVICE = "tianYanChaAPIService";
     public static final String BEAN_QIXINBAO_API_SERVICE = "qiXinBaoAPIService";
+    public static final String BEAN_QICHACHA_API_SERVICE = "qiChaChaAPIService";
+
+    public static final String API_TIANYANCHA = "tyc";
+    public static final String API_QIXINBAO = "qxb";
+    public static final String API_QICHACHA = "qcc";
 
     public static final String IMAGE_TYPE_GIF = "gif";
     public static final String IMAGE_TYPE_PNG = "png";

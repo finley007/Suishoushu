@@ -32,8 +32,6 @@ import java.util.*;
 @Service("qiXinBaoAPIService")
 public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl implements ExternalEnterpriseAPIService {
 
-    private static final String SOURCE_QXB = "qxb";
-
     private static final String COOKIE_NAME_SID = "sid";
 
     private static final String QIXINBAO_KEY = "qixinbao.key";
@@ -65,10 +63,6 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
 
     private static final String DATE_FORMAT_REGEX = "(\\d{4})年(\\d{1,2})月(\\d{1,2})日";
     private static final String DATE_FORMAT_REPLACEMENT = "$1-$2-$3";
-
-    public String getAPIKey() {
-        return SOURCE_QXB;
-    }
 
     @Timer
     public List<Map> matchEnterprise(String key) throws Exception {
@@ -249,6 +243,10 @@ public class QiXinBaoAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
             }
         }
         return result;
+    }
+
+    public String getAPIKey() {
+        return FIConstants.API_QIXINBAO;
     }
 
 }

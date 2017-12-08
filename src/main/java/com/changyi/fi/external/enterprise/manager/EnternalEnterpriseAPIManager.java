@@ -17,9 +17,6 @@ import java.util.Map;
 
 public class EnternalEnterpriseAPIManager {
 
-    public static final String API_TIANYANCHA = "tyc";
-    public static final String API_QIXINBAO = "qxb";
-
     private static final String SERV_IMPL_TYPE_ENTERPRISE = "enterprise";
 
     private static final int API_DISABLED = -1;
@@ -51,12 +48,14 @@ public class EnternalEnterpriseAPIManager {
         if (StringUtils.isBlank(key)) {
             return null;
         }
-        if (API_TIANYANCHA.equals(key)) {
+        if (FIConstants.API_TIANYANCHA.equals(key)) {
             return (ExternalEnterpriseAPIService)CtxProvider.getContext().getBean(FIConstants.BEAN_TIANYANCHA_API_SERVICE);
-        } if (API_QIXINBAO.equals(key)) {
+        } else if (FIConstants.API_QIXINBAO.equals(key)) {
             return (ExternalEnterpriseAPIService)CtxProvider.getContext().getBean(FIConstants.BEAN_QIXINBAO_API_SERVICE);
+        } else if (FIConstants.API_QICHACHA.equals(key)) {
+            return (ExternalEnterpriseAPIService)CtxProvider.getContext().getBean(FIConstants.BEAN_QICHACHA_API_SERVICE);
         } else {
-            throw new UnknowEnterpriseAPIImpl("The enterprise service implements: " + key + "is unknown");
+            throw new UnknowEnterpriseAPIImpl("The enterprise service implements: " + key + " is unknown");
         }
     }
 
