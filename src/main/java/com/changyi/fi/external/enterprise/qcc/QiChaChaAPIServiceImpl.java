@@ -59,7 +59,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "QiChaCha API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
         HTTPParser parser = new HTTPParser(html);
-        return createEnterpriseList(parser);
+        return createEnterpriseList(parser, key);
     }
 
     private CookieStore createCookieStore() throws Exception {
@@ -73,17 +73,20 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         return cookieStore;
     }
 
-    private List<Map> createEnterpriseList(HTTPParser parser) {
+    private List<Map> createEnterpriseList(HTTPParser parser, String key) {
         List<Map> result = new ArrayList<Map>();
         List<Element> list = parser.select(Properties.get(QICHACHA_SEARCH_NAME_MATCHER));
         for (Element elem : list) {
             String creditCode = elem.attr("href").toString();
             String name = elem.text();
-            Map map = new HashMap();
-            map.put(FIConstants.FIELD_CREDIT_CODE, creditCode);
-            map.put(FIConstants.FIELD_NAME, name);
-            map.put(getSourceKey(), getAPIKey());
-            result.add(map);
+            if (isValidCreditCode(creditCode)
+                    && isValidName(name, key)) {
+                Map map = new HashMap();
+                map.put(FIConstants.FIELD_CREDIT_CODE, creditCode);
+                map.put(FIConstants.FIELD_NAME, name);
+                map.put(getSourceKey(), getAPIKey());
+                result.add(map);
+            }
         }
         return result;
     }

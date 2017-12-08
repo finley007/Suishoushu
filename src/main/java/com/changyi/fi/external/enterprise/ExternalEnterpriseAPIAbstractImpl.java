@@ -85,6 +85,10 @@ public abstract class ExternalEnterpriseAPIAbstractImpl implements ExternalEnter
         return true;
     }
 
+    protected boolean isValidName(String name, String key) {
+        return name.contains(key);
+    }
+
     public class StringResultHandler implements HTTPParser.ResultHandler<String> {
         public String handleResult(Elements elems) {
             if (elems != null && elems.size() > 0) {

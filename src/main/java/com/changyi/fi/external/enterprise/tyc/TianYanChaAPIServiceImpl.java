@@ -79,11 +79,13 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         List result = new ArrayList();
         if (response != null && response.getData() != null && response.getData().size() > 0) {
             for (Map<String, String> m : response.getData()) {
-                Map<String, String> map = new HashMap<String, String>();
                 String creditCode = m.get(TYCMatchResponse.FIELD_ID);
-                if (this.isValidCreditCode(creditCode)) {
+                String name = handleName(m.get(TYCMatchResponse.FIELD_NAME));
+                if (this.isValidCreditCode(creditCode) &&
+                        this.isValidName(name, key)) {
+                    Map<String, String> map = new HashMap<String, String>();
                     map.put(FIConstants.FIELD_CREDIT_CODE, creditCode);
-                    map.put(FIConstants.FIELD_NAME, handleName(m.get(TYCMatchResponse.FIELD_NAME)));
+                    map.put(FIConstants.FIELD_NAME, name);
                     map.put(getSourceKey(), getAPIKey());
                     result.add(map);
                 }
