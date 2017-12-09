@@ -103,14 +103,4 @@ public class FIConstants {
         public String getValue() { return value; }
     }
 
-    public enum JobType {
-        EnterpriseSync("1");
-
-        private String value;
-
-        private JobType(String value) {this.value = value; }
-
-        public String getValue() { return this.value; }
-    }
-
 }

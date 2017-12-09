@@ -56,7 +56,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         }
         //后台自动同步
         if (ConfigManager.getBooleanParameter(ConfigDic.SYNC_ENTERPRISE_WHEN_MATCH, false)) {
-            JobManager.addJob(new EnterpriseSyncJob(FIConstants.JobType.EnterpriseSync, key));
+            JobManager.addJob(new EnterpriseSyncJob(key));
         }
         return new MatchEnterpriseResponse(combineResult(internalList, externalList, key));
     }

@@ -17,14 +17,19 @@ public class EnterpriseSyncJob extends Job {
     private final static String INVOICE_DAO = "invoiceDao";
     private final static String TIANYANCHA_DAO = "invoiceDao";
 
+    private final static String ENTERPRISE_SYNC = "ENTERPRISE_SYNC";
+
     private String key;
+
+    public String getType() {
+        return ENTERPRISE_SYNC;
+    }
 
     private ExternalEnterpriseAPIService service;
 
     private InvoiceDao invoiceDao;
 
-    public EnterpriseSyncJob(FIConstants.JobType type, String key) {
-        super(type);
+    public EnterpriseSyncJob(String key) {
         this.key = key;
         //目前由于天眼查需要代理，用天眼查作为后台同步的接口
         service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(FIConstants.BEAN_TIANYANCHA_API_SERVICE);

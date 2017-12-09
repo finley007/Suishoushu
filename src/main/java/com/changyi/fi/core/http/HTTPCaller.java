@@ -3,7 +3,10 @@ package com.changyi.fi.core.http;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.job.JobManager;
+import com.changyi.fi.core.model.SysOutboundPO;
 import com.changyi.fi.core.tool.Properties;
+import com.changyi.fi.job.RecordOutboundJob;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -26,12 +29,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import javax.ws.rs.HttpMethod;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HTTPCaller {
 
@@ -47,6 +53,8 @@ public class HTTPCaller {
     public static final String HEADER_CONNECTION = "Connection";
 
     public static final String CONTENT_TYPE_JSON = "application/json";
+
+    private static final String URL_PATTERN = "(http|ftp|https)://(([a-zA-Z0-9\\._-]+\\.[a-zA-Z]{2,6})|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:([0-9]{1,4}))*(/[a-zA-Z0-9\\&%_\\./-~-]*)?";
 
     private String url;
 
@@ -138,6 +146,7 @@ public class HTTPCaller {
         HttpClient httpClient = getHttpClient();
         HttpGet get = new HttpGet(url);
         init(get);
+        recordOutbound(HttpMethod.GET);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
@@ -153,7 +162,28 @@ public class HTTPCaller {
         return httpClient.execute(get, responseHandler);
     }
 
+    private void recordOutbound(String method) {
+        SysOutboundPO po = parseURL(method);
+        JobManager.addJob(new RecordOutboundJob(po));
+    }
 
+    public SysOutboundPO parseURL(String method) {
+        Pattern pattern = Pattern.compile(URL_PATTERN);
+        Matcher matcher = pattern.matcher(url);
+        if (matcher.matches()) {
+            SysOutboundPO po = new SysOutboundPO();
+            po.setProtocol(matcher.group(1));
+            po.setDomain(matcher.group(2));
+            po.setPort(matcher.group(6));
+            po.setUrl(url);
+            po.setProxyIp(this.proxyIp);
+            po.setProxyPort(this.proxyPort + "");
+            po.setMethod(method);
+            po.setCallTime(new Date());
+            return po;
+        }
+        return null;
+    }
 
     public String doPost(Map<String, String> map) throws Exception {
         HttpClient httpClient = getHttpClient();
@@ -167,6 +197,7 @@ public class HTTPCaller {
             }
             post.setEntity(new UrlEncodedFormEntity(nvps));
         }
+        recordOutbound(HttpMethod.POST);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
@@ -191,6 +222,7 @@ public class HTTPCaller {
             entity.setContentType(CONTENT_TYPE_JSON);
             post.setEntity(entity);
         }
+        recordOutbound(HttpMethod.POST);
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
             @Override
             public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
@@ -216,6 +248,7 @@ public class HTTPCaller {
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
         init(post);
+        recordOutbound(HttpMethod.POST);
         if (StringUtils.isNoneBlank(json)) {
             StringEntity entity = new StringEntity(json, FIConstants.DEFAULT_CHARSET);   // 中文乱码在此解决
             entity.setContentType(CONTENT_TYPE_JSON);

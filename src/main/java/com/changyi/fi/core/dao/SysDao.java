@@ -1,6 +1,7 @@
 package com.changyi.fi.core.dao;
 
 import com.changyi.fi.core.model.SysAccessPO;
+import com.changyi.fi.core.model.SysOutboundPO;
 import com.changyi.fi.core.model.SysServImplPO;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +27,7 @@ public interface SysDao {
     int updateSysServImpl(SysServImplPO servImplPO);
 
     public List<SysServImplPO> getSysServImplsByType(@Param("type") String type);
+
+    int insertSysOutbound(SysOutboundPO record);
 
 }

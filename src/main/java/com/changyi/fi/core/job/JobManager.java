@@ -27,7 +27,7 @@ public class JobManager {
     }
 
     public static void addJob(Job job) {
-        LogUtil.info(JobManager.class, "Add new job: " + job.getType().getValue());
+        LogUtil.info(JobManager.class, "Add new job: " + job.getType());
         if (jobService != null) {
             jobService.addJob(job);
         } else {

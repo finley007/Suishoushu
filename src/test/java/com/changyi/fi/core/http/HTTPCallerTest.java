@@ -3,12 +3,14 @@ package com.changyi.fi.core.http;
 import org.apache.http.client.CookieStore;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.junit.Test;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.ws.rs.HttpMethod;
 
 /**
  * HTTPCaller Tester.
@@ -43,6 +45,13 @@ public class HTTPCallerTest {
         String url = "http://47.94.41.252:8080/suishoushu/inbound/detail";
         String response = new HTTPCaller(url).setCookieStore(cookieStore).enableProxy().doGet();
         System.out.println(response);
+    }
+
+    @Test
+    public void testParseURL() throws Exception {
+        String url = "https://www.baidu.com:9080/service/aa.html";
+        HTTPCaller caller = new HTTPCaller(url);
+        caller.parseURL(HttpMethod.POST);
     }
 
 
