@@ -7,7 +7,7 @@ import com.changyi.fi.core.model.SysOutboundPO;
 
 public class RecordOutboundJob extends Job {
 
-    private final static String SYS_DAO = "SysDao";
+    private final static String SYS_DAO = "sysDao";
     private final static String RECORD_OUTBOUND = "RECORD_OUTBOUND";
 
     private SysDao sysDao;
