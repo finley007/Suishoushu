@@ -5,6 +5,7 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.dao.SysDao;
 import com.changyi.fi.core.job.Job;
 import com.changyi.fi.core.model.SysOutboundPO;
+import org.apache.logging.log4j.ThreadContext;
 
 public class RecordOutboundJob extends Job {
 
@@ -25,6 +26,8 @@ public class RecordOutboundJob extends Job {
     }
 
     public void run() {
+        LogUtil.intSquence();
+        ThreadContext.put(LogUtil.LOG_ROUTE_KEY, LogUtil.DAEMON_THREAD);
         if (sysDao != null && po != null) {
             LogUtil.info(this.getClass(), "Add outbound call record");
             try {
