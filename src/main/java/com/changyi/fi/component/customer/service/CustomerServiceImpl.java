@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Validate
-    public void updateCustomer(Customer info, String openId) throws Exception {
+    public void updateCustomer(Customer info, String openId, boolean isLogin) throws Exception {
         LogUtil.info(this.getClass(), "Update customer info in DB");
         CustomerPO po = new CustomerPO();
         po.setCity(info.getCity());
@@ -39,9 +39,11 @@ public class CustomerServiceImpl implements CustomerService {
             customerDao.insert(po);
         }
 
-        CustomerLoginPO loginPO = new CustomerLoginPO();
-        loginPO.setOpenId(openId);
-        loginPO.setLoginTime(new Date());
-        customerDao.insertCustomerLogin(loginPO);
+        if (isLogin) {
+            CustomerLoginPO loginPO = new CustomerLoginPO();
+            loginPO.setOpenId(openId);
+            loginPO.setLoginTime(new Date());
+            customerDao.insertCustomerLogin(loginPO);
+        }
     }
 }

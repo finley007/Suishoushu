@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
         //根据openid生成session并保存在token中
         Customer customer = new Customer();
         customer.setGendar(FIConstants.Gendar.Unknow.getValue().toString());
-        customerService.updateCustomer(customer, session.getOpenId());
+        customerService.updateCustomer(customer, session.getOpenId(), true);
         return new AuthResponse(new Token(session).getKey());
     }
 
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         session.setOpenId(TESTER_CODE);
         Customer customer = new Customer();
         customer.setGendar(FIConstants.Gendar.Unknow.getValue().toString());
-        customerService.updateCustomer(customer, session.getOpenId());
+        customerService.updateCustomer(customer, session.getOpenId(), true);
         return new AuthResponse(new Token(session).getKey());
     }
 

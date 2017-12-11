@@ -42,7 +42,7 @@ public class CustomerResource {
             Token curToken = Token.touch(token);
             String openId = curToken.getSession().setCustomer(customer).getOpenId();
             Token.update(curToken);
-            customerService.updateCustomer(customer, openId);
+            customerService.updateCustomer(customer, openId, false);
             LogUtil.info(this.getClass(), "Complete updateCustomer endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
