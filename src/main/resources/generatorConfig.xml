@@ -46,6 +46,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
+        <!--
         <table schema="${dev_schema}" tableName="INC_INVOICE" domainObjectName="InvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
@@ -71,13 +72,11 @@
                enableUpdateByExample="true">
         </table>
 
-        <!--
         <table schema="${dev_schema}" tableName="MERCHANT_TYPE" domainObjectName="MerchantTypePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
             <property name="useActualColumnNames" value="true"/>
         </table>
-        -->
 
         <table schema="${dev_schema}" tableName="INC_CUSTOMER" domainObjectName="CustomerPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
@@ -88,7 +87,14 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
+        -->
 
+        <table schema="${dev_schema}" tableName="INC_CUSTOMER_QRCODE" domainObjectName="CustomerQRCodePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
+        </table>
+
+        <!--
         <table schema="${dev_schema}" tableName="INC_V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
@@ -108,5 +114,6 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
+        -->
     </context>
 </generatorConfiguration>

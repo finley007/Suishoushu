@@ -3,17 +3,17 @@ package com.changyi.fi.component.invoice.service;
 import com.changyi.fi.component.invoice.request.PutInvoiceRequest;
 import com.changyi.fi.component.invoice.response.GetInvoiceResponse;
 import com.changyi.fi.component.invoice.response.InvoicesResponse;
+import com.changyi.fi.core.CtxProvider;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.encrypt.EncryptManager;
+import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.exception.AuthenticationFailedException;
 import com.changyi.fi.exception.InvoiceNotFoundException;
-import com.changyi.fi.model.EnterpriseHistoryPO;
-import com.changyi.fi.model.EnterprisePO;
-import com.changyi.fi.model.InvoicePO;
-import com.changyi.fi.model.VInvoicePO;
+import com.changyi.fi.job.DBOperatorJob;
+import com.changyi.fi.model.*;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -323,7 +323,23 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice == null) {
             throw new InvoiceNotFoundException("The invoice: " + invoiceId + " does not existed");
         }
+        recordCustomerQRCode(invoice);
         return this.getQRCodeImg(invoice);
+    }
+
+    private void recordCustomerQRCode(VInvoicePO invoice) {
+        final CustomerQRCodePO po = new CustomerQRCodePO();
+        po.setOpenId(invoice.getOpenId());
+        po.setType(invoice.getType());
+        if (invoice.isEnterpriseInvoice()) {
+            po.setCreditCode(invoice.getCreditCode());
+        }
+        final InvoiceDao dao = (InvoiceDao)CtxProvider.getContext().getBean("invoiceDao");
+        JobManager.addJob(new DBOperatorJob(new DBOperatorJob.IDBOperator() {
+            public void execute() {
+                dao.insertCustomerQRCode(po);
+            }
+        }));
     }
 
     private File getQRCodeImg(VInvoicePO invoice) throws Exception {

@@ -1,9 +1,6 @@
 package com.changyi.fi.dao;
 
-import com.changyi.fi.model.EnterpriseHistoryPO;
-import com.changyi.fi.model.EnterprisePO;
-import com.changyi.fi.model.InvoicePO;
-import com.changyi.fi.model.VInvoicePO;
+import com.changyi.fi.model.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -66,4 +63,6 @@ public interface InvoiceDao {
     @Select("SELECT id FROM inc_invoice T WHERE T.open_id = #{openId} and T.status = 0")
     @Result(javaType = Integer.class)
     List<Integer> getInvoiceIdByCustomer(@Param("openId") String openId);
+
+    int insertCustomerQRCode(CustomerQRCodePO record);
 }

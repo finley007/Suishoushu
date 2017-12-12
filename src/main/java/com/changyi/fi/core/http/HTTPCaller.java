@@ -1,12 +1,14 @@
 package com.changyi.fi.core.http;
 
+import com.changyi.fi.core.CtxProvider;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.dao.SysDao;
 import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.model.SysOutboundPO;
 import com.changyi.fi.core.tool.Properties;
-import com.changyi.fi.job.RecordOutboundJob;
+import com.changyi.fi.job.DBOperatorJob;
 import com.changyi.fi.util.FIConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -163,8 +165,14 @@ public class HTTPCaller {
     }
 
     private void recordOutbound(String method) {
-        SysOutboundPO po = parseURL(method);
-        JobManager.addJob(new RecordOutboundJob(po));
+        final SysOutboundPO po = parseURL(method);
+        final SysDao sysDao = (SysDao)CtxProvider.getContext().getBean("sysDao");
+        JobManager.addJob(new DBOperatorJob(new DBOperatorJob.IDBOperator() {
+
+            public void execute() {
+                sysDao.insertSysOutbound(po);
+            }
+        }));
     }
 
     public SysOutboundPO parseURL(String method) {

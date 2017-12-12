@@ -1,5 +1,7 @@
 package com.changyi.fi.model;
 
+import com.changyi.fi.util.FIConstants;
+
 import java.util.Date;
 
 public class VInvoicePO {
@@ -481,5 +483,9 @@ public class VInvoicePO {
      */
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public boolean isEnterpriseInvoice() {
+        return !FIConstants.InvoiceType.Person.getValue().equals(this.type);
     }
 }
