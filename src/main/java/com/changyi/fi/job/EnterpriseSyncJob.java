@@ -46,10 +46,10 @@ public class EnterpriseSyncJob extends Job {
             for (Map map : enterpriseList) {
                 String name = map.get(FIConstants.FIELD_NAME).toString();
                 String creditCode = map.get(FIConstants.FIELD_CREDIT_CODE).toString();
-                if (StringUtils.isBlank(name)
-                        || invoiceDao.countEnterpriseByName(name) > 0) {
-                    continue;
-                }
+//                if (StringUtils.isBlank(name)
+//                        || invoiceDao.countEnterpriseByName(name) > 0) {
+//                    continue;
+//                }
                 try {
                     service.getEnterpriseByCode(creditCode);
                 } catch (Exception e) {
