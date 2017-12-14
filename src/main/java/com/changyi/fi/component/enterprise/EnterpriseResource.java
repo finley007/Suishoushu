@@ -39,7 +39,7 @@ public class EnterpriseResource {
         try {
             LogUtil.info(this.getClass(), "Enter matchEnterprise endpoint for key: " + key);
             if (StringUtils.isEmpty(key)) {
-                throw new NullRequestException("Key is required");
+                throw new NullRequestException("Parameter: key is required");
             }
             MatchEnterpriseResponse response = enterpriseService.matchEnterprise(key);
             LogUtil.info(this.getClass(), "Complete matchEnterprise endpoint handle");
@@ -71,6 +71,31 @@ public class EnterpriseResource {
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run getEnterprise endpoint error: ", t);
             String res = ExceptionHandler.handle(new GetEnterpriseFailException("Get enterprise information failed"));
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @GET
+    @Path("/heartbeat")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response heartbeat(@HeaderParam(Token.KEY) String token, @QueryParam("key") String key, @QueryParam("api") String api) {
+        try {
+            LogUtil.info(this.getClass(), "Enter heartbeat endpoint for key: " + key + " and API: " + api);
+            if (StringUtils.isEmpty(key)) {
+                throw new NullRequestException("Parameter key is required");
+            }
+            if (StringUtils.isEmpty(api)) {
+                throw new NullRequestException("Parameter api is required");
+            }
+            MatchEnterpriseResponse response = enterpriseService.heartbeat(key, api);
+            LogUtil.info(this.getClass(), "Complete heartbeat endpoint handle");
+            LogUtil.debug(this.getClass(), "Response: {} ", response.build());
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run heartbeat endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
     }

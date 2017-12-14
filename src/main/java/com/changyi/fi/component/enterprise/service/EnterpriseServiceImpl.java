@@ -11,6 +11,7 @@ import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.job.JobManager;
 import com.changyi.fi.core.maintain.MaintainManager;
 import com.changyi.fi.dao.InvoiceDao;
+import com.changyi.fi.exception.SystemErrorException;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
 import com.changyi.fi.external.enterprise.manager.EnternalEnterpriseAPIManager;
 import com.changyi.fi.job.EnterpriseSyncJob;
@@ -139,5 +140,15 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             EnterprisePO po = service.getEnterpriseByCode(req.getCreditCode());
             return new GetEnterpriseResponse(po);
         }
+    }
+
+    @Timer
+    public MatchEnterpriseResponse heartbeat(String key, String api) throws Exception {
+        LogUtil.info(this.getClass(), "Execute heartbeat service for key: " + key + " and API: " + api);
+        ExternalEnterpriseAPIService apiImpl = EnternalEnterpriseAPIManager.getAPIImpl(api);
+        if (apiImpl == null) {
+            throw new SystemErrorException("Unknown API: " + api);
+        }
+        return new MatchEnterpriseResponse(apiImpl.matchEnterprise(key));
     }
 }

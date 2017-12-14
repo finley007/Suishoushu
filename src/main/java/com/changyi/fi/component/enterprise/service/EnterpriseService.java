@@ -12,4 +12,6 @@ public interface EnterpriseService {
     public MatchEnterpriseResponse matchEnterprise(String key) throws Exception;
 
     public GetEnterpriseResponse getEnterprise(GetEnterpriseRequest req) throws Exception;
+
+    public MatchEnterpriseResponse heartbeat(String key, String api) throws Exception;
 }
