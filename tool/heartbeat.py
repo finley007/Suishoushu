@@ -21,9 +21,12 @@ SESSION_KEY = 'session_map_111111'
 EMAIL_SERVER = 'smtp.163.com'
 EMAIL_SENDER = 'changyi_688@163.com'  
 EMAIL_RECEIVER = 'finley007@163.com; 147699362@qq.com'  
-EMAIL_SUBJECT = 'Suishoushu heartbeat check failed'  
+EMAIL_SUBJECT = '发票闪开系统告警'  
 EMAIL_SMTPSERVER = 'smtp.163.com'  
 EMAIL_PASSWORD = 'changyi2017'  
+
+#15分钟
+TIME_UNIT = 15 * 60
 
 conn = MySQLdb.connect('localhost', 'root', 'root', 'fi_dev', charset='utf8')
 cursor = conn.cursor()
@@ -37,26 +40,45 @@ smtp.login(EMAIL_SENDER, EMAIL_PASSWORD)
 def main(argv):
 	logging.info('************************Start heartbeat check')
 	getSession()
-	cursor.execute('select * from sys_heartbeat_config')
+	cursor.execute("select * from sys_heartbeat_config where status = '0'")
 	heartbeat_items = cursor.fetchall()
 	for item in heartbeat_items:
+		cid = item[0]
 		url = item[1]
 		logging.info('-----------Check link: ' + url)
 		method = item[2]
 		data = item[3]
+		time = item[6]
 		is_auth = item[7]
-		try: 
-			if method == 'GET':
-				res = doGet(url, data, is_auth)
+		interval = item[5]
+		#配置了区间
+		isCheck = False
+		if interval and interval > 0:
+			current_time = datetime.datetime.now()
+			logging.info('Interval is ' + interval + ' and next time: ' + time.strftime('%Y-%m-%d %H:%S:%M') + ' and current time: ' + current_time.strftime('%Y-%m-%d %H:%S:%M'))
+			if (time - current_time).seconds <= 10:
+				isCheck = true
+				delta = TIME_UNIT
+				next_time = current_time + datetime.timedelta(seconds=delta)
+				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime("%Y-%m-%d %H:%M:%S") + "' where id = '2'"
+				cursor.execute(update_next_time)
+				conn.commit()
 			else:
-				data_type = item[4]
-				res = doPost(url, data, data_type, is_auth)
-		except BaseException as e:
-			msg = traceback.format_exc()
-			sendEmail("Heartbeat check error: " + url + "\n" + msg)
-			logging.info("Heartbeat check error: " + url + "\n" + msg)
-			continue
-		checkResponse(url, res)
+				logging.info("Next time not reach")
+		if isCheck:
+			logging.info('Execute heartbeat')
+			try: 
+				if method == 'GET':
+					res = doGet(url, data, is_auth)
+				else:
+					data_type = item[4]
+					res = doPost(url, data, data_type, is_auth)
+			except BaseException as e:
+				msg = traceback.format_exc()
+				sendEmail("心跳探测出错，服务链接：" + url + "\n，异常信息：" + msg)
+				logging.info("Heartbeat check error: " + url + "\n" + msg)
+				continue
+			checkResponse(url, res)
 
 
 #这个方法有待于扩展
@@ -64,13 +86,13 @@ def checkResponse(url, res):
 	jsonRes = json.loads(res)
 	if 'returnCode' in jsonRes:
 		if jsonRes['returnCode'] != '0':
-			sendEmail("Heartbeat check failed: " + url + " for return code: " + jsonRes['returnCode'])
+			sendEmail("心跳测试失败，服务链接： " + url + "，错误码：" + jsonRes['returnCode'])
 			logging.info("Heartbeat check failed: " + url + " for return code: " + jsonRes['returnCode'])
 			return
 	if 'content' in jsonRes:
 		content = jsonRes['content']
 		if 'count' in content and content['count'] == 0:
-			endEmail("Heartbeat check failed: " + url + " for content: " + content)
+			endEmail("心跳测试失败，服务链接：" + url + "，报文信息：" + content)
 			logging.info("Heartbeat check failed: " + url + " for content: " + content)
 
 
