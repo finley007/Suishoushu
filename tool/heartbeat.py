@@ -53,18 +53,18 @@ def main(argv):
 		is_auth = item[7]
 		interval = item[5]
 		#配置了区间
-		isCheck = False
+		isCheck = True
 		if interval and interval > 0:
 			current_time = datetime.datetime.now()
 			logging.info('Interval is ' + str(interval) + ' and next time: ' + time.strftime(TIME_FORMAT) + ' and current time: ' + current_time.strftime(TIME_FORMAT))
 			if (time - current_time).seconds <= 10:
-				isCheck = true
 				delta = TIME_UNIT
 				next_time = current_time + datetime.timedelta(seconds=delta)
 				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime(TIME_FORMAT) + "' where id = '" + str(cid) + "'"
 				cursor.execute(update_next_time)
 				conn.commit()
 			else:
+				isCheck = False
 				logging.info("Next time not reach")
 		if isCheck:
 			logging.info('Execute heartbeat')
