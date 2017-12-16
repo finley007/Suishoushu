@@ -27,6 +27,7 @@ EMAIL_PASSWORD = 'changyi2017'
 
 #15分钟
 TIME_UNIT = 15 * 60
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 conn = MySQLdb.connect('localhost', 'root', 'root', 'fi_dev', charset='utf8')
 cursor = conn.cursor()
@@ -55,12 +56,12 @@ def main(argv):
 		isCheck = False
 		if interval and interval > 0:
 			current_time = datetime.datetime.now()
-			logging.info('Interval is ' + str(interval) + ' and next time: ' + time.strftime('%Y-%m-%d %H:%S:%M') + ' and current time: ' + current_time.strftime('%Y-%m-%d %H:%S:%M'))
+			logging.info('Interval is ' + str(interval) + ' and next time: ' + time.strftime(TIME_FORMAT) + ' and current time: ' + current_time.strftime(TIME_FORMAT))
 			if (time - current_time).seconds <= 10:
 				isCheck = true
 				delta = TIME_UNIT
 				next_time = current_time + datetime.timedelta(seconds=delta)
-				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime("%Y-%m-%d %H:%M:%S") + "' where id = '" + str(cid) + "'"
+				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime(TIME_FORMAT) + "' where id = '" + str(cid) + "'"
 				cursor.execute(update_next_time)
 				conn.commit()
 			else:
