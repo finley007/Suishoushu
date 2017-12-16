@@ -55,12 +55,12 @@ def main(argv):
 		isCheck = False
 		if interval and interval > 0:
 			current_time = datetime.datetime.now()
-			logging.info('Interval is ' + interval + ' and next time: ' + time.strftime('%Y-%m-%d %H:%S:%M') + ' and current time: ' + current_time.strftime('%Y-%m-%d %H:%S:%M'))
+			logging.info('Interval is ' + str(interval) + ' and next time: ' + time.strftime('%Y-%m-%d %H:%S:%M') + ' and current time: ' + current_time.strftime('%Y-%m-%d %H:%S:%M'))
 			if (time - current_time).seconds <= 10:
 				isCheck = true
 				delta = TIME_UNIT
 				next_time = current_time + datetime.timedelta(seconds=delta)
-				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime("%Y-%m-%d %H:%M:%S") + "' where id = '2'"
+				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime("%Y-%m-%d %H:%M:%S") + "' where id = '" + str(cid) + "'"
 				cursor.execute(update_next_time)
 				conn.commit()
 			else:
