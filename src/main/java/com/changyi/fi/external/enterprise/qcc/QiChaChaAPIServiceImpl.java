@@ -85,6 +85,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         CookieStore cookieStore = new BasicCookieStore();
         String key = Properties.get(QICHACHA_COOKIE_KEY);
         String value = Properties.get(QICHACHA_COOKIE_VALUE);
+        LogUtil.info(this.getClass(), "QCC cookie enabled key: " + key + " and value: " + value);
         BasicClientCookie cookie = new BasicClientCookie(key, value);
         cookie.setDomain(QICHACHA_DOMAIN);
         cookie.setPath("/");
