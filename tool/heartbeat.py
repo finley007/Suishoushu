@@ -10,6 +10,7 @@ import logging
 import logging.config
 import os
 import datetime
+import time
 import smtplib  
 from email.mime.text import MIMEText  
 from email.header import Header 
@@ -17,7 +18,7 @@ import traceback
 import re
 import chardet
 
-EMAIL_NOTIFY_SWITCH = False
+EMAIL_NOTIFY_SWITCH = True
 
 #LOG_DIR = '/Users/finley/Finley/workspace/java/Suishoushu/log'
 LOG_DIR = '/home/suishoushu/log'
@@ -58,19 +59,21 @@ def main(argv):
 		data = item[3]
 		logging.info('-----------Check link: ' + url + ' data: ' + data)
 		method = item[2]
-		time = item[6]
+		ntime = item[6]
 		is_auth = item[7]
 		interval = item[5]
 		#配置了区间
 		isCheck = True
 		if not interval is None and interval > 0:
 			current_time = datetime.datetime.now()
+			time_stamp = time.mktime(ntime.timetuple())
+			current_time_stamp = time.mktime(current_time.timetuple())
 			logging.info('Interval is ' + str(interval) 
-			+ ' and next time: ' + time.strftime(TIME_FORMAT) 
+			+ ' and next time: ' + ntime.strftime(TIME_FORMAT) 
 			+ ' and current time: ' + current_time.strftime(TIME_FORMAT)
-			+ ' and delta: ' + str((time - current_time).seconds))
-			if (time - current_time).seconds <= 10:
-				delta = TIME_UNIT
+			+ ' and delta: ' + str(time_stamp - current_time_stamp))
+			if time_stamp - current_time_stamp <= 10:
+				delta = TIME_UNIT * interval
 				next_time = current_time + datetime.timedelta(seconds=delta)
 				logging.info('Set next time: ' + next_time.strftime(TIME_FORMAT))
 				update_next_time = "update sys_heartbeat_config set next_time = '" + next_time.strftime(TIME_FORMAT) + "' where id = '" + str(cid) + "'"
