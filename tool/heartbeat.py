@@ -39,7 +39,7 @@ ZH_PATTERN = re.compile(u'[\u4e00-\u9fa5]+')
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-conn = MySQLdb.connect('localhost', 'root', 'root', 'fi_dev', charset='utf8')
+conn = MySQLdb.connect('localhost', 'root', 'root', 'fi', charset='utf8')
 cursor = conn.cursor()
 redis_client = redis.StrictRedis(host='localhost',port=6380)
 
