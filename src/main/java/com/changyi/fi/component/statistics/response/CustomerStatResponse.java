@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class CustomerStatResponse extends NormalResponse {
 
-    private long customerLoginTime;
+    private long customerLoginCount;
 
-    private long customerRegisterTime;
+    private long customerRegisterCount;
 
     private List<Map> custormerStat;
 
@@ -31,19 +31,19 @@ public class CustomerStatResponse extends NormalResponse {
         this.custormerStat = custormerStat;
     }
 
-    public long getCustomerLoginTime() {
-        return customerLoginTime;
+    public long getCustomerLoginCount() {
+        return customerLoginCount;
     }
 
-    public void setCustomerLoginTime(long customerLoginTime) {
-        this.customerLoginTime = customerLoginTime;
+    public void setCustomerLoginCount(long customerLoginCount) {
+        this.customerLoginCount = customerLoginCount;
     }
 
-    public long getCustomerRegisterTime() {
-        return customerRegisterTime;
+    public long getCustomerRegisterCount() {
+        return customerRegisterCount;
     }
 
-    public void setCustomerRegisterTime(long customerRegisterTime) {
-        this.customerRegisterTime = customerRegisterTime;
+    public void setCustomerRegisterCount(long customerRegisterCount) {
+        this.customerRegisterCount = customerRegisterCount;
     }
 }

@@ -32,7 +32,7 @@ public class EnterpriseSyncJob extends Job {
     public EnterpriseSyncJob(String key) {
         this.key = key;
         //目前由于天眼查需要代理，用企查查作为后台同步的接口
-        service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(FIConstants.BEAN_TIANYANCHA_API_SERVICE);
+        service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(FIConstants.BEAN_QICHACHA_API_SERVICE);
         invoiceDao = (InvoiceDao) CtxProvider.getContext().getBean(INVOICE_DAO);
     }
 

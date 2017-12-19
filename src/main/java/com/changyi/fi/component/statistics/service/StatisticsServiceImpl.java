@@ -32,8 +32,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     public CustomerStatResponse getCustomerStatInfo(CustomerStatRequest request) throws Exception {
         LogUtil.info(this.getClass(), "Execute getCustomerStatInfo service");
         CustomerStatResponse res = new CustomerStatResponse();
-        res.setCustomerLoginTime(statisticsDao.countCustomerLogin(request.getStrStartDate(), request.getStrEndDate()));
-        res.setCustomerRegisterTime(statisticsDao.countCustomerRegister(request.getStrStartDate(), request.getStrEndDate()));
+        res.setCustomerLoginCount(statisticsDao.countCustomerLogin(request.getStrStartDate(), request.getStrEndDate()));
+        res.setCustomerRegisterCount(statisticsDao.countCustomerRegister(request.getStrStartDate(), request.getStrEndDate()));
         res.setCustormerStat(statisticsDao.getCustomerStat(request.getCustomerTopN()));
         res.setCustomerDistri(statisticsDao.getCustomerDistribution());
         return res;
