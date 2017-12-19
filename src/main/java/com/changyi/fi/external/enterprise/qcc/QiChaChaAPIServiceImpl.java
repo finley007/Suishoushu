@@ -77,6 +77,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         String url = HTTPCaller.createUrl(QICHACHA_SEARCH_TEMPLATE, new Object[]{encodedKey});
         LogUtil.info(this.getClass(), "QiChaCha API, url: " + url);
         String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
+        LogUtil.debug(this.getClass(), "QiChaCha match enterprise response: " + html);
         HTTPParser parser = new HTTPParser(html);
         return createEnterpriseList(parser, key);
     }
