@@ -9,11 +9,11 @@ import java.util.Map;
 
 public interface StatisticsDao {
 
-    @Select("select count(*) from inc_customer_login")
+    @Select("select count(*) from (select t1.nick_name, count(*) from inc_customer_login t, inc_customer t1 where t1.open_id = t.open_id group by t1.nick_name) v")
     @Result(javaType = Long.class)
     public Long countTotalCustomer();
 
-    @Select("select count(*) from inc_customer_login where login_time < #{limitDate}")
+    @Select("select count(*) from (select t1.nick_name, count(*) from inc_customer_login t, inc_customer t1 where t1.open_id = t.open_id and t.login_time < #{limitDate} group by t1.nick_name) v")
     @Result(javaType = Long.class)
     public Long countInactiveCustomer(@Param("limitDate") String limitDate);
 

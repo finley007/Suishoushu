@@ -3,6 +3,9 @@ package com.changyi.fi.external.weixin;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * WeixinAPIServiceImpl Tester.
@@ -11,6 +14,8 @@ import org.junit.After;
  * @version 1.0
  * @since <pre>Aug 7, 2017</pre>
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/applicationContext.xml"})
 public class WeixinAPIServiceImplTest {
 
     private WeixinAPIService api;
@@ -134,7 +139,7 @@ try {
 
     @Test
     public void testCreateMerchantQRCode() throws Exception {
-        this.api.createMerchantQRCode("", "");
+        this.api.createMerchantQRCode("test", "/Users/finley/Finley/aa.gif");
     }
 
 
