@@ -35,7 +35,7 @@ public class MerchantResource {
     @Timer
     public Response validate(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
         try {
-            LogUtil.info(this.getClass(), "Enter validate endpoint");
+            LogUtil.info(this.getClass(), "Enter validate endpoint and request: " + request);
             if (StringUtils.isBlank(request)) {
                 throw new NullRequestException("Request is required");
             }
