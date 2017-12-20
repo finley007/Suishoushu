@@ -9,6 +9,14 @@ import java.util.Map;
 
 public interface StatisticsDao {
 
+    @Select("select count(*) from inc_customer_login")
+    @Result(javaType = Long.class)
+    public Long countTotalCustomer();
+
+    @Select("select count(*) from inc_customer_login where login_time < #{limitDate}")
+    @Result(javaType = Long.class)
+    public Long countInactiveCustomer(@Param("limitDate") String limitDate);
+
     @Select("select count(*) from inc_customer_login where login_time > #{startDate} and login_time < #{endDate}")
     @Result(javaType = Long.class)
     public Long countCustomerLogin(@Param("startDate") String startDate, @Param("endDate") String endDate);

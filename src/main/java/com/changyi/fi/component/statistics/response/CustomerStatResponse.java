@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class CustomerStatResponse extends NormalResponse {
 
+    private long totalCustomerCount;
+
+    private long inactiveCustomerCount;
+
     private long customerLoginCount;
 
     private long customerRegisterCount;
@@ -45,5 +49,21 @@ public class CustomerStatResponse extends NormalResponse {
 
     public void setCustomerRegisterCount(long customerRegisterCount) {
         this.customerRegisterCount = customerRegisterCount;
+    }
+
+    public long getTotalCustomerCount() {
+        return totalCustomerCount;
+    }
+
+    public void setTotalCustomerCount(long totalCustomerCount) {
+        this.totalCustomerCount = totalCustomerCount;
+    }
+
+    public long getInactiveCustomerCount() {
+        return inactiveCustomerCount;
+    }
+
+    public void setInactiveCustomerCount(long inactiveCustomerCount) {
+        this.inactiveCustomerCount = inactiveCustomerCount;
     }
 }

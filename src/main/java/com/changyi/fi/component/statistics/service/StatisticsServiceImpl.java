@@ -1,5 +1,8 @@
 package com.changyi.fi.component.statistics.service;
 
+import java.util.Date;
+import java.util.Calendar;
+
 import com.changyi.fi.component.statistics.request.CustomerStatRequest;
 import com.changyi.fi.component.statistics.request.EnterpriseStatRequest;
 import com.changyi.fi.component.statistics.request.SystemStatRequest;
@@ -8,11 +11,14 @@ import com.changyi.fi.component.statistics.response.EnterpriseStatResponse;
 import com.changyi.fi.component.statistics.response.SystemStatResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.dao.StatisticsDao;
+import com.changyi.fi.util.FIConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("statisticsService")
 public class StatisticsServiceImpl implements StatisticsService {
+
+    private static final int INACTIVE_LIMIT = -10;
 
     private StatisticsDao statisticsDao;
 
@@ -36,6 +42,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         res.setCustomerRegisterCount(statisticsDao.countCustomerRegister(request.getStrStartDate(), request.getStrEndDate()));
         res.setCustormerStat(statisticsDao.getCustomerStat(request.getCustomerTopN()));
         res.setCustomerDistri(statisticsDao.getCustomerDistribution());
+        res.setTotalCustomerCount(statisticsDao.countTotalCustomer());
+        res.setInactiveCustomerCount(statisticsDao.countInactiveCustomer(getInactiveLimit()));
         return res;
     }
 
@@ -45,5 +53,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         res.setEnterpriseStat(statisticsDao.getEnterpriseStat(request.getTopN()));
         res.setEnterpriseDistri(statisticsDao.getEnterpriseDistribution());
         return res;
+    }
+
+    private String getInactiveLimit() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, INACTIVE_LIMIT);
+        return FIConstants.sdf.format(cal.getTime());
     }
 }
