@@ -87,7 +87,7 @@ public class MerchantServiceImpl implements MerchantService {
         if (success) {
             po.setResult(MERCHANT_VALICATION_RESULT_SUCCESS);
         } else {
-            po.setResult(MERCHANT_VALICATION_RESULT_SUCCESS);
+            po.setResult(MERCHANT_VALICATION_RESULT_FAIL);
         }
         this.merchantDao.insertMerchantVisit(po);
     }
