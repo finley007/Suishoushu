@@ -10,7 +10,6 @@ import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
 import com.changyi.fi.exception.MerchantNotFoundException;
-import com.changyi.fi.exception.OutOfBoundsException;
 import com.changyi.fi.external.weixin.WeixinAPIService;
 import com.changyi.fi.model.MerchantPO;
 import com.changyi.fi.model.MerchantVisitPO;
@@ -31,6 +30,8 @@ public class MerchantServiceImpl implements MerchantService {
     private static final String QRCODE_EXTEND = "qrcode.extend";
 
     private static final int SWITCH_DO_VALIDATION = 1;
+    private static final short MERCHANT_VALICATION_RESULT_SUCCESS = 0;
+    private static final short MERCHANT_VALICATION_RESULT_FAIL = 1;
 
     private MerchantDao merchantDao;
 
@@ -43,13 +44,13 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Validate
-    public void validate(MerchantValidateRequest req, String openId) throws Exception {
+    public boolean validate(MerchantValidateRequest req, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute validate service for: " + openId);
         MerchantPO merchantPO = this.merchantDao.getMerchantById(req.getId());
         if (merchantPO == null) {
             throw new MerchantNotFoundException("Merchant: " + req.getId() + " not found");
         }
-        isValidate(merchantPO, req.getPosition());
+        return isValidate(merchantPO, req.getPosition());
     }
 
 
@@ -63,7 +64,7 @@ public class MerchantServiceImpl implements MerchantService {
                 LogUtil.debug(this.getClass(), "Current position: " + position.toJson());
                 LogUtil.debug(this.getClass(), "Valid distance: " + validDistance);
                 if (validDistance < CommonUtil.getDistance(merchantPosition, position)) {
-                    throw new OutOfBoundsException("Current QR code is out of bounds");
+                    return false;
                 }
             } else {
                 LogUtil.info(this.getClass(), "The current merchant validation switch is off");
@@ -75,7 +76,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Validate
-    public void doRecord(MerchantValidateRequest req, String openId) throws Exception {
+    public void recordVisit(MerchantValidateRequest req, String openId, boolean success) throws Exception {
         LogUtil.info(this.getClass(), "Execute doRecord service for: " + openId + " and merchant: " + req.getId());
         MerchantVisitPO po = new MerchantVisitPO();
         po.setCreateTime(new Date());
@@ -83,6 +84,11 @@ public class MerchantServiceImpl implements MerchantService {
         po.setMerchantId(req.getId());
         po.setLetitude(BigDecimal.valueOf(req.getPosition().getLatitude()));
         po.setLongitude(BigDecimal.valueOf(req.getPosition().getLongitude()));
+        if (success) {
+            po.setResult(MERCHANT_VALICATION_RESULT_SUCCESS);
+        } else {
+            po.setResult(MERCHANT_VALICATION_RESULT_SUCCESS);
+        }
         this.merchantDao.insertMerchantVisit(po);
     }
 

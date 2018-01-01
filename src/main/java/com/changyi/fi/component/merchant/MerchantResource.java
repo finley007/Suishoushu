@@ -14,6 +14,7 @@ import com.changyi.fi.core.seq.SeqCreatorBuilder;
 import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.InvalidRequestException;
 import com.changyi.fi.exception.NullRequestException;
+import com.changyi.fi.exception.OutOfBoundsException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,8 +49,11 @@ public class MerchantResource {
             }
             MerchantValidateRequest req = new Payload(request).as(MerchantValidateRequest.class);
             String openId = Token.touch(token).getOpenId();
-            merchantService.doRecord(req, openId);
-            merchantService.validate(req, openId);
+            boolean result = merchantService.validate(req, openId);
+            merchantService.recordVisit(req, openId, result);
+            if (!result) {
+                throw new OutOfBoundsException("Current QR code is out of bounds");
+            }
             LogUtil.info(this.getClass(), "Complete validate endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {

@@ -4,9 +4,9 @@ import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 
 public interface MerchantService {
 
-    public void validate(MerchantValidateRequest req, String openId) throws Exception;
+    public boolean validate(MerchantValidateRequest req, String openId) throws Exception;
 
-    public void doRecord(MerchantValidateRequest req, String openId) throws Exception;
+    public void recordVisit(MerchantValidateRequest req, String openId, boolean success) throws Exception;
 
     public String createQRCode(String merchantId) throws Exception;
 
