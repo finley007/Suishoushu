@@ -31,6 +31,16 @@ public class FIConstants {
     public static final String FIELD_CREDIT_CODE = "creditCode";
     public static final String FIELD_NAME = "name";
 
+    //渠道级别：一级代理，二级代理
+    public static final short CHANNEL_LEVEL_1 = 1;
+    public static final short CHANNEL_LEVEL_2 = 2;
+    public static final short CHANNEL_LEVEL_3 = 3;
+
+    public static final short CHANNEL_RANK_1 = 1; //一般
+    public static final short CHANNEL_RANK_2 = 2; //黄金
+    public static final short CHANNEL_RANK_3 = 3; //白金
+    public static final short CHANNEL_RANK_4 = 4; //钻石
+
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
 
@@ -53,6 +63,16 @@ public class FIConstants {
         private Short value;
 
         private InvoiceStatus(Short value) { this.value = value; }
+
+        public Short getValue() { return value; }
+    }
+
+    public enum ChannelStatus {
+        Normal(Integer.valueOf(0).shortValue()), Invalid(Integer.valueOf(1).shortValue());
+
+        private Short value;
+
+        private ChannelStatus(Short value) { this.value = value; }
 
         public Short getValue() { return value; }
     }

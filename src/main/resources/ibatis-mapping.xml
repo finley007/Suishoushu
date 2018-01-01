@@ -7,5 +7,6 @@
         <mapper resource="mapping/InvoicePOMapper.xml"/>
         <mapper resource="mapping/CustomerPOMapper.xml"/>
         <mapper resource="mapping/MerchantPOMapper.xml"/>
+        <mapper resource="mapping/OrderPOMapper.xml"/>
     </mappers>
 </configuration>

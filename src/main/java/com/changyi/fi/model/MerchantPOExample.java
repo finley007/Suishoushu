@@ -1245,6 +1245,136 @@ public class MerchantPOExample {
             addCriterion("expire_time not between", value1, value2, "expireTime");
             return (Criteria) this;
         }
+
+        public Criteria andChannelIdIsNull() {
+            addCriterion("channel_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdIsNotNull() {
+            addCriterion("channel_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdEqualTo(String value) {
+            addCriterion("channel_id =", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdNotEqualTo(String value) {
+            addCriterion("channel_id <>", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdGreaterThan(String value) {
+            addCriterion("channel_id >", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdGreaterThanOrEqualTo(String value) {
+            addCriterion("channel_id >=", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdLessThan(String value) {
+            addCriterion("channel_id <", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdLessThanOrEqualTo(String value) {
+            addCriterion("channel_id <=", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdLike(String value) {
+            addCriterion("channel_id like", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdNotLike(String value) {
+            addCriterion("channel_id not like", value, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdIn(List<String> values) {
+            addCriterion("channel_id in", values, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdNotIn(List<String> values) {
+            addCriterion("channel_id not in", values, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdBetween(String value1, String value2) {
+            addCriterion("channel_id between", value1, value2, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIdNotBetween(String value1, String value2) {
+            addCriterion("channel_id not between", value1, value2, "channelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateIsNull() {
+            addCriterion("do_validate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateIsNotNull() {
+            addCriterion("do_validate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateEqualTo(Short value) {
+            addCriterion("do_validate =", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateNotEqualTo(Short value) {
+            addCriterion("do_validate <>", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateGreaterThan(Short value) {
+            addCriterion("do_validate >", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateGreaterThanOrEqualTo(Short value) {
+            addCriterion("do_validate >=", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateLessThan(Short value) {
+            addCriterion("do_validate <", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateLessThanOrEqualTo(Short value) {
+            addCriterion("do_validate <=", value, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateIn(List<Short> values) {
+            addCriterion("do_validate in", values, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateNotIn(List<Short> values) {
+            addCriterion("do_validate not in", values, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateBetween(Short value1, Short value2) {
+            addCriterion("do_validate between", value1, value2, "doValidate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoValidateNotBetween(Short value1, Short value2) {
+            addCriterion("do_validate not between", value1, value2, "doValidate");
+            return (Criteria) this;
+        }
     }
 
     /**

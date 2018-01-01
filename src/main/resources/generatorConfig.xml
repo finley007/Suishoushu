@@ -61,17 +61,16 @@
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
-
         <table schema="${dev_schema}" tableName="INC_MERCHANT" domainObjectName="MerchantPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
-
+        -->
         <table schema="${dev_schema}" tableName="INC_MERCHANT_VISIT" domainObjectName="MerchantVisitPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
         </table>
-
+        <!--
         <table schema="${dev_schema}" tableName="MERCHANT_TYPE" domainObjectName="MerchantTypePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
@@ -87,14 +86,12 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
-        -->
 
         <table schema="${dev_schema}" tableName="INC_CUSTOMER_QRCODE" domainObjectName="CustomerQRCodePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
 
-        <!--
         <table schema="${dev_schema}" tableName="INC_V_INVOICE" domainObjectName="VInvoicePO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="true"
                enableUpdateByExample="true">
@@ -113,6 +110,36 @@
         <table schema="${dev_schema}" tableName="SYS_OUTBOUND" domainObjectName="SysOutboundPO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_PROD_TYPE" domainObjectName="ProdTypePO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_PRODUCT" domainObjectName="ProductPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_PROD_ATTR" domainObjectName="ProdAttrPO" enableCountByExample="false"
+               enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_PROD_ATTR_INS" domainObjectName="ProdAttrInsPO" enableCountByExample="false"
+               enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_ORDER" domainObjectName="OrderPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true">
+        </table>
+
+        <table schema="${dev_schema}" tableName="INC_CHANNEL" domainObjectName="ChannelPO" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true">
         </table>
         -->
     </context>

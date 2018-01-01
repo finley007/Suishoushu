@@ -9,6 +9,4 @@ public interface MerchantDao {
     MerchantPO getMerchantById(@Param(("id")) String id);
 
     int insertMerchantVisit(MerchantVisitPO po);
-
-    int insertMerchantVisitSelective(MerchantVisitPO po);
 }

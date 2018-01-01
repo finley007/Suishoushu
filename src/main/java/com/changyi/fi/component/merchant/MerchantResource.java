@@ -1,5 +1,6 @@
 package com.changyi.fi.component.merchant;
 
+import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.response.QRCodeResponse;
 import com.changyi.fi.component.merchant.service.MerchantService;
@@ -9,7 +10,9 @@ import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
+import com.changyi.fi.core.seq.SeqCreatorBuilder;
 import com.changyi.fi.core.token.Token;
+import com.changyi.fi.exception.InvalidRequestException;
 import com.changyi.fi.exception.NullRequestException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -19,10 +22,14 @@ import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("merchant")
 public class MerchantResource {
+
+    private static final int MERCHANR_ID_LENGTH = 11;
 
     @Resource
     private MerchantService merchantService;
@@ -42,7 +49,7 @@ public class MerchantResource {
             MerchantValidateRequest req = new Payload(request).as(MerchantValidateRequest.class);
             String openId = Token.touch(token).getOpenId();
             merchantService.validate(req, openId);
-            merchantService.doRecord(req.getId(), openId);
+            merchantService.doRecord(req, openId);
             LogUtil.info(this.getClass(), "Complete validate endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
@@ -69,4 +76,32 @@ public class MerchantResource {
         }
     }
 
+    @GET
+    @Path("createid")
+    @Produces
+    public Response createId(@QueryParam("num") String num) {
+        try {
+            int idNum;
+            List<String> idList = new ArrayList<String>();
+            LogUtil.info(this.getClass(), "Enter createId endpoint");
+            if (StringUtils.isBlank(num)) {
+                throw new NullRequestException("Parameter num is required");
+            }
+            try {
+                idNum = Integer.valueOf(num);
+            } catch (Exception e) {
+                LogUtil.error(this.getClass(), "Invalid parameter num: " + num, e);
+                throw new InvalidRequestException("Invalid parameter num: " + num);
+            }
+            for (int i = 0; i < idNum; i++) {
+                idList.add(SeqCreatorBuilder.build(SeqCreatorBuilder.SEQ_CREATOR_RANDOWM).createSeq(MERCHANR_ID_LENGTH));
+            }
+            LogUtil.info(this.getClass(), "Complete createId endpoint handle");
+            return Response.status(Response.Status.OK).entity(new CreateMerchantIDResponse(idList).build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run createId endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
 }
