@@ -48,8 +48,8 @@ public class MerchantResource {
             }
             MerchantValidateRequest req = new Payload(request).as(MerchantValidateRequest.class);
             String openId = Token.touch(token).getOpenId();
-            merchantService.validate(req, openId);
             merchantService.doRecord(req, openId);
+            merchantService.validate(req, openId);
             LogUtil.info(this.getClass(), "Complete validate endpoint handle");
             return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
         } catch (Throwable t) {
