@@ -166,16 +166,21 @@ public class HTTPCaller {
 
     private void recordOutbound(String method) {
         final SysOutboundPO po = parseURL(method);
-        final SysDao sysDao = (SysDao)CtxProvider.getContext().getBean("sysDao");
-        JobManager.addJob(new DBOperatorJob(new DBOperatorJob.IDBOperator() {
+        if (po != null) {
+            final SysDao sysDao = (SysDao)CtxProvider.getContext().getBean("sysDao");
+            JobManager.addJob(new DBOperatorJob(new DBOperatorJob.IDBOperator() {
 
-            public void execute() {
-                sysDao.insertSysOutbound(po);
-            }
-        }));
+                public void execute() {
+                    sysDao.insertSysOutbound(po);
+                }
+            }));
+        } else {
+            LogUtil.info(this.getClass(), "Parse URL with null result");
+        }
     }
 
     public SysOutboundPO parseURL(String method) {
+        LogUtil.info(this.getClass(), "Parse URL: " + url);
         Pattern pattern = Pattern.compile(URL_PATTERN);
         Matcher matcher = pattern.matcher(url);
         if (matcher.matches()) {
