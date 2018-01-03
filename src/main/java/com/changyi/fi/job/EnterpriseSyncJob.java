@@ -2,6 +2,7 @@ package com.changyi.fi.job;
 
 import com.changyi.fi.core.CtxProvider;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.config.ConfigManager;
 import com.changyi.fi.core.job.Job;
 import com.changyi.fi.dao.InvoiceDao;
 import com.changyi.fi.external.enterprise.ExternalEnterpriseAPIService;
@@ -11,6 +12,8 @@ import org.apache.logging.log4j.ThreadContext;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.changyi.fi.core.config.ConfigDic.SYNC_ENTERPRISE_BEAN;
 
 public class EnterpriseSyncJob extends Job {
 
@@ -32,7 +35,7 @@ public class EnterpriseSyncJob extends Job {
     public EnterpriseSyncJob(String key) {
         this.key = key;
         //目前由于天眼查需要代理，用企查查作为后台同步的接口
-        service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(FIConstants.BEAN_TIANYANCHA_API_SERVICE);
+        service = (ExternalEnterpriseAPIService) CtxProvider.getContext().getBean(ConfigManager.getParameter(SYNC_ENTERPRISE_BEAN));
         invoiceDao = (InvoiceDao) CtxProvider.getContext().getBean(INVOICE_DAO);
     }
 

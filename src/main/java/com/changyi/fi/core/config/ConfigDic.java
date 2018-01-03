@@ -28,6 +28,7 @@ public class ConfigDic implements Dictionary<String> {
     public static final String QXB_ACCOUNT_USE_TIME = "QXB_ACCOUNT_USE_TIME";
     public static final String TYC_ACCOUNT_USE_TIME = "TYC_ACCOUNT_USE_TIME";
     public static final String LOG_LEVEL = "LOG_LEVEL";
+    public static final String SYNC_ENTERPRISE_BEAN = "SYNC_ENTERPRISE_BEAN";
 
 
     public static final String NAME = "config";

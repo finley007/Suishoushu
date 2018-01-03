@@ -76,7 +76,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(),"Encoded key: " + encodedKey);
         String url = HTTPCaller.createUrl(QICHACHA_SEARCH_TEMPLATE, new Object[]{encodedKey});
         LogUtil.info(this.getClass(), "QiChaCha API, url: " + url);
-        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).doGet();
+        String html = new HTTPCaller(url).setCookieStore(createCookieStore()).enableProxy().doGet();
         LogUtil.debug(this.getClass(), "QiChaCha match enterprise response: " + html);
         HTTPParser parser = new HTTPParser(html);
         return createEnterpriseList(parser, key);
@@ -117,7 +117,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         LogUtil.info(this.getClass(), "Execute get enterprise info service by calling QiChaCha API, code: " + code);
         String url = HTTPCaller.createUrl(QICHACHA_DETAIL_TEMPLATE, new Object[]{code});
         LogUtil.info(this.getClass(), "QiChaCha API, url: " + url);
-        String html = new HTTPCaller(url).setCookieStore(this.createCookieStore()).doGet();
+        String html = new HTTPCaller(url).setCookieStore(this.createCookieStore()).enableProxy().doGet();
         HTTPParser parser = new HTTPParser(html);
         EnterprisePO po = createEnterprisePO(parser, url);
         updateEnterpriseBankInfo(po, code);
