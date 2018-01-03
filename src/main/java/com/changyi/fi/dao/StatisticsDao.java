@@ -49,4 +49,7 @@ public interface StatisticsDao {
     @Result(javaType = Long.class)
     public Long getEnterpiseSycNum(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    @Select("select count(*) as count, merchant_id as merchant, result from inc_merchant_visit where create_time > #{startDate} and create_time < #{endDate} group by merchant_id, result")
+    @Result(javaType = Map.class)
+    public List<Map> getMerchantStat(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }

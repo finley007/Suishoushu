@@ -5,9 +5,11 @@ import java.util.Calendar;
 
 import com.changyi.fi.component.statistics.request.CustomerStatRequest;
 import com.changyi.fi.component.statistics.request.EnterpriseStatRequest;
+import com.changyi.fi.component.statistics.request.MerchantStatRequest;
 import com.changyi.fi.component.statistics.request.SystemStatRequest;
 import com.changyi.fi.component.statistics.response.CustomerStatResponse;
 import com.changyi.fi.component.statistics.response.EnterpriseStatResponse;
+import com.changyi.fi.component.statistics.response.MerchantStatResponse;
 import com.changyi.fi.component.statistics.response.SystemStatResponse;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.dao.StatisticsDao;
@@ -60,5 +62,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         cal.setTime(new Date());
         cal.add(Calendar.DATE, INACTIVE_LIMIT);
         return FIConstants.sdf.format(cal.getTime());
+    }
+
+    public MerchantStatResponse getMerchantStatInfo(MerchantStatRequest request) throws Exception {
+        LogUtil.info(this.getClass(), "Execute getMerchantStatInfo service");
+        MerchantStatResponse res = new MerchantStatResponse();
+        res.setMerchantStat(statisticsDao.getMerchantStat(request.getStrStartDate(), request.getStrEndDate()));
+        return res;
     }
 }

@@ -2,9 +2,11 @@ package com.changyi.fi.component.statistics;
 
 import com.changyi.fi.component.statistics.request.CustomerStatRequest;
 import com.changyi.fi.component.statistics.request.EnterpriseStatRequest;
+import com.changyi.fi.component.statistics.request.MerchantStatRequest;
 import com.changyi.fi.component.statistics.request.SystemStatRequest;
 import com.changyi.fi.component.statistics.response.CustomerStatResponse;
 import com.changyi.fi.component.statistics.response.EnterpriseStatResponse;
+import com.changyi.fi.component.statistics.response.MerchantStatResponse;
 import com.changyi.fi.component.statistics.response.SystemStatResponse;
 import com.changyi.fi.component.statistics.service.StatisticsService;
 import com.changyi.fi.core.LogUtil;
@@ -90,6 +92,28 @@ public class StatisticsResource {
             return Response.status(Response.Status.OK).entity(res.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run system statistics endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("/merchant")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Response getMerchantStatInfo(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
+        try {
+            LogUtil.info(this.getClass(), "Enter merchant statistics endpoint, request: " + request);
+            if (StringUtils.isBlank(request)) {
+                throw new NullRequestException("Request is required");
+            }
+            MerchantStatRequest req = new Payload(request).as(MerchantStatRequest.class);
+            MerchantStatResponse res = statisticsService.getMerchantStatInfo(req);
+            LogUtil.info(this.getClass(), "Complete merchant statistics endpoint handle");
+            return Response.status(Response.Status.OK).entity(res.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run merchant statistics endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
