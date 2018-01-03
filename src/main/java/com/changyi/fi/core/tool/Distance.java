@@ -12,6 +12,7 @@ public class Distance {
         this.lon2 = degreesToRadians(lon2);
     }
 
+    //返回距离，单位m
     public double caculate() {
         //差值
         double vLon = Math.abs(lon1 - lon2);
@@ -20,7 +21,7 @@ public class Distance {
         //h is the great circle distance in radians, great circle就是一个球体上的切面，它的圆心即是球心的一个周长最大的圆。
         double h = HaverSin(vLat) + Math.cos(lat1) * Math.cos(lat2) * HaverSin(vLon);
 
-        return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(h));
+        return 2 * EARTH_RADIUS * Math.asin(Math.sqrt(h)) * 1000;
     }
 
     private double lat1;

@@ -27,7 +27,7 @@ public class DistanceTest {
     @Test
     public void testCaculate() throws Exception {
 //TODO: Test goes here...
-        Distance distance = new Distance(34.322049, 34.321642, 108.978996, 108.979423);
+        Distance distance = new Distance(34.322049, 34.320585, 108.978996, 108.978845);
         System.out.println(distance.caculate());
     }
 
