@@ -63,7 +63,9 @@ public class MerchantServiceImpl implements MerchantService {
                 LogUtil.debug(this.getClass(), "Merchant position: " + merchantPosition.toJson());
                 LogUtil.debug(this.getClass(), "Current position: " + position.toJson());
                 LogUtil.debug(this.getClass(), "Valid distance: " + validDistance);
-                if (validDistance < CommonUtil.getDistance(merchantPosition, position)) {
+                double actualDistance = CommonUtil.getDistance(merchantPosition, position);
+                LogUtil.debug(this.getClass(), "Actual distance: " + actualDistance);
+                if (validDistance < actualDistance) {
                     return false;
                 }
             } else {

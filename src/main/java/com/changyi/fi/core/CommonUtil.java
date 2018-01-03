@@ -1,5 +1,6 @@
 package com.changyi.fi.core;
 
+import com.changyi.fi.core.tool.Distance;
 import com.changyi.fi.vo.Position;
 
 import java.io.UnsupportedEncodingException;
@@ -8,9 +9,8 @@ import java.net.URLEncoder;
 public class CommonUtil {
 
     public static Double getDistance(Position p1, Position p2){
-        double x = Math.abs(p1.getLatitude() - p2.getLatitude());
-        double y = Math.abs(p1.getLongitude() - p2.getLongitude());
-        return Math.sqrt(x*x+y*y);
+        Distance distance = new Distance(p1.getLatitude(), p2.getLatitude(), p1.getLongitude(), p2.getLongitude());
+        return distance.caculate();
     }
 
     public static long toUnsigned(long signed) {
