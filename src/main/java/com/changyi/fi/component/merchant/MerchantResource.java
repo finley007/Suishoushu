@@ -83,7 +83,7 @@ public class MerchantResource {
     }
 
     @GET
-    @Path("createid")
+    @Path("/createid")
     @Produces
     public Response createId(@QueryParam("num") String num) {
         try {
@@ -110,7 +110,7 @@ public class MerchantResource {
     }
 
     @POST
-    @Path("qrcodes")
+    @Path("/qrcodes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
