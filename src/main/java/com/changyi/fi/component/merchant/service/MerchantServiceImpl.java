@@ -6,6 +6,7 @@ import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.seq.SeqCreatorBuilder;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
@@ -20,10 +21,14 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service("merchantService")
 public class MerchantServiceImpl implements MerchantService {
+
+    private static final int MERCHANR_ID_LENGTH = 11;
 
     private static final String QRCODE_BASE_PATH = "qrcode.base.path";
     private static final String QRCODE_ROOT_URL = "qrcode.root.url";
@@ -92,6 +97,17 @@ public class MerchantServiceImpl implements MerchantService {
             po.setResult(MERCHANT_VALICATION_RESULT_FAIL);
         }
         this.merchantDao.insertMerchantVisit(po);
+    }
+
+    public List<String> createMerchantIds(int idNum) throws Exception {
+        LogUtil.info(this.getClass(),"Create merchant id for number: " + idNum);
+        List<String> idList = new ArrayList<String>();
+        for (int i = 0; i < idNum; i++) {
+            String id = SeqCreatorBuilder.build(SeqCreatorBuilder.SEQ_CREATOR_RANDOWM).createSeq(MERCHANR_ID_LENGTH);
+            LogUtil.debug(this.getClass(), "Create merchant id: " + id);
+            idList.add(id);
+        }
+        return idList;
     }
 
     public String createQRCode(String merchantId) throws Exception {

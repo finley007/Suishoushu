@@ -2,7 +2,9 @@ package com.changyi.fi.component.merchant;
 
 import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
+import com.changyi.fi.component.merchant.request.QRCodesRequest;
 import com.changyi.fi.component.merchant.response.QRCodeResponse;
+import com.changyi.fi.component.merchant.response.QRCodesResponse;
 import com.changyi.fi.component.merchant.service.MerchantService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
@@ -24,13 +26,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Path("merchant")
 public class MerchantResource {
-
-    private static final int MERCHANR_ID_LENGTH = 11;
 
     @Resource
     private MerchantService merchantService;
@@ -86,7 +88,7 @@ public class MerchantResource {
     public Response createId(@QueryParam("num") String num) {
         try {
             int idNum;
-            List<String> idList = new ArrayList<String>();
+
             LogUtil.info(this.getClass(), "Enter createId endpoint");
             if (StringUtils.isBlank(num)) {
                 throw new NullRequestException("Parameter num is required");
@@ -97,13 +99,46 @@ public class MerchantResource {
                 LogUtil.error(this.getClass(), "Invalid parameter num: " + num, e);
                 throw new InvalidRequestException("Invalid parameter num: " + num);
             }
-            for (int i = 0; i < idNum; i++) {
-                idList.add(SeqCreatorBuilder.build(SeqCreatorBuilder.SEQ_CREATOR_RANDOWM).createSeq(MERCHANR_ID_LENGTH));
-            }
+            List<String> idList = merchantService.createMerchantIds(idNum);
             LogUtil.info(this.getClass(), "Complete createId endpoint handle");
             return Response.status(Response.Status.OK).entity(new CreateMerchantIDResponse(idList).build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run createId endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("qrcodes")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response createQRCodes(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
+        try {
+            LogUtil.info(this.getClass(), "Enter createQRCodes endpoint and request: " + request);
+            if (StringUtils.isBlank(request)) {
+                throw new NullRequestException("Request is required");
+            }
+            QRCodesRequest req = new Payload(request).as(QRCodesRequest.class);
+            List<String> idList = merchantService.createMerchantIds(req.getNumber());
+            List<Map> result = new ArrayList<Map>();
+            if (idList != null && idList.size() > 0) {
+                for (String id  : idList) {
+                    String url = merchantService.createQRCode(id);
+                    Map map = new HashMap();
+                    map.put(QRCodesResponse.KEY_MERCHANT_ID, id);
+                    map.put(QRCodesResponse.KEY_URL, url);
+                    result.add(map);
+                }
+            } else {
+                LogUtil.info(this.getClass(), "No merchant id created");
+            }
+            LogUtil.info(this.getClass(), "Complete createQRCodes endpoint handle");
+            return Response.status(Response.Status.OK).entity(new QRCodesResponse(result).build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run createQRCodes endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }
