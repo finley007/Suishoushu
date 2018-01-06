@@ -1,5 +1,6 @@
 package com.changyi.fi.util;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 public class FIConstants {
@@ -22,6 +23,8 @@ public class FIConstants {
 
     public static final String OK = "ok";
 
+    public static final BigDecimal INIT_POSITION = new BigDecimal(0.0);
+
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
@@ -30,6 +33,10 @@ public class FIConstants {
 
     public static final String FIELD_CREDIT_CODE = "creditCode";
     public static final String FIELD_NAME = "name";
+    public static final String FIELD_ADDRESS = "address";
+
+    //商户默认类型:未知
+    public static final short MERCHANT_DEFAULT_TYPE = 0;
 
     //渠道级别：一级代理，二级代理
     public static final short CHANNEL_LEVEL_1 = 1;
@@ -77,6 +84,16 @@ public class FIConstants {
         public Short getValue() { return value; }
     }
 
+    public enum MerchantStatus {
+        Nonactivated(Integer.valueOf(0).shortValue()), Activated(Integer.valueOf(1).shortValue()), Invalid(Integer.valueOf(2).shortValue());
+
+        private Short value;
+
+        private MerchantStatus(Short value) { this.value = value; }
+
+        public Short getValue() { return value; }
+    }
+
     public enum Gendar {
         Male(Integer.valueOf(0).shortValue()), Female(Integer.valueOf(1).shortValue()), Unknow(Integer.valueOf(2).shortValue());
 
@@ -103,6 +120,18 @@ public class FIConstants {
         private String value;
 
         private IsDefault(String value) { this.value = value; }
+
+        public String getValue() { return value; }
+
+        public Short getShortValue() { return Short.valueOf(this.value); }
+    }
+
+    public enum DoMerchantValidation {
+        True("1"), False("0");
+
+        private String value;
+
+        private DoMerchantValidation(String value) { this.value = value; }
 
         public String getValue() { return value; }
 

@@ -10,10 +10,15 @@ import com.changyi.fi.core.seq.SeqCreatorBuilder;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
+import com.changyi.fi.exception.InvalidChannelException;
 import com.changyi.fi.exception.MerchantNotFoundException;
 import com.changyi.fi.external.weixin.WeixinAPIService;
+import com.changyi.fi.model.ChannelPO;
+import com.changyi.fi.model.ChannelPOExample;
 import com.changyi.fi.model.MerchantPO;
 import com.changyi.fi.model.MerchantVisitPO;
+import com.changyi.fi.util.FIConstants;
+import com.changyi.fi.vo.Channel;
 import com.changyi.fi.vo.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,6 +113,36 @@ public class MerchantServiceImpl implements MerchantService {
             idList.add(id);
         }
         return idList;
+    }
+
+    public List<String> createMerchants(int idNum, String channelId) throws Exception {
+        verifyChannel(channelId);
+        List<String> ids = this.createMerchantIds(idNum);
+        for (int i = 0; i < ids.size(); i++) {
+            MerchantPO po = new MerchantPO();
+            po.setId(ids.get(i));
+            po.setChannelId(channelId);
+            po.setCreateBy(FIConstants.SYSTEM);
+            po.setModifyBy(FIConstants.SYSTEM);
+            po.setLetitude(FIConstants.INIT_POSITION);
+            po.setLongitude(FIConstants.INIT_POSITION);
+            po.setName(FIConstants.FIELD_NAME);
+            po.setAddress(FIConstants.FIELD_ADDRESS);
+            po.setType(FIConstants.MERCHANT_DEFAULT_TYPE);
+            po.setStatus(FIConstants.MerchantStatus.Nonactivated.getValue());
+            po.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
+            merchantDao.insertMerchant(po);
+        }
+        return ids;
+    }
+
+    public void verifyChannel(String channelId) throws InvalidChannelException {
+        ChannelPOExample query = new ChannelPOExample();
+        query.createCriteria().andIdEqualTo(channelId);
+        List<ChannelPO> channels = merchantDao.selectChannelByExample(query);
+        if (channels == null || channels.size() == 0) {
+            throw new InvalidChannelException("Channel not found: " + channelId);
+        }
     }
 
     public String createQRCode(String merchantId) throws Exception {

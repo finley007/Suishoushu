@@ -122,7 +122,7 @@ public class MerchantResource {
                 throw new NullRequestException("Request is required");
             }
             QRCodesRequest req = new Payload(request).as(QRCodesRequest.class);
-            List<String> idList = merchantService.createMerchantIds(req.getNumber());
+            List<String> idList = merchantService.createMerchants(req.getNumber(), req.getChannelId());
             List<Map> result = new ArrayList<Map>();
             if (idList != null && idList.size() > 0) {
                 for (String id  : idList) {

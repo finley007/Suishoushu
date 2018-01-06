@@ -14,4 +14,6 @@ public interface MerchantService {
 
     public List<String> createMerchantIds(int idNum) throws Exception;
 
+    public List<String> createMerchants(int idNum, String channelId) throws Exception;
+
 }
