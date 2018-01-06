@@ -305,6 +305,9 @@
       <if test="modifyBy != null">
         modify_by = #{modifyBy,jdbcType=VARCHAR},
       </if>
+      <if test="doValidate != null">
+        #{doValidate,jdbcType=SMALLINT},
+      </if>
     </set>
     WHERE
     id = #{id}
