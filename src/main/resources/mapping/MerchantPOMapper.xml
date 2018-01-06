@@ -306,7 +306,7 @@
         modify_by = #{modifyBy,jdbcType=VARCHAR},
       </if>
       <if test="doValidate != null">
-        #{doValidate,jdbcType=SMALLINT},
+        do_validate = #{doValidate,jdbcType=SMALLINT},
       </if>
     </set>
     WHERE
