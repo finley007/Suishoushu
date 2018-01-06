@@ -61,7 +61,7 @@ public class QRCodeUtils {
 
     public static synchronized void modifyPermission(File file) throws Exception {
         String chgOwn = "chown " + QRCodeUtils.getUserGroup() + " " + file.getAbsolutePath();
-        String chgMod = "chmod 777 " + file.getAbsolutePath();
+        String chgMod = "chmod -R 777 " + file.getAbsolutePath();
         LogUtil.debug(QRCodeUtils.class, "Change qrcode image permission: " + chgOwn + " and " + chgMod);
         Runtime.getRuntime().exec(chgOwn);
         Runtime.getRuntime().exec(chgMod);
