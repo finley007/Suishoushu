@@ -221,6 +221,7 @@ public class MerchantServiceImpl implements MerchantService {
         return codeURI.getUrl();
     }
 
+    @Validate
     public void merchantRegister(Merchant req) throws Exception {
         MerchantPO merchantPO = merchantDao.getMerchantById(req.getId());
         if (merchantPO == null) {
