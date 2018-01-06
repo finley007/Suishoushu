@@ -1,5 +1,6 @@
 package com.changyi.fi.component.merchant;
 
+import com.changyi.fi.component.customer.response.ChannelListResponse;
 import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.request.QRCodesRequest;
@@ -17,6 +18,7 @@ import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.InvalidRequestException;
 import com.changyi.fi.exception.NullRequestException;
 import com.changyi.fi.exception.OutOfBoundsException;
+import com.changyi.fi.vo.Channel;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,6 +141,50 @@ public class MerchantResource {
             return Response.status(Response.Status.OK).entity(new QRCodesResponse(result).build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run createQRCodes endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @PUT
+    @Path("/channel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response registerChannel(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
+        try {
+            LogUtil.info(this.getClass(), "Enter registerChannel endpoint");
+            LogUtil.debug(this.getClass(), "Request: {} ", request);
+            if (StringUtils.isEmpty(request)) {
+                throw new NullRequestException("Request is required");
+            }
+            Channel channel = new Payload(request).as(Channel.class);
+            Token curToken = Token.touch(token);
+            merchantService.updateChannel(channel);
+            LogUtil.info(this.getClass(), "Complete registerChannel endpoint handle");
+            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run registerChannel endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @GET
+    @Path("/channel/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response listChannel(@HeaderParam(Token.KEY) String token) {
+        try {
+            LogUtil.info(this.getClass(), "Enter listChannel endpoint");
+            Token curToken = Token.touch(token);
+            ChannelListResponse response = new ChannelListResponse(merchantService.listChannel());
+            LogUtil.info(this.getClass(), "Complete listChannel endpoint handle");
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run listChannel endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

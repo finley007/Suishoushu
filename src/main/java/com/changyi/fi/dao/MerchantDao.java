@@ -16,4 +16,8 @@ public interface MerchantDao {
     int insertMerchant(MerchantPO record);
 
     int updateMerchantByExampleSelective(MerchantPO record, MerchantPOExample example);
+
+    int insertChannel(ChannelPO record);
+
+    int updateChannelByExampleSelective(@Param("record") ChannelPO record, @Param("example") ChannelPOExample example);
 }

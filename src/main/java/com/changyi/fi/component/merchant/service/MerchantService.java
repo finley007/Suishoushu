@@ -1,6 +1,7 @@
 package com.changyi.fi.component.merchant.service;
 
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
+import com.changyi.fi.vo.Channel;
 
 import java.util.List;
 
@@ -15,5 +16,9 @@ public interface MerchantService {
     public List<String> createMerchantIds(int idNum) throws Exception;
 
     public List<String> createMerchants(int idNum, String channelId) throws Exception;
+
+    public String updateChannel(Channel channel) throws Exception;
+
+    public List<Channel> listChannel() throws Exception;
 
 }

@@ -1,6 +1,5 @@
 package com.changyi.fi.component.customer;
 
-import com.changyi.fi.component.customer.response.ChannelListResponse;
 import com.changyi.fi.component.customer.service.CustomerService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
@@ -10,7 +9,6 @@ import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.NullRequestException;
-import com.changyi.fi.vo.Channel;
 import com.changyi.fi.vo.Customer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -54,47 +52,4 @@ public class CustomerResource {
         }
     }
 
-    @PUT
-    @Path("/channel")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    @Timer
-    public Response registerChannel(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
-        try {
-            LogUtil.info(this.getClass(), "Enter registerChannel endpoint");
-            LogUtil.debug(this.getClass(), "Request: {} ", request);
-            if (StringUtils.isEmpty(request)) {
-                throw new NullRequestException("Request is required");
-            }
-            Channel channel = new Payload(request).as(Channel.class);
-            Token curToken = Token.touch(token);
-            customerService.updateChannel(channel);
-            LogUtil.info(this.getClass(), "Complete registerChannel endpoint handle");
-            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
-        } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Run registerChannel endpoint error: ", t);
-            String res = ExceptionHandler.handle(t);
-            return Response.status(Response.Status.OK).entity(res).build();
-        }
-    }
-
-    @GET
-    @Path("/channel/list")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Secured
-    @Timer
-    public Response listChannel(@HeaderParam(Token.KEY) String token) {
-        try {
-            LogUtil.info(this.getClass(), "Enter listChannel endpoint");
-            Token curToken = Token.touch(token);
-            ChannelListResponse response = new ChannelListResponse(customerService.listChannel());
-            LogUtil.info(this.getClass(), "Complete listChannel endpoint handle");
-            return Response.status(Response.Status.OK).entity(response.build()).build();
-        } catch (Throwable t) {
-            LogUtil.error(this.getClass(), "Run listChannel endpoint error: ", t);
-            String res = ExceptionHandler.handle(t);
-            return Response.status(Response.Status.OK).entity(res).build();
-        }
-    }
 }

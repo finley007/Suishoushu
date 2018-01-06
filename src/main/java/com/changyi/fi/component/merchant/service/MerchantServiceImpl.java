@@ -1,12 +1,18 @@
 package com.changyi.fi.component.merchant.service;
 
+import com.changyi.fi.component.customer.response.ChannelListResponse;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
+import com.changyi.fi.core.annotation.Secured;
+import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
+import com.changyi.fi.core.exception.ExceptionHandler;
+import com.changyi.fi.core.seq.ISeqCreator;
 import com.changyi.fi.core.seq.SeqCreatorBuilder;
+import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
@@ -20,10 +26,17 @@ import com.changyi.fi.model.MerchantVisitPO;
 import com.changyi.fi.util.FIConstants;
 import com.changyi.fi.vo.Channel;
 import com.changyi.fi.vo.Position;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,6 +47,7 @@ import java.util.List;
 public class MerchantServiceImpl implements MerchantService {
 
     private static final int MERCHANR_ID_LENGTH = 11;
+    private static final int CHANNEL_SEQ_LENGTH = 6;
 
     private static final String QRCODE_BASE_PATH = "qrcode.base.path";
     private static final String QRCODE_ROOT_URL = "qrcode.root.url";
@@ -42,6 +56,8 @@ public class MerchantServiceImpl implements MerchantService {
     private static final int SWITCH_DO_VALIDATION = 1;
     private static final short MERCHANT_VALICATION_RESULT_SUCCESS = 0;
     private static final short MERCHANT_VALICATION_RESULT_FAIL = 1;
+
+    private ISeqCreator seqCreator = SeqCreatorBuilder.build(SeqCreatorBuilder.SEQ_CREATOR_RANDOWM);
 
     private MerchantDao merchantDao;
 
@@ -143,6 +159,65 @@ public class MerchantServiceImpl implements MerchantService {
         if (channels == null || channels.size() == 0) {
             throw new InvalidChannelException("Channel not found: " + channelId);
         }
+    }
+
+    @Validate
+    public String updateChannel(Channel channel) throws Exception {
+        LogUtil.info(this.getClass(), "Update channel info");
+        ChannelPO channelPO = null;
+        ChannelPOExample query = new ChannelPOExample();
+        if (StringUtils.isNotBlank(channel.getId())) {
+            query.createCriteria().andIdEqualTo(channel.getId());
+            List<ChannelPO> poList = merchantDao.selectChannelByExample(query);
+            if (poList != null && poList.size() > 0) {
+                channelPO = poList.get(0);
+            }
+        }
+        boolean isNew = false;
+        if (channelPO != null) {
+            LogUtil.info(this.getClass(), "The channel: " + channel.getId() + " is existed");
+        } else {
+            isNew = true;
+            channelPO = new ChannelPO();
+            channelPO.setId(createChannelId());
+        }
+        channelPO.setAddress(channel.getAddress());
+        channelPO.setCity(channel.getCity());
+        channelPO.setEmail(channel.getEmail());
+        channelPO.setName(channel.getName());
+        channelPO.setPhone(channel.getPhone());
+        channelPO.setProv(channel.getProvince());
+        channelPO.setQq(channel.getQq());
+        channelPO.setWechat(channel.getWechat());
+        channelPO.setRemark(channel.getRemark());
+        channelPO.setUpdateTime(new Date());
+        if (!isNew) {
+            merchantDao.updateChannelByExampleSelective(channelPO, query);
+        } else {
+            channelPO.setCreateTime(new Date());
+            channelPO.setStatus(FIConstants.ChannelStatus.Normal.getValue());
+            channelPO.setStatusTime(new Date());
+            channelPO.setLevel(FIConstants.CHANNEL_LEVEL_1);
+            channelPO.setRank(FIConstants.CHANNEL_RANK_1);
+            merchantDao.insertChannel(channelPO);
+        }
+        return channel.getId();
+    }
+
+    private synchronized String createChannelId() {
+        return seqCreator.createSeq(CHANNEL_SEQ_LENGTH);
+    }
+
+    public List<Channel> listChannel() throws Exception {
+        LogUtil.info(this.getClass(), "List all the channels");
+        List<Channel> result = new ArrayList<Channel>();
+        List<ChannelPO> poList = merchantDao.selectChannelByExample(new ChannelPOExample());
+        if (poList != null && poList.size() > 0) {
+            for (ChannelPO po : poList) {
+                result.add(new Channel(po));
+            }
+        }
+        return result;
     }
 
     public String createQRCode(String merchantId) throws Exception {
