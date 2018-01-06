@@ -2,9 +2,9 @@ package com.changyi.fi.exception;
 
 import com.changyi.fi.core.exception.BusinessException;
 
-public class InvalidChannelException extends BusinessException {
+public class ChannelNotFoundException extends BusinessException {
 
-    public InvalidChannelException(String msg) {
+    public ChannelNotFoundException(String msg) {
         super(msg);
     }
 }

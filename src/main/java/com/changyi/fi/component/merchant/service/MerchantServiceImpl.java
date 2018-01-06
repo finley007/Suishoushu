@@ -1,22 +1,18 @@
 package com.changyi.fi.component.merchant.service;
 
-import com.changyi.fi.component.customer.response.ChannelListResponse;
+import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.core.CommonUtil;
 import com.changyi.fi.core.LogUtil;
-import com.changyi.fi.core.annotation.Secured;
-import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.annotation.Validate;
 import com.changyi.fi.core.config.ConfigDic;
 import com.changyi.fi.core.config.ConfigManager;
-import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.seq.ISeqCreator;
 import com.changyi.fi.core.seq.SeqCreatorBuilder;
-import com.changyi.fi.core.token.Token;
 import com.changyi.fi.core.tool.Properties;
 import com.changyi.fi.core.tool.QRCodeUtils;
 import com.changyi.fi.dao.MerchantDao;
-import com.changyi.fi.exception.InvalidChannelException;
+import com.changyi.fi.exception.ChannelNotFoundException;
 import com.changyi.fi.exception.MerchantNotFoundException;
 import com.changyi.fi.external.weixin.WeixinAPIService;
 import com.changyi.fi.model.ChannelPO;
@@ -31,12 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.mail.AuthenticationFailedException;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -152,12 +143,12 @@ public class MerchantServiceImpl implements MerchantService {
         return ids;
     }
 
-    public void verifyChannel(String channelId) throws InvalidChannelException {
+    public void verifyChannel(String channelId) throws ChannelNotFoundException {
         ChannelPOExample query = new ChannelPOExample();
         query.createCriteria().andIdEqualTo(channelId);
         List<ChannelPO> channels = merchantDao.selectChannelByExample(query);
         if (channels == null || channels.size() == 0) {
-            throw new InvalidChannelException("Channel not found: " + channelId);
+            throw new ChannelNotFoundException("Channel not found: " + channelId);
         }
     }
 
@@ -228,6 +219,30 @@ public class MerchantServiceImpl implements MerchantService {
         }
         QRCodeURI codeURI = createQRCodeFile(merchantId);
         return codeURI.getUrl();
+    }
+
+    public void merchantRegister(Merchant req) throws Exception {
+        MerchantPO merchantPO = merchantDao.getMerchantById(req.getId());
+        if (merchantPO == null) {
+            throw new MerchantNotFoundException("Merchant: " + req.getId() + " does not existed");
+        }
+        if (!merchantPO.getChannelId().equals(req.getChannelId())) {
+            throw new AuthenticationFailedException("Current channel: " + req.getChannelId() + " is not merchant's channel: " + merchantPO.getChannelId());
+        }
+        merchantPO.setStatus(FIConstants.MerchantStatus.Activated.getValue());
+        merchantPO.setType(req.getType());
+        merchantPO.setAddress(req.getAddress());
+        merchantPO.setName(req.getName());
+        merchantPO.setEmail(req.getEmail());
+        merchantPO.setPhone1(req.getPhone1());
+        merchantPO.setPhone2(req.getPhone2());
+        merchantPO.setZipCode(req.getZipCode());
+        merchantPO.setLongitude(new BigDecimal(req.getLongitude()));
+        merchantPO.setLetitude(new BigDecimal(req.getLatitude()));
+        merchantPO.setModifyBy(FIConstants.SYSTEM);
+        merchantPO.setModifyTime(new Date());
+        merchantPO.setDoValidate(FIConstants.DoMerchantValidation.True.getShortValue());
+        merchantDao.updateMerchantSelective(merchantPO);
     }
 
     private QRCodeURI createQRCodeFile(String merchantId) throws Exception {

@@ -2,6 +2,7 @@ package com.changyi.fi.component.merchant;
 
 import com.changyi.fi.component.customer.response.ChannelListResponse;
 import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
+import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.request.QRCodesRequest;
 import com.changyi.fi.component.merchant.response.QRCodeResponse;
@@ -13,7 +14,6 @@ import com.changyi.fi.core.annotation.Secured;
 import com.changyi.fi.core.annotation.Timer;
 import com.changyi.fi.core.exception.ExceptionHandler;
 import com.changyi.fi.core.response.NormalResponse;
-import com.changyi.fi.core.seq.SeqCreatorBuilder;
 import com.changyi.fi.core.token.Token;
 import com.changyi.fi.exception.InvalidRequestException;
 import com.changyi.fi.exception.NullRequestException;
@@ -185,6 +185,30 @@ public class MerchantResource {
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run listChannel endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @POST
+    @Path("register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response registerMerchant(@HeaderParam(Token.KEY) String token, @RequestParam String request) {
+        try {
+            LogUtil.info(this.getClass(), "Enter registerMerchant endpoint");
+            LogUtil.debug(this.getClass(), "Request: {} ", request);
+            Token curToken = Token.touch(token);
+            if (StringUtils.isBlank(request)) {
+                throw new NullRequestException("Request is required");
+            }
+            Merchant req = new Payload(request).as(Merchant.class);
+            merchantService.merchantRegister(req);
+            LogUtil.info(this.getClass(), "Complete registerMerchant endpoint handle");
+            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run registerMerchant endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

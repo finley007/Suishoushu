@@ -1,5 +1,6 @@
 package com.changyi.fi.component.merchant.service;
 
+import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.vo.Channel;
 
@@ -20,5 +21,7 @@ public interface MerchantService {
     public String updateChannel(Channel channel) throws Exception;
 
     public List<Channel> listChannel() throws Exception;
+
+    public void merchantRegister(Merchant req) throws Exception;
 
 }
