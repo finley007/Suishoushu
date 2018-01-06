@@ -22,12 +22,12 @@ import com.changyi.fi.model.MerchantVisitPO;
 import com.changyi.fi.util.FIConstants;
 import com.changyi.fi.vo.Channel;
 import com.changyi.fi.vo.Position;
+import com.changyi.fi.exception.AuthenticationFailedException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.mail.AuthenticationFailedException;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
