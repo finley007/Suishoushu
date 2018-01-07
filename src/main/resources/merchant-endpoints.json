@@ -1,0 +1,128 @@
+{
+  "endpoints": [
+    {
+      "name": "渠道商注册接口",
+      "url": "https://www.suishoushu.com/suishoushu/merchant/channel",
+      "head" : "auth-token",
+      "method": "PUT",
+      "request": {
+        "name": "渠道商名称",
+        "phone": "渠道商电话",
+        "address": "渠道商地址",
+        "wechat": "渠道商微信",
+        "qq": "渠道商qq",
+        "email": "渠道商email",
+        "prov": "渠道商省份：用英文缩写，陕西：snx",
+        "city": "渠道商城市：英文全称，西安：xi'an"
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "message": "错误信息"
+      }
+    },
+    {
+      "name": "渠道商列表",
+      "url": "https://www.suishoushu.com/suishoushu/merchant/channel/list",
+      "head" : "auth-token",
+      "method": "GET",
+      "request": {
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "channelList": [
+            {
+              "id": "渠道商编号",
+              "name": "渠道商名称",
+              "phone": "渠道商电话",
+              "address": "渠道商地址",
+              "wechat": "渠道商微信",
+              "qq": "渠道商qq",
+              "email": "渠道商email",
+              "prov": "渠道商省份",
+              "city": "渠道商城市"
+            }
+          ]
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "name": "渠道二维码批量生成接口",
+      "url": "https://suishoushu.com/suishoushu/merchant/qrcodes/",
+      "head" : "auth-token",
+      "method": "POST",
+      "request": {
+        "channelId" : "渠道商编号",
+        "number" : "生成二维码数量，不填默认为1"
+      },
+      "response": {
+        "returnCode": "返回码: 0-正常，xxxx-错误码",
+        "content": {
+          "qrcodes": [
+            {
+              "merchantId": "商户编号",
+              "url": "商户二维码下载地址"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "渠道商户列表查询接口",
+      "url": "https://suishoushu.com/suishoushu/merchant/{channelId}/merchants",
+      "head" : "auth-token",
+      "method": "GET",
+      "request": "channelId:渠道商编号",
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+          "merchantList": [
+            {
+              "id": "商户编号",
+              "name": "商户名称",
+              "type": "商户类型:0-位置，1-超市，2-酒店，3-加油站",
+              "address": "商户地址",
+              "email": "商户email",
+              "longitude": "商户经度",
+              "letitude": "商户纬度",
+              "status": "状态：0-未激活，1-已激活，2-异常",
+              "createTime": "创建时间",
+              "createBy": "创建人",
+              "modifyTime": "更改时间",
+              "modifyBy": "更改人",
+              "expireTime": "过期时间",
+              "channelId": "渠道商编号",
+              "doValidate": "是否进行位置校验：0-不校验，1-校验"
+            }
+          ]
+        },
+        "message": "错误信息"
+      }
+    },
+    {
+      "name": "商户激活接口",
+      "url": "https://suishoushu.com/suishoushu/merchant/register/",
+      "head" : "auth-token",
+      "method": "POST",
+      "request": {
+        "id" : "商户编号",
+        "channelId" : "渠道商编号",
+        "name" : "商户名称",
+        "address" : "商户地址",
+        "longitude" : "商户位置信息经度",
+        "latitude" : "商户位置信息纬度",
+        "email" : "商户邮件",
+        "phone1" : "商户电话1",
+        "phone2" : "商户电话2",
+        "zipCode" : "商户邮政编码",
+        "type" : "商户类型"
+      },
+      "response": {
+        "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": "success",
+        "message": "错误信息"
+      }
+    }
+  ]
+}
