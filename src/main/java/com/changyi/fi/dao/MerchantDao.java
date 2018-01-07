@@ -9,6 +9,8 @@ public interface MerchantDao {
 
     MerchantPO getMerchantById(@Param(("id")) String id);
 
+    List<MerchantPO> getMerchantByChannel(@Param(("channelId")) String channelId);
+
     int insertMerchant(MerchantPO record);
 
     int updateMerchantSelective(MerchantPO record);

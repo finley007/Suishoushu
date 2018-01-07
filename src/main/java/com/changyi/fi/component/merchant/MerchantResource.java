@@ -1,7 +1,8 @@
 package com.changyi.fi.component.merchant;
 
-import com.changyi.fi.component.customer.response.ChannelListResponse;
+import com.changyi.fi.component.merchant.response.ChannelListResponse;
 import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
+import com.changyi.fi.component.merchant.response.MerchantListResponse;
 import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.request.QRCodesRequest;
@@ -70,10 +71,12 @@ public class MerchantResource {
     @POST
     @Path("/qrcode/{merchantId}")
     @Produces
+    @Secured
     @Timer
-    public Response createQRCode(@PathParam("merchantId") String merchantId) {
+    public Response createQRCode(@HeaderParam(Token.KEY) String token, @PathParam("merchantId") String merchantId) {
         try {
             LogUtil.info(this.getClass(), "Enter createQRCode endpoint");
+            Token.touch(token).getOpenId();
             String url = merchantService.createQRCode(merchantId);
             LogUtil.info(this.getClass(), "Complete createQRCode endpoint handle");
             return Response.status(Response.Status.OK).entity(new QRCodeResponse(merchantId, url).build()).build();
@@ -87,11 +90,13 @@ public class MerchantResource {
     @GET
     @Path("/createid")
     @Produces
-    public Response createId(@QueryParam("num") String num) {
+    @Secured
+    @Timer
+    public Response createId(@HeaderParam(Token.KEY) String token, @QueryParam("num") String num) {
         try {
             int idNum;
-
             LogUtil.info(this.getClass(), "Enter createId endpoint");
+            Token.touch(token).getOpenId();
             if (StringUtils.isBlank(num)) {
                 throw new NullRequestException("Parameter num is required");
             }
@@ -185,6 +190,25 @@ public class MerchantResource {
             return Response.status(Response.Status.OK).entity(response.build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run listChannel endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
+    @GET
+    @Path("/{channelId}/merchants")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response listMerchantsByChannel(@HeaderParam(Token.KEY) String token, @PathParam("channelId") String channelId) {
+        try {
+            LogUtil.info(this.getClass(), "Enter listMerchantsByChannel endpoint");
+            Token curToken = Token.touch(token);
+            MerchantListResponse response = new MerchantListResponse(merchantService.getMerchantsByChannel(channelId));
+            LogUtil.info(this.getClass(), "Complete listMerchantsByChannel endpoint handle");
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run listMerchantsByChannel endpoint error: ", t);
             String res = ExceptionHandler.handle(t);
             return Response.status(Response.Status.OK).entity(res).build();
         }

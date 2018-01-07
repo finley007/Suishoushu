@@ -246,6 +246,10 @@ public class MerchantServiceImpl implements MerchantService {
         merchantDao.updateMerchantSelective(merchantPO);
     }
 
+    public List<MerchantPO> getMerchantsByChannel(String channelId) throws Exception {
+        return merchantDao.getMerchantByChannel(channelId);
+    }
+
     private QRCodeURI createQRCodeFile(String merchantId) throws Exception {
         QRCodeURI codeURI = createQRCodeDownloadPath(merchantId);
         File file = new File(codeURI.getPath());

@@ -1,4 +1,4 @@
-package com.changyi.fi.component.customer.response;
+package com.changyi.fi.component.merchant.response;
 
 import com.changyi.fi.core.response.NormalResponse;
 import com.changyi.fi.vo.Channel;
