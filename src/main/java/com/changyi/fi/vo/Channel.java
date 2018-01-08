@@ -47,6 +47,8 @@ public class Channel {
 
     private String remark;
 
+    private String url;
+
     public String getName() {
         return name;
     }
@@ -125,6 +127,14 @@ public class Channel {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
 

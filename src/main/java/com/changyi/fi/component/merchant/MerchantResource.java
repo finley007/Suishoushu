@@ -1,13 +1,11 @@
 package com.changyi.fi.component.merchant;
 
-import com.changyi.fi.component.merchant.response.ChannelListResponse;
+import com.changyi.fi.component.merchant.response.*;
 import com.changyi.fi.component.invoice.response.CreateMerchantIDResponse;
-import com.changyi.fi.component.merchant.response.MerchantListResponse;
+import com.changyi.fi.model.ChannelPO;
 import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.component.merchant.request.QRCodesRequest;
-import com.changyi.fi.component.merchant.response.QRCodeResponse;
-import com.changyi.fi.component.merchant.response.QRCodesResponse;
 import com.changyi.fi.component.merchant.service.MerchantService;
 import com.changyi.fi.core.LogUtil;
 import com.changyi.fi.core.Payload;
@@ -166,9 +164,9 @@ public class MerchantResource {
             }
             Channel channel = new Payload(request).as(Channel.class);
             Token curToken = Token.touch(token);
-            merchantService.updateChannel(channel);
+            channel = merchantService.updateChannel(channel);
             LogUtil.info(this.getClass(), "Complete registerChannel endpoint handle");
-            return Response.status(Response.Status.OK).entity(new NormalResponse().build()).build();
+            return Response.status(Response.Status.OK).entity(new UpdateChannelResponse(channel.getId(), channel.getUrl()).build()).build();
         } catch (Throwable t) {
             LogUtil.error(this.getClass(), "Run registerChannel endpoint error: ", t);
             String res = ExceptionHandler.handle(t);

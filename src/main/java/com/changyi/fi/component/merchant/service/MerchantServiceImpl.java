@@ -147,7 +147,7 @@ public class MerchantServiceImpl implements MerchantService {
             po.setLongitude(FIConstants.INIT_POSITION);
             po.setName(FIConstants.FIELD_NAME);
             po.setAddress(FIConstants.FIELD_ADDRESS);
-            po.setType(FIConstants.MERCHANT_DEFAULT_TYPE);
+            po.setType(FIConstants.MERCHANT_TYPE_DEFAULT);
             po.setStatus(FIConstants.MerchantStatus.Nonactivated.getValue());
             po.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
             merchantDao.insertMerchant(po);
@@ -165,7 +165,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Validate
-    public String updateChannel(Channel channel) throws Exception {
+    public Channel updateChannel(Channel channel) throws Exception {
         LogUtil.info(this.getClass(), "Update channel info");
         ChannelPO channelPO = null;
         ChannelPOExample query = new ChannelPOExample();
@@ -203,8 +203,26 @@ public class MerchantServiceImpl implements MerchantService {
             channelPO.setLevel(FIConstants.CHANNEL_LEVEL_1);
             channelPO.setRank(FIConstants.CHANNEL_RANK_1);
             merchantDao.insertChannel(channelPO);
+
+            //新建渠道自动建立渠道自身商户，并生成试用二维码
+            channel.setUrl(createChannelMerchant(channelPO));
         }
-        return channel.getId();
+        return channel;
+    }
+
+    public String createChannelMerchant(ChannelPO channelPO) throws Exception {
+        MerchantPO merchantPO = new MerchantPO();
+        merchantPO.setId(channelPO.getId());
+        merchantPO.setName(channelPO.getName());
+        merchantPO.setAddress(channelPO.getAddress());
+        merchantPO.setPhone1(channelPO.getPhone());
+        merchantPO.setEmail(channelPO.getEmail());
+        merchantPO.setType(FIConstants.MERCHANT_TYPE_CHANNEL);
+        merchantPO.setStatus(FIConstants.MerchantStatus.Activated.getValue());
+        merchantPO.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
+        merchantDao.insertMerchant(merchantPO);
+
+        return this.createQRCode(merchantPO.getId());
     }
 
     private synchronized String createChannelId() {

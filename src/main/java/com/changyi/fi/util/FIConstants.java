@@ -36,7 +36,11 @@ public class FIConstants {
     public static final String FIELD_ADDRESS = "address";
 
     //商户默认类型:未知
-    public static final short MERCHANT_DEFAULT_TYPE = 0;
+    public static final short MERCHANT_TYPE_DEFAULT = 0;
+    public static final short MERCHANT_TYPE_SM = 1;
+    public static final short MERCHANT_TYPE_HOTEL = 2;
+    public static final short MERCHANT_TYPE_PETROL = 3;
+    public static final short MERCHANT_TYPE_CHANNEL = 4;
 
     //渠道级别：一级代理，二级代理
     public static final short CHANNEL_LEVEL_1 = 1;

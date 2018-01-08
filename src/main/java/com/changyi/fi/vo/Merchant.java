@@ -18,7 +18,7 @@ public class Merchant {
     @NotEmpty(message = "name is required")
     private String name;
 
-    private short type = FIConstants.MERCHANT_DEFAULT_TYPE;
+    private short type = FIConstants.MERCHANT_TYPE_DEFAULT;
 
     @NotNull(message = "address is required")
     @NotEmpty(message = "address is required")

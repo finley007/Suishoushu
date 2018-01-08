@@ -19,7 +19,7 @@ public interface MerchantService {
 
     public List<String> createMerchants(int idNum, String channelId) throws Exception;
 
-    public String updateChannel(Channel channel) throws Exception;
+    public Channel updateChannel(Channel channel) throws Exception;
 
     public List<Channel> listChannel() throws Exception;
 
