@@ -206,6 +206,7 @@ public class MerchantServiceImpl implements MerchantService {
 
             //新建渠道自动建立渠道自身商户，并生成试用二维码
             channel.setUrl(createChannelMerchant(channelPO));
+            channel.setId(channelPO.getId());
         }
         return channel;
     }
@@ -229,7 +230,7 @@ public class MerchantServiceImpl implements MerchantService {
         merchantPO.setModifyTime(new Date());
         merchantDao.insertMerchant(merchantPO);
 
-        return this.createQRCodeDownloadPath(merchantPO.getId()).getUrl();
+        return this.createQRCode(merchantPO.getId());
     }
 
     private synchronized String createChannelId() {
