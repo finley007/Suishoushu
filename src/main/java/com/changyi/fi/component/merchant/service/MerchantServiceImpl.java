@@ -1,5 +1,6 @@
 package com.changyi.fi.component.merchant.service;
 
+import com.changyi.fi.exception.InvalidMerchantException;
 import com.changyi.fi.vo.Merchant;
 import com.changyi.fi.component.merchant.request.MerchantValidateRequest;
 import com.changyi.fi.core.CommonUtil;
@@ -72,6 +73,17 @@ public class MerchantServiceImpl implements MerchantService {
 
 
     private Boolean isValidate(MerchantPO merchantPO, Position position) throws Exception {
+        //状态检查
+        if (merchantPO.getStatus().equals(FIConstants.MerchantStatus.Nonactivated.getValue())) {
+            throw new InvalidMerchantException("The current merchant: " +  merchantPO.getId() + " is not activated");
+        }
+        if (merchantPO.getStatus().equals(FIConstants.MerchantStatus.Invalid.getValue())) {
+            throw new InvalidMerchantException("The current merchant: " + merchantPO.getId() + " is invalid");
+        }
+        //过期时间检查
+        if (merchantPO.getExpireTime() != null && merchantPO.getExpireTime().compareTo(new Date()) < 0) {
+            throw new InvalidMerchantException("The current merchant: " + merchantPO.getId() + " is over expired date: " + FIConstants.sdf.format(merchantPO.getExpireTime()))
+        }
         if (ConfigManager.getBooleanParameter(ConfigDic.MERCHANT_VALIDATION_TOGGLE, true)) {
             LogUtil.info(this.getClass(), "Merchant validation is on");
             if (merchantPO.getDoValidate() == SWITCH_DO_VALIDATION) {
