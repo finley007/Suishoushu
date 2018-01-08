@@ -82,7 +82,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
         //过期时间检查
         if (merchantPO.getExpireTime() != null && merchantPO.getExpireTime().compareTo(new Date()) < 0) {
-            throw new InvalidMerchantException("The current merchant: " + merchantPO.getId() + " is over expired date: " + FIConstants.sdf.format(merchantPO.getExpireTime()))
+            throw new InvalidMerchantException("The current merchant: " + merchantPO.getId() + " is over expired date: " + FIConstants.sdf.format(merchantPO.getExpireTime()));
         }
         if (ConfigManager.getBooleanParameter(ConfigDic.MERCHANT_VALIDATION_TOGGLE, true)) {
             LogUtil.info(this.getClass(), "Merchant validation is on");
