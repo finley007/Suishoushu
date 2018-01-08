@@ -222,6 +222,10 @@ public class MerchantServiceImpl implements MerchantService {
         merchantPO.setLetitude(FIConstants.INIT_POSITION);
         merchantPO.setStatus(FIConstants.MerchantStatus.Activated.getValue());
         merchantPO.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
+        merchantPO.setCreateBy(FIConstants.SYSTEM);
+        merchantPO.setCreateTime(new Date());
+        merchantPO.setModifyBy(FIConstants.SYSTEM);
+        merchantPO.setModifyTime(new Date());
         merchantDao.insertMerchant(merchantPO);
 
         return this.createQRCodeDownloadPath(merchantPO.getId()).getUrl();
