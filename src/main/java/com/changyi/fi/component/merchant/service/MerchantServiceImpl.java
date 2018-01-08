@@ -259,7 +259,11 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     public List<MerchantPO> getMerchantsByChannel(String channelId) throws Exception {
-        return merchantDao.getMerchantByChannel(channelId);
+        List<MerchantPO> result = merchantDao.getMerchantByChannel(channelId);
+        for (MerchantPO po : result) {
+            po.setQrcode(this.createQRCodeDownloadPath(po.getId()).getUrl());
+        }
+        return result;
     }
 
     private QRCodeURI createQRCodeFile(String merchantId) throws Exception {

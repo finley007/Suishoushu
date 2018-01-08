@@ -93,7 +93,8 @@
               "modifyBy": "更改人",
               "expireTime": "过期时间",
               "channelId": "渠道商编号",
-              "doValidate": "是否进行位置校验：0-不校验，1-校验"
+              "doValidate": "是否进行位置校验：0-不校验，1-校验",
+              "qrcode": "二维码地址"
             }
           ]
         },
