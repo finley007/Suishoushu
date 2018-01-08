@@ -213,6 +213,7 @@ public class MerchantServiceImpl implements MerchantService {
     public String createChannelMerchant(ChannelPO channelPO) throws Exception {
         MerchantPO merchantPO = new MerchantPO();
         merchantPO.setId(channelPO.getId());
+        merchantPO.setChannelId(channelPO.getId());
         merchantPO.setName(channelPO.getName());
         merchantPO.setAddress(channelPO.getAddress());
         merchantPO.setPhone1(channelPO.getPhone());
