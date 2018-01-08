@@ -218,11 +218,13 @@ public class MerchantServiceImpl implements MerchantService {
         merchantPO.setPhone1(channelPO.getPhone());
         merchantPO.setEmail(channelPO.getEmail());
         merchantPO.setType(FIConstants.MERCHANT_TYPE_CHANNEL);
+        merchantPO.setLongitude(FIConstants.INIT_POSITION);
+        merchantPO.setLetitude(FIConstants.INIT_POSITION);
         merchantPO.setStatus(FIConstants.MerchantStatus.Activated.getValue());
         merchantPO.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
         merchantDao.insertMerchant(merchantPO);
 
-        return this.createQRCode(merchantPO.getId());
+        return this.createQRCodeDownloadPath(merchantPO.getId()).getUrl();
     }
 
     private synchronized String createChannelId() {
@@ -235,7 +237,9 @@ public class MerchantServiceImpl implements MerchantService {
         List<ChannelPO> poList = merchantDao.selectChannelByExample(new ChannelPOExample());
         if (poList != null && poList.size() > 0) {
             for (ChannelPO po : poList) {
-                result.add(new Channel(po));
+                Channel channel = new Channel(po);
+                channel.setUrl(this.createQRCodeDownloadPath(channel.getId()).getUrl());
+                result.add(channel);
             }
         }
         return result;
