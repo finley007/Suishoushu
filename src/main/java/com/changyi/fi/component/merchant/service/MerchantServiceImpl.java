@@ -164,6 +164,14 @@ public class MerchantServiceImpl implements MerchantService {
         }
     }
 
+    public String createChannelQRCode(String channelId) throws Exception {
+        ChannelPO channelPO = merchantDao.getChannelById(channelId);
+        if (channelPO == null) {
+            throw new ChannelNotFoundException("Channel： " + channelId + " not found");
+        }
+        return createChannelMerchant(channelPO);
+    }
+
     @Validate
     public Channel updateChannel(Channel channel) throws Exception {
         LogUtil.info(this.getClass(), "Update channel info");

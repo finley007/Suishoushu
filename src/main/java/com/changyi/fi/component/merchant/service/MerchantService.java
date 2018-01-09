@@ -21,6 +21,8 @@ public interface MerchantService {
 
     public Channel updateChannel(Channel channel) throws Exception;
 
+    public String createChannelQRCode(String channelId) throws Exception;
+
     public List<Channel> listChannel() throws Exception;
 
     public void merchantRegister(Merchant req) throws Exception;

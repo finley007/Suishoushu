@@ -174,6 +174,28 @@ public class MerchantResource {
         }
     }
 
+    @POST
+    @Path("/channel/qrcode")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response createChannelQRCode(@HeaderParam(Token.KEY) String token,  @FormParam("channelId") String channelId) {
+        try {
+            LogUtil.info(this.getClass(), "Enter createChannelQRCode endpoint for channel: " + channelId);
+            if (StringUtils.isEmpty(channelId)) {
+                throw new NullRequestException("ChannelId is required");
+            }
+            Token curToken = Token.touch(token);
+            String url = merchantService.createChannelQRCode(channelId);
+            LogUtil.info(this.getClass(), "Complete registerChannel endpoint handle");
+            return Response.status(Response.Status.OK).entity(new UpdateChannelResponse("", url).build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run registerChannel endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
     @GET
     @Path("/channel/list")
     @Produces(MediaType.APPLICATION_JSON)

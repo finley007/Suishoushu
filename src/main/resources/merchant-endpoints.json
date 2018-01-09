@@ -17,6 +17,10 @@
       },
       "response": {
         "returnCode": "返回码：0-正常，xxxx-错误码",
+        "content": {
+            "channelId": "渠道商编号",
+            "url": "商户二维码下载地址"
+        },
         "message": "错误信息"
       }
     },
@@ -40,7 +44,8 @@
               "qq": "渠道商qq",
               "email": "渠道商email",
               "prov": "渠道商省份",
-              "city": "渠道商城市"
+              "city": "渠道商城市",
+              "url": "演示二维码地址"
             }
           ]
         },
