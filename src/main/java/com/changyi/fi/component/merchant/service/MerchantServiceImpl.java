@@ -142,13 +142,21 @@ public class MerchantServiceImpl implements MerchantService {
             po.setId(ids.get(i));
             po.setChannelId(channelId);
             po.setCreateBy(FIConstants.SYSTEM);
+            po.setCreateTime(new Date());
             po.setModifyBy(FIConstants.SYSTEM);
+            po.setModifyTime(new Date());
+            po.setExpireTime(FIConstants.sdf.parse(FIConstants.DEFAULT_MERCHANT_EXPIRED_TIME));
             po.setLetitude(FIConstants.INIT_POSITION);
             po.setLongitude(FIConstants.INIT_POSITION);
             po.setName(FIConstants.FIELD_NAME);
             po.setAddress(FIConstants.FIELD_ADDRESS);
             po.setType(FIConstants.MERCHANT_TYPE_DEFAULT);
-            po.setStatus(FIConstants.MerchantStatus.Nonactivated.getValue());
+            //畅移信息创建的商户直接激活
+            if (FIConstants.CHANGYI_CHANNEL_ID.equals(channelId)) {
+                po.setStatus(FIConstants., FIConstants.MerchantStatus.Activated.getValue());
+            } else {
+                po.setStatus(FIConstants.MerchantStatus.Nonactivated.getValue());
+            }
             po.setDoValidate(FIConstants.DoMerchantValidation.False.getShortValue());
             merchantDao.insertMerchant(po);
         }

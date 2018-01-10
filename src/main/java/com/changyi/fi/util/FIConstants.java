@@ -52,6 +52,9 @@ public class FIConstants {
     public static final short CHANNEL_RANK_3 = 3; //白金
     public static final short CHANNEL_RANK_4 = 4; //钻石
 
+    public static final String CHANGYI_CHANNEL_ID = "000001";
+    public static final String DEFAULT_MERCHANT_EXPIRED_TIME = "2030-12-31";
+
     public enum InvoiceType {
         EnterpriseSpecial("2"), EnterpriseNormal("1"), Person("0");
 
