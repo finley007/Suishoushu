@@ -154,7 +154,7 @@ public class MerchantServiceImpl implements MerchantService {
             po.setType(FIConstants.MERCHANT_TYPE_DEFAULT);
             //畅移信息创建的商户直接激活
             if (FIConstants.CHANGYI_CHANNEL_ID.equals(channelId)) {
-                po.setStatus(FIConstants., FIConstants.MerchantStatus.Activated.getValue());
+                po.setStatus(FIConstants.MerchantStatus.Activated.getValue());
             } else {
                 po.setStatus(FIConstants.MerchantStatus.Nonactivated.getValue());
             }
