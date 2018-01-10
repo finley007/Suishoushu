@@ -377,15 +377,15 @@ public class InvoiceServiceImpl implements InvoiceService {
             result.append(invoice.getCorpName().trim());
             result.append(SEPARATOR);
             result.append(invoice.getCreditCode().trim());
+            result.append(SEPARATOR);
+            if (StringUtils.isNotBlank(invoice.getAddress())) {
+                result.append(invoice.getAddress() + " ");
+            }
+            if (StringUtils.isNotBlank(invoice.getPhone())) {
+                result.append(invoice.getPhone());
+            }
             if (StringUtils.isNotBlank(invoice.getBank())
                     && StringUtils.isNotBlank(invoice.getBankAcct())) {
-                result.append(SEPARATOR);
-                if (StringUtils.isNotBlank(invoice.getAddress())) {
-                    result.append(invoice.getAddress() + " ");
-                }
-                if (StringUtils.isNotBlank(invoice.getPhone())) {
-                    result.append(invoice.getPhone());
-                }
                 result.append(SEPARATOR);
                 result.append(invoice.getBank() + " ");
                 result.append(invoice.getBankAcct());
