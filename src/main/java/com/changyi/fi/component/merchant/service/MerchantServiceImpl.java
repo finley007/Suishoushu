@@ -137,6 +137,7 @@ public class MerchantServiceImpl implements MerchantService {
     public List<String> createMerchants(int idNum, String channelId) throws Exception {
         verifyChannel(channelId);
         List<String> ids = this.createMerchantIds(idNum);
+        LogUtil.debug(this.getClass(), "Create merchant for the channel: " + channelId);
         for (int i = 0; i < ids.size(); i++) {
             MerchantPO po = new MerchantPO();
             po.setId(ids.get(i));
