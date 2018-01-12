@@ -98,7 +98,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             Set<String> set = new HashSet<String>();
             for (Map map : internal) {
                 if (map.get(DB_FIELD_NAME) != null && map.get(DB_FIELD_CREDITCODE) != null) {
-                    String name = map.get(DB_FIELD_NAME).toString();
+                    String name = map.get(DB_FIELD_NAME).toString().trim();
                     Map m = new HashMap();
                     m.put(FIELD_SOURCE, SOURCE_INTERNAL);
                     m.put(FIELD_NAME, name);
@@ -109,7 +109,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             }
             count -= result.size();
             for (Map map : external) {
-                if (map.get(FIELD_NAME) != null && !set.contains(map.get(FIELD_NAME).toString())
+                if (map.get(FIELD_NAME) != null && !set.contains(map.get(FIELD_NAME).toString().trim())
                         && map.get(FIELD_NAME).toString().contains(key) //有的接口不在名称中查询关键字，因此加这个过滤
                             && !"-".equals(map.get(FIELD_CREDITCODE).toString()) //启信宝有的统一社会编码不公开
                                 && count > 0 ) {

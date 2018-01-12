@@ -1,5 +1,7 @@
 package com.changyi.fi.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -217,7 +219,8 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setCreditCode(String creditCode) {
-        this.creditCode = creditCode == null ? null : creditCode.trim();
+        this.creditCode = handleValue(creditCode);
+
     }
 
     /**
@@ -241,7 +244,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = handleValue(name);
     }
 
     /**
@@ -265,7 +268,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+        this.type = handleValue(type);
     }
 
     /**
@@ -289,7 +292,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setLegalPerson(String legalPerson) {
-        this.legalPerson = legalPerson == null ? null : legalPerson.trim();
+        this.legalPerson = handleValue(legalPerson);
     }
 
     /**
@@ -409,7 +412,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setRegAuthority(String regAuthority) {
-        this.regAuthority = regAuthority == null ? null : regAuthority.trim();
+        this.regAuthority = handleValue(regAuthority);
     }
 
     /**
@@ -433,7 +436,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = handleValue(address);
     }
 
     /**
@@ -457,7 +460,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = handleValue(phone);
     }
 
     /**
@@ -481,7 +484,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setBank(String bank) {
-        this.bank = bank == null ? null : bank.trim();
+        this.bank = handleValue(bank);
     }
 
     /**
@@ -505,7 +508,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setBankAcct(String bankAcct) {
-        this.bankAcct = bankAcct == null ? null : bankAcct.trim();
+        this.bankAcct = handleValue(bankAcct);
     }
 
     /**
@@ -625,7 +628,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setBizRegNum(String bizRegNum) {
-        this.bizRegNum = bizRegNum == null ? null : bizRegNum.trim();
+        this.bizRegNum = handleValue(bizRegNum);
     }
 
     /**
@@ -649,7 +652,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode == null ? null : orgCode.trim();
+        this.orgCode = handleValue(orgCode);
     }
 
     /**
@@ -673,7 +676,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setTaxpayerCode(String taxpayerCode) {
-        this.taxpayerCode = taxpayerCode == null ? null : taxpayerCode.trim();
+        this.taxpayerCode = handleValue(taxpayerCode);
     }
 
     /**
@@ -697,7 +700,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setIndustry(String industry) {
-        this.industry = industry == null ? null : industry.trim();
+        this.industry = handleValue(industry);
     }
 
     /**
@@ -721,7 +724,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
+        this.area = handleValue(area);
     }
 
     /**
@@ -745,7 +748,7 @@ public class EnterprisePO {
      * @mbggenerated
      */
     public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl == null ? null : sourceUrl.trim();
+        this.sourceUrl = handleValue(sourceUrl);
     }
 
     /**
@@ -770,5 +773,14 @@ public class EnterprisePO {
      */
     public void setMainBiz(byte[] mainBiz) {
         this.mainBiz = mainBiz;
+    }
+
+    private String handleValue(String value) {
+        String result = value == null ? null : value.trim();
+        if (StringUtils.isBlank(value)) {
+            return null;
+        } else {
+            return result;
+        }
     }
 }
