@@ -120,7 +120,7 @@ public class EnterpriseResource {
     public Response synccheck(@HeaderParam(Token.KEY) String token) {
         try {
             LogUtil.info(this.getClass(), "Enter synccheck endpoint");
-            String[] apis = new String[]{FIConstants.API_QIXINBAO, FIConstants.API_QIXINBAO, FIConstants.API_QIXINBAO};
+            String[] apis = new String[]{FIConstants.API_QIXINBAO, FIConstants.API_QICHACHA, FIConstants.API_TIANYANCHA};
             Map ent = new HashMap<String, Object>();
             for (int i = 0; i < apis.length; i++) {
                 ExternalEnterpriseAPIService api = EnternalEnterpriseAPIManager.getAPIImpl(apis[i]);
