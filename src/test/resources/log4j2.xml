@@ -22,7 +22,7 @@
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="Routing"/>
-            <AppenderRef ref="Console"/>
+            <!--AppenderRef ref="Console"/-->
         </Root>
     </Loggers>
 </Configuration>
