@@ -150,7 +150,7 @@ public class QiChaChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl im
         po.setCreditCode(parser.select(Properties.get(QICHACHA_GET_CREDIT_CODE_MATCHER)).toString());
         po.setAddress(parser.select(Properties.get(QICHACHA_GET_ADDRESS_MATCHER)).toString());
         po.setBizRegNum(parser.select(Properties.get(QICHACHA_GET_BIZ_REG_NUM_MATCHER)).toString());
-        po.setOrgCode(parser.select(Properties.get(QICHACHA_GET_ORG_CODE_MATCHER)).toString());
+//        po.setOrgCode(parser.select(Properties.get(QICHACHA_GET_ORG_CODE_MATCHER)).toString());
         po.setIndustry(parser.select(Properties.get(QICHACHA_GET_INDUSTRY_MATCHER)).toString());
 //        po.setTaxpayerCode(parser.select(Properties.get(QICHACHA_GET_TAXPAYER_CODE_MATCHER)).toString());
         po.setLegalPerson(parser.select(Properties.get(QICHACHA_GET_LEGAL_PERSON_MATCHER)).toString());
