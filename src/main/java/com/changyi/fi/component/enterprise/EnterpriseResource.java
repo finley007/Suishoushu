@@ -124,7 +124,7 @@ public class EnterpriseResource {
             Map ent = new HashMap<String, Object>();
             for (int i = 0; i < apis.length; i++) {
                 ExternalEnterpriseAPIService api = EnternalEnterpriseAPIManager.getAPIImpl(apis[i]);
-                EnterprisePO entPO = api.getEnterpriseByCode(PROP_CHANGYI_ENTERPRISE + apis[i]);
+                EnterprisePO entPO = api.getEnterpriseByCode(Properties.get(PROP_CHANGYI_ENTERPRISE + apis[i]));
                 ent.put(apis[i], entPO);
             }
             return Response.status(Response.Status.OK).entity(new SyncCheckResponse(ent).build()).build();
