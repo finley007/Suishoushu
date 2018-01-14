@@ -124,8 +124,12 @@ public class EnterpriseResource {
             Map ent = new HashMap<String, Object>();
             for (int i = 0; i < apis.length; i++) {
                 ExternalEnterpriseAPIService api = EnternalEnterpriseAPIManager.getAPIImpl(apis[i]);
-                EnterprisePO entPO = api.getEnterpriseByCode(Properties.get(PROP_CHANGYI_ENTERPRISE + apis[i]));
-                ent.put(apis[i], entPO);
+                try {
+                    EnterprisePO entPO = api.getEnterpriseByCode(Properties.get(PROP_CHANGYI_ENTERPRISE + apis[i]));
+                    ent.put(apis[i], entPO);
+                } catch (Exception e) {
+                    LogUtil.error(this.getClass(), "Call API: " + apis[i] + " for sync check error: ", e);
+                }
             }
             return Response.status(Response.Status.OK).entity(new SyncCheckResponse(ent).build()).build();
         } catch (Throwable t) {
