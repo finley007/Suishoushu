@@ -213,7 +213,7 @@ public class TianYanChaAPIServiceImpl extends ExternalEnterpriseAPIAbstractImpl 
         String res = new HTTPCaller(url).enableProxy().setTimeout(10000).doPost(request);
         TYCLoginResponse response = new Payload(res).as(TYCLoginResponse.class);
         if (!FIConstants.OK.equals(response.getState())) {
-            throw new SystemException("");
+            throw new SystemException("TYC login failed: " + res);
         }
         return response.getData().get(FIELD_TOKEN);
     }
