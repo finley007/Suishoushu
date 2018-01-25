@@ -38,6 +38,28 @@ public class MerchantResource {
     @Resource
     private MerchantService merchantService;
 
+    @GET
+    @Path("/{merchantId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    @Timer
+    public Response getMerchant(@HeaderParam(Token.KEY) String token, @PathParam("merchantId") String merchantId) {
+        try {
+            LogUtil.info(this.getClass(), "Enter getMerchant endpoint");
+            if (StringUtils.isBlank(merchantId)) {
+                throw new NullRequestException("Parameter merchantId is required");
+            }
+            Token curToken = Token.touch(token);
+            GetMerchantResponse response = new GetMerchantResponse(merchantService.getMerchantById(merchantId));
+            LogUtil.info(this.getClass(), "Complete getMerchant endpoint handle");
+            return Response.status(Response.Status.OK).entity(response.build()).build();
+        } catch (Throwable t) {
+            LogUtil.error(this.getClass(), "Run getMerchant endpoint error: ", t);
+            String res = ExceptionHandler.handle(t);
+            return Response.status(Response.Status.OK).entity(res).build();
+        }
+    }
+
     @POST
     @Path("/validate")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -85,7 +107,7 @@ public class MerchantResource {
         }
     }
 
-    @GET
+    @POST
     @Path("/createid")
     @Produces
     @Secured

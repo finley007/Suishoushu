@@ -29,5 +29,7 @@ public interface MerchantService {
 
     public List<MerchantPO> getMerchantsByChannel(String channelId) throws Exception;
 
+    public MerchantPO getMerchantById(String merchantId) throws Exception;
+
 
 }

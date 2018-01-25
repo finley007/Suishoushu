@@ -61,6 +61,10 @@ public class MerchantServiceImpl implements MerchantService {
         this.merchantDao = merchantDao;
     }
 
+    public MerchantPO getMerchantById(String merchantId) throws Exception {
+        return this.merchantDao.getMerchantById(merchantId);
+    }
+
     @Validate
     public boolean validate(MerchantValidateRequest req, String openId) throws Exception {
         LogUtil.info(this.getClass(), "Execute validate service for: " + openId);
