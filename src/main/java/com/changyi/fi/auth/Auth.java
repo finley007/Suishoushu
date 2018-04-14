@@ -28,7 +28,7 @@ public class Auth {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response auth(@RequestParam String request) {
-        LogUtil.info(this.getClass(), "Do authentication for request: ", request);
+        LogUtil.info(this.getClass(), "Do authentication for request: " + request);
         try {
             if (StringUtils.isEmpty(request)) {
                 throw new NullRequestException("Request is required");
@@ -52,7 +52,7 @@ public class Auth {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response internalAuth(@RequestParam String request) {
-        LogUtil.info(this.getClass(), "Do internal authentication for request: ", request);
+        LogUtil.info(this.getClass(), "Do internal authentication for request: " + request);
         try {
             if (StringUtils.isEmpty(request)) {
                 throw new NullRequestException("Request is required");
